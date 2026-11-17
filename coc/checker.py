@@ -55,7 +55,7 @@ def enabled_queues(cfg: Config) -> list[str]:
 
 def collect_events(v: Village, cfg: Config, now: float) -> dict[str, list[tuple[str, float, str]]]:
     """Pro Warteschlange: Liste (Schlüssel, Zeitpunkt frei, Beschreibung) aller fälligen Ereignisse."""
-    ahead = float(cfg.notify.get("ahead_minutes", 15)) * 60
+    ahead = float(cfg.notify.get("ahead_minutes", 0)) * 60
     out: dict[str, list] = {}
     for q in enabled_queues(cfg):
         cap = v.capacity(q)
@@ -73,6 +73,32 @@ def collect_events(v: Village, cfg: Config, now: float) -> dict[str, list[tuple[
     return out
 
 
+def soon_events(v: Village, cfg: Config, now: float) -> list[tuple[str, str, object]]:
+    """Upgrades, die innerhalb der Vorwarnzeit (Standard 60 Min.) fertig werden."""
+    soon = float(cfg.notify.get("soon_minutes", 60)) * 60
+    if soon <= 0:
+        return []
+    out = []
+    for q in enabled_queues(cfg):
+        for inst in v.active(q):
+            if now < inst.end <= now + soon:
+                out.append((f"soon:{q}:{int(inst.end)}:{inst.uid}", q, inst))
+    return sorted(out, key=lambda e: e[2].end)
+
+
+def _soon_message(evs, plan: Plan, cfg: Config, now: float, names: dict[int, str]) -> list[str]:
+    lines = []
+    for key, q, inst in evs:
+        nm = names.get(inst.data_id, f"#{inst.data_id}")
+        lines.append(f"{ICON[q]} {QUEUE_LABEL[q]}: {nm} → {inst.level + 1} fertig um "
+                     f"{cfg.fmt_time(inst.end)[-5:]} (in {fmt_dur(inst.end - now)})")
+        nxt = next((r for r in plan.for_queue(q) if r.start >= inst.end - 300), None)
+        if nxt:
+            lines.append(f"   ⏭️ Danach: {nxt.name} {level_txt(nxt)} ({fmt_dur(nxt.duration)}, {fmt_cost(nxt)})")
+    lines += ["", "Tipp: Rohstoffe jetzt noch sammeln, falls sie nicht reichen."]
+    return lines
+
+
 def run_check(v: Village, plan: Plan, cfg: Config, now: float, names: dict[int, str],
               dry_run: bool = False) -> str:
     state = load_state()
@@ -83,6 +109,22 @@ def run_check(v: Village, plan: Plan, cfg: Config, now: float, names: dict[int, 
     nconf = cfg.notify
     quiet = bool(nconf.get("quiet_at_night", True)) and cfg.asleep(now)
 
+    # 1) Vorwarnung (z. B. 1 Stunde vorher)
+    soon_new = [e for e in soon_events(v, cfg, now) if e[0] not in sent]
+    soon_log = None
+    if soon_new and not quiet:
+        stitle = "Clash: In " + fmt_dur(min(e[2].end for e in soon_new) - now) + " frei – " + \
+                 " & ".join(dict.fromkeys(QUEUE_LABEL[e[1]] for e in soon_new))
+        smsg = "\n".join(_soon_message(soon_new, plan, cfg, now, names))
+        soon_log = f"**Vorwarnung:** {stitle}\n\n```\n{smsg}\n```"
+        if not dry_run:
+            errs = notify.send(stitle, smsg, tags=["alarm_clock"], priority=3)
+            if errs:
+                soon_log += "\n\nFehler beim Senden: " + "; ".join(errs)
+        for key, *_ in soon_new:
+            sent[key] = now
+
+    # 2) Wirklich frei
     events = collect_events(v, cfg, now)
     new: dict[str, list] = {q: [e for e in evs if e[0] not in sent] for q, evs in events.items()}
     new = {q: evs for q, evs in new.items() if evs}
@@ -131,6 +173,8 @@ def run_check(v: Village, plan: Plan, cfg: Config, now: float, names: dict[int, 
         stale_msg = (f"Dein letzter Export ist {fmt_dur(now - v.timestamp)} alt. Zeit für einen "
                      "Abgleich: Export kopieren & Kurzbefehl tippen.")
 
+    if soon_log:
+        log.append(soon_log)
     if title:
         msg = "\n".join(lines)
         log.append(f"**Benachrichtigung:** {title}\n\n```\n{msg}\n```")
@@ -152,7 +196,7 @@ def run_check(v: Village, plan: Plan, cfg: Config, now: float, names: dict[int, 
                     "from_lvl": r.from_lvl, "start": r.start, "end": r.end, "name": r.name})
     elif quiet and new:
         log.append("🌙 Schlafenszeit – Benachrichtigung wird beim Aufwachen geschickt.")
-    else:
+    elif not soon_log:
         log.append("Nichts Neues zu melden.")
 
     if stale_msg:

@@ -21,9 +21,10 @@ pet_percent = 0
 # Plan-folgen-Modus: Nach jeder Benachrichtigung geht das Repo davon aus, dass du die
 # Empfehlung startest, und rechnet selbst weiter. Neuer Export nur, wenn du abweichst.
 follow_plan = true
-# Benachrichtigung schon X Minuten bevor etwas frei wird
-# (gleicht aus, dass GitHub-Zeitpläne sich oft etwas verzögern).
-ahead_minutes = 15
+# Vorwarnung X Minuten bevor etwas frei wird (0 = aus).
+soon_minutes = 60
+# Die "ist frei"-Meldung kommt, wenn der Timer abgelaufen ist (+ X Minuten früher, falls gewünscht).
+ahead_minutes = 0
 # Erinnerung, wenn etwas weiter untätig ist (0 = aus).
 reminder_hours = 0
 # Erinnerung an einen Abgleich-Export nach so vielen Tagen (0 = aus).
