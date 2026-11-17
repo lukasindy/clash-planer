@@ -12,7 +12,8 @@ sleep_start = "23:00"
 sleep_end = "07:00"
 
 [boosts]
-# Goldpass-Bonus in Prozent (0–20), verkürzt die Zeiten im Plan.
+# Goldpass-Boost in Prozent (0, 10, 15 oder 20). Senkt laut Supercell Bauzeit UND Kosten.
+# Steht im Spiel im Saisonpass. Wird jeden Monat zurückgesetzt und steigt mit den Saisonpunkten.
 builder_percent = 0
 lab_percent = 0
 pet_percent = 0

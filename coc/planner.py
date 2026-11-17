@@ -170,6 +170,7 @@ class Planner:
             if dur <= 0 and cost <= 0:
                 continue  # Platzhalter-Level in den Spieldaten (noch nicht im Spiel)
             dur = int(dur * self.speed[q])
+            cost = int(cost * self.speed[q])   # Goldpass-Boost senkt Zeit UND Kosten
             name = obj["name"]
             if q == "builder":
                 tier = int(self.tiers.get(name, self.default_tier))
