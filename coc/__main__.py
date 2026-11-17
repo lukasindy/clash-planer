@@ -102,6 +102,10 @@ def main(argv: list[str] | None = None) -> int:
 
     gd = GameData.load()
     v = effective_village(cfg)
+    from .checker import load_state
+    used = load_state().get("books_used")
+    if used:   # Bücher heute schon eingesetzt → nicht nochmal einplanen
+        cfg.raw.setdefault("planner", {}).setdefault("books", {})["skip_date"] = used
     plan = make_plan(gd, v, cfg, now)
 
     if args.cmd == "status":

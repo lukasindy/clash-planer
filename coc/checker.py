@@ -104,7 +104,7 @@ def run_check(v: Village, plan: Plan, cfg: Config, now: float, names: dict[int, 
     state = load_state()
     if state.get("export_ts") != v.timestamp:
         state = {"export_ts": v.timestamp, "sent": {}, "recommended": [], "assumed": [],
-                 "last_reminder": 0, "stale_warned": False}
+                 "last_reminder": 0, "stale_warned": False, "books_used": state.get("books_used")}
     sent: dict = state.setdefault("sent", {})
     nconf = cfg.notify
     quiet = bool(nconf.get("quiet_at_night", True)) and cfg.asleep(now)
@@ -123,6 +123,29 @@ def run_check(v: Village, plan: Plan, cfg: Config, now: float, names: dict[int, 
                 soon_log += "\n\nFehler beim Senden: " + "; ".join(errs)
         for key, *_ in soon_new:
             sent[key] = now
+
+    # 1b) Bücher-Tag am Monatsanfang
+    book_steps = [r for r in plan.steps if r.book and r.start <= now + 120]
+    today = cfg._local(now).strftime("%Y-%m-%d")
+    if book_steps and state.get("books_used") != today and not quiet:
+        blines = []
+        for r in book_steps:
+            book = "Buch des Bauens" if r.queue == "builder" else "Labor-Buch"
+            blines.append(f"{ICON[r.queue]} {book}: {r.name} {r.from_lvl} → {r.to_lvl} ({fmt_cost(r)})")
+        saved = sum(plan.book_savings[:len(book_steps)])
+        blines += ["", f"Upgrade starten → sofort Buch einsetzen. Spart zusammen ca. {fmt_dur(saved)}."]
+        btitle = "📖 Clash: Bücher-Tag!"
+        bmsg = "\n".join(blines)
+        soon_log = (soon_log + "\n\n" if soon_log else "") + f"**Bücher-Tag:**\n\n```\n{bmsg}\n```"
+        if not dry_run:
+            notify.send(btitle, bmsg, tags=["books"], priority=4)
+        state["books_used"] = today
+        if follow_mode(cfg):
+            for r in book_steps:   # sofort fertig → gilt als erledigt
+                state.setdefault("assumed", []).append({
+                    "uid": r.uid, "data_id": r.data_id, "section": r.section, "queue": r.queue,
+                    "from_lvl": r.from_lvl, "start": now, "end": now, "name": r.name})
+                sent[f"{r.queue}:end:{int(now)}:{r.uid}"] = now
 
     # 2) Wirklich frei
     events = collect_events(v, cfg, now)
@@ -146,7 +169,8 @@ def run_check(v: Village, plan: Plan, cfg: Config, now: float, names: dict[int, 
                 parts.append(f"{nm} → {int(lvl) + 1} " + ("fertig" if when <= now else f"in {fmt_dur(when - now)} fertig"))
         lines.append(f"{ICON[q]} {QUEUE_LABEL[q]}: " + "; ".join(parts))
         # Empfehlungen: die nächsten Plan-Schritte, die noch nicht empfohlen wurden
-        recs = [r for r in plan.for_queue(q) if f"{r.uid}:{r.to_lvl}" not in recommended][:len(evs)]
+        recs = [r for r in plan.for_queue(q)
+                if f"{r.uid}:{r.to_lvl}" not in recommended and not r.book][:len(evs)]
         for r in recs:
             lines.append(f"   👉 Empfehlung: {r.name} {level_txt(r)} ({fmt_dur(r.duration)}, {fmt_cost(r)})")
             new_recs.append(r)

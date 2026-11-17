@@ -77,6 +77,7 @@ header{display:flex;justify-content:space-between;align-items:flex-start;gap:10p
 .tb.plan{opacity:.55;border-style:dashed}
 .tb.Gold{background:var(--gold)} .tb.Elixir{background:var(--elixir)} .tb.Dark{background:var(--dark);color:#fff}
 .tb.none{background:#8a7a6a}
+.tb.book{width:22px!important;padding:0;text-align:center;background:#fff3c4;margin-left:-11px;border-radius:50%;font-size:13px}
 .now{position:absolute;top:0;bottom:0;width:2px;background:var(--warn);z-index:2;box-shadow:0 0 8px var(--warn)}
 .detail{margin-top:8px;font-size:13px;min-height:20px;color:var(--mute)}
 .detail b{color:var(--text)}
@@ -131,7 +132,7 @@ function fmtNum(n) {
   if (n >= 1e3) return Math.round(n / 1e3) + "k";
   return String(n);
 }
-const lvlTxt = s => s.new || s.from === 0 ? "bauen" : `${s.from} → ${s.to}`;
+const lvlTxt = s => (s.new || s.from === 0 ? "bauen" : `${s.from} → ${s.to}`) + (s.book ? " 📖" : "");
 const costTxt = s => s.cost ? `<span class="cost ${resCls(s.res)}">${fmtNum(s.cost)} ${RES[s.res] || s.res}</span>` : "";
 
 // --- Zustand jetzt berechnen ---
@@ -195,6 +196,7 @@ function renderTimeline() {
   const rowHtml = rows.map(row => {
     const bars = all.filter(s => s.q === row.q && s.slot === row.slot && s.end > t0 && s.start < t1).map(s => {
       const l = Math.max(0, x(s.start)), w = Math.max(4, x(Math.min(s.end, t1)) - l);
+      if (s.book) return `<div class="tb book" style="left:${l}px" data-i='${esc(JSON.stringify({n: s.name + " (mit Buch)", l: lvlTxt(s), a: s.start, b: s.end, c: s.cost || 0, r: s.res || "", run: false}))}'>📖</div>`;
       return `<div class="tb ${resCls(s.res)} ${s.run ? "" : "plan"}" style="left:${l}px;width:${w}px" data-i='${esc(JSON.stringify({n: s.name, l: lvlTxt(s), a: s.start, b: s.end, c: s.cost || 0, r: s.res || "", run: s.run}))}'>${esc(s.name)}</div>`;
     }).join("");
     return `<div class="tl-row">${nights}${bars}</div>`;
@@ -217,9 +219,19 @@ function renderList() {
   $("#tabs").querySelectorAll("button").forEach(b => b.onclick = () => { listQ = b.dataset.q; renderList(); });
   $("#list").innerHTML = shown.length ? shown.map((s, n) => `<div class="li"><div class="n">${n + 1}</div>
       <div><div class="sname">${esc(s.name)} <span class="lvl">${lvlTxt(s)}</span></div>
-      <div class="t">${s.q === "builder" ? "B" + (s.slot + 1) + " · " : ""}ab ${fmtTime(s.start)} · ${fmtDur(s.end - s.start)}</div></div>
+      <div class="t">${s.q === "builder" ? "B" + (s.slot + 1) + " · " : ""}${s.book ? `<b style="color:var(--gold)">📖 mit Buch am ${fmtTime(s.start)}</b>` : `ab ${fmtTime(s.start)} · ${fmtDur(s.end - s.start)}`}</div></div>
       ${costTxt(s)}</div>`).join("") + ((D.stepCount[listQ] || 0) > shown.length ? `<div class="more">… noch ${D.stepCount[listQ] - shown.length} weitere Schritte</div>` : "")
     : `<div class="more">Alles erledigt auf diesem Rathaus-Level 🎉</div>`;
+}
+
+function renderBooks() {
+  const bs = D.steps.filter(s => s.book);
+  if (!bs.length) { $("#books").innerHTML = ""; return; }
+  const first = bs[0].start, day = bs.filter(s => s.start === first);
+  $("#books").innerHTML = `<h2>📖 Nächster Bücher-Tag</h2><div class="card"><h3>${fmtTime(first)}<span>Upgrade starten → Buch einsetzen</span></h3>
+    ${day.map(s => `<div class="slot"><div class="row"><div class="sname">${s.q === "builder" ? "🔨 Buch des Bauens" : "🧪 Labor-Buch"}</div>${costTxt(s)}</div>
+      <div class="sub"><span>${esc(s.name)} ${s.from} → ${s.to}</span></div></div>`).join("")}
+    <div class="sub" style="margin-top:8px"><span>Bis dahin plant der Planer 1 Bauarbeiter und das Labor so, dass sie rechtzeitig frei sind.</span></div></div>`;
 }
 
 function renderTotals() {
@@ -254,6 +266,7 @@ function render() {
   <h2>⏳ Läuft gerade</h2><div id="now"></div>
   <div class="tl-head"><h2>📅 Zeitleiste</h2><div class="seg" id="tlseg"><button data-d="7">7 Tage</button><button data-d="30">30 Tage</button></div></div>
   <div class="tl" id="tl"></div><div class="detail" id="detail">Tippe auf einen Balken für Details. Volle Balken laufen, gestrichelte sind geplant.</div>
+  <div id="books"></div>
   <h2>📋 Nächste Schritte</h2><div class="tabs" id="tabs"></div><div class="list" id="list"></div>
   <h2>📊 Bis alles fertig ist</h2><div class="tot" id="tot"></div>
   <footer>Zeiten ohne Tränke, Helfer &amp; Juwelen · Rohstoffe werden als vorhanden angenommen<br>
@@ -262,7 +275,7 @@ function render() {
     b.classList.toggle("on", +b.dataset.d === tlDays);
     b.onclick = () => { tlDays = +b.dataset.d; $("#tlseg").querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b)); renderTimeline(); };
   });
-  renderNow(); renderTimeline(); renderList(); renderTotals(); tick();
+  renderNow(); renderTimeline(); renderBooks(); renderList(); renderTotals(); tick();
 }
 
 function tick() {

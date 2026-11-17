@@ -23,6 +23,8 @@ def _step(s, extra=None) -> dict:
         d["goblin"] = True
     if s.assumed:
         d["assumed"] = True
+    if getattr(s, "book", False):
+        d["book"] = True
     if extra:
         d.update(extra)
     return d

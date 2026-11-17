@@ -135,3 +135,11 @@ default_tier = 4
 heroes_blocked = true
 start_day = 1
 end_day = 11
+
+# Bücher am Monatsanfang: Ein Bauarbeiter und das Labor werden so geplant, dass sie am Bücher-Tag
+# (zur Aufwachzeit) frei sind. Dann werden die längsten Upgrades mit Buch sofort fertig gemacht.
+[planner.books]
+enabled = true
+day = 1
+builder = 1     # Buch des Bauens
+lab = 2         # Labor-Bücher (Kampf/Zauber)

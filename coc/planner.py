@@ -46,6 +46,7 @@ class Step:
     goblin: bool = False
     assumed: bool = False
     section: str = ""
+    book: bool = False            # mit Buch sofort fertig (Bücher-Tag am Monatsanfang)
 
     @property
     def duration(self) -> float:
@@ -58,6 +59,7 @@ class Plan:
     steps: list[Step] = field(default_factory=list)
     running: list[Step] = field(default_factory=list)   # Upgrades, die beim Start schon laufen
     idle_at_start: dict[str, int] = field(default_factory=dict)
+    book_savings: list = field(default_factory=list)
 
     def for_queue(self, q: str) -> list[Step]:
         return [s for s in self.steps if s.queue == q]
@@ -96,6 +98,13 @@ class Planner:
         self.cwl_on = bool(cwl.get("heroes_blocked", True))
         self.cwl_days = (int(cwl.get("start_day", 1)), int(cwl.get("end_day", 11)))
         self._retry_at: float | None = None
+        bk = pc.get("books", {})
+        self.books_on = bool(bk.get("enabled", True))
+        self.books_day = int(bk.get("day", 1))
+        self.books_n = {"builder": int(bk.get("builder", 1)), "lab": int(bk.get("lab", 2))}
+        self.book_slot = max(village.capacity("builder") - 1, 0)   # dieser Bauarbeiter ist am 1. frei
+        self.book_times = self._make_book_times() if self.books_on else []
+        self._books_done: set[float] = set()
         self.busy: set[int] = set()
         self._next_uid = min(list(self.inst) + [0]) - 1
         self._known_th = 0
@@ -190,6 +199,51 @@ class Planner:
         out.sort(key=lambda c: c[0])
         return out
 
+    # ---------- Bücher am Monatsanfang ----------
+    def _make_book_times(self) -> list[float]:
+        """Jeden Monat am Bücher-Tag zur Aufwachzeit (bzw. jetzt, wenn heute Bücher-Tag ist)."""
+        from datetime import datetime
+        tz, out = self.cfg.tz, []
+        h, m = self.cfg.sleep_end.hour, self.cfg.sleep_end.minute
+        d = datetime.fromtimestamp(self.start, tz).replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        while d.timestamp() <= self.horizon:
+            bt = d.replace(day=self.books_day, hour=h, minute=m).timestamp()
+            today = datetime.fromtimestamp(bt, tz).strftime("%Y-%m-%d")
+            if bt <= self.start < bt + 86400 - 3600 * h:
+                if self.cfg.planner.get("books", {}).get("skip_date") != today:
+                    out.append(self.start)        # heute ist Bücher-Tag (und noch nicht erledigt)
+            elif bt > self.start:
+                out.append(bt)
+            d = d.replace(year=d.year + 1, month=1) if d.month == 12 else d.replace(month=d.month + 1)
+        return out
+
+    def _book_deadline(self, q: str, slot: int, start: float) -> float | None:
+        """Bis wann dieser Platz fertig sein muss, damit am Bücher-Tag das Buch genutzt werden kann."""
+        if not self.book_times or self.books_n.get(q, 0) <= 0:
+            return None
+        if q == "builder" and slot != self.book_slot:
+            return None
+        return next((bt for bt in self.book_times if bt >= start and bt not in self._books_done), None)
+
+    def _use_books(self, plan, idle, t):
+        self._books_done.add(t)
+        for q in ("builder", "lab"):
+            slot = self.book_slot if q == "builder" else 0
+            if self.books_n.get(q, 0) <= 0 or slot not in idle[q]:
+                continue
+            for _ in range(self.books_n[q]):
+                cands = [c for c in self._candidates(q, t) if c[2].section != "heroes"]
+                if not cands:
+                    break
+                key, group, inst, dur, cost, res = max(cands, key=lambda c: c[3])   # längstes = größte Ersparnis
+                obj = self.gd.get(inst.data_id)
+                plan.steps.append(Step(q, slot, t, t, inst.uid, inst.data_id, de_name(obj["name"]),
+                                       inst.level, inst.level + 1, cost, res, new=inst.level == 0,
+                                       section=inst.section, book=True))
+                plan.book_savings.append(dur)
+                inst.level += 1
+                self._add_new_buildings()
+
     def _cwl_windows(self, a: float, b: float):
         """CWL-Zeiträume (Start, Ende) im Bereich a..b, in deiner Zeitzone."""
         from datetime import datetime
@@ -253,7 +307,11 @@ class Planner:
                 idle[q].append(s)
 
         self._add_new_buildings()
+        for bt in self.book_times:
+            heapq.heappush(events, (bt, next(seq), "book", None, None, None))
         t = self.start
+        if self.book_times and self.book_times[0] == self.start:
+            self._use_books(plan, idle, t)
         self._assign_all(plan, idle, events, seq, t)
         while events:
             t, _, kind, q, slot, uid = heapq.heappop(events)
@@ -261,6 +319,8 @@ class Planner:
                 break
             if kind == "retry":
                 self._retry_pending = False
+            if kind == "book" and t > self.start:
+                self._use_books(plan, idle, t)
             if kind == "done":
                 self.inst[uid].level += 1
                 self.busy.discard(uid)
@@ -280,13 +340,18 @@ class Planner:
 
     def _assign_queues(self, plan, idle, events, seq, t):
         for q in QUEUES:
-            while idle[q]:
+            for slot in sorted(idle[q]):
                 start = self.cfg.earliest_start(t)
                 cands = self._candidates(q, start)
                 if not cands:
                     break
+                deadline = self._book_deadline(q, slot, start)
+                if deadline is not None:
+                    # Muss vor dem Bücher-Tag fertig sein (sonst bleibt der Platz bis dahin frei)
+                    cands = [c for c in cands if start + c[3] <= deadline]
+                    if not cands:
+                        continue
                 key, group, inst, dur, cost, res = self._choose(cands, start)
-                slot = min(idle[q])
                 idle[q].remove(slot)
                 self.busy.add(inst.uid)
                 end = start + dur

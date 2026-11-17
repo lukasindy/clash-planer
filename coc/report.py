@@ -35,7 +35,8 @@ def fmt_cost(s: Step) -> str:
 
 
 def level_txt(s: Step) -> str:
-    return "neu bauen" if s.new else f"{s.from_lvl} → {s.to_lvl}"
+    txt = "neu bauen" if s.new else f"{s.from_lvl} → {s.to_lvl}"
+    return txt + (" 📖 mit Buch" if getattr(s, "book", False) else "")
 
 
 def running_table(plan: Plan, cfg: Config, now: float) -> list[str]:
