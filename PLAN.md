@@ -2,16 +2,16 @@
 
 - **Spieler:** `#L88VCPGG0`
 - **Rathaus:** 19 · **Bauarbeiter:** 6 · **Labor:** 16 · **Begleiterhaus:** 12 · **Heldenhalle:** 12
-- **Export vom:** Di 17.11. 15:14 (vor 23m)
-- **Plan erstellt:** Di 17.11. 15:38
+- **Export vom:** Di 17.11. 15:14 (vor 28m)
+- **Plan erstellt:** Di 17.11. 15:43
 
 
 ## ⏳ Läuft gerade
 
 | Warteschlange | Was | Level | fertig am | Restzeit |
 |---|---|---|---|---|
-| Bauarbeiter | Sprungfeder | 12 → 13 | Di 17.11. 23:45 | 8h 7m |
-| Bauarbeiter | Sprungfeder | 12 → 13 | Di 17.11. 23:45 | 8h 7m |
+| Bauarbeiter | Sprungfeder | 12 → 13 | Di 17.11. 23:45 | 8h 1m |
+| Bauarbeiter | Sprungfeder | 12 → 13 | Di 17.11. 23:45 | 8h 2m |
 | Bauarbeiter (Goblin) | Squad Barracks | 1 → 2 | Mi 18.11. 16:15 | 1T |
 | Begleiterhaus | Angry Jelly | 10 → 11 | Mo 23.11. 15:13 | 5T 23h |
 | Labor | Magier | 13 → 14 | Di 24.11. 08:22 | 6T 16h |
@@ -24,62 +24,62 @@
 
 | # | Start | Was | Level | Dauer | Kosten | fertig |
 |---|---|---|---|---|---|---|
-| 1 | Mi 18.11. 07:00 | Clanburg *(B5)* | 14 → 15 | 16T | 31,5 Mio Elixier | Fr 04.12. 07:00 |
-| 2 | Mi 18.11. 07:00 | Heldenhalle *(B6)* | 12 → 13 | 15T 12h | 30,5 Mio Elixier | Do 03.12. 19:00 |
-| 3 | Fr 27.11. 18:36 | Labor *(B1)* | 16 → 17 | 15T | 30,5 Mio Elixier | Sa 12.12. 18:36 |
-| 4 | So 29.11. 07:00 | Zauberfabrik *(B3)* | 9 → 10 | 10T 12h | 18,5 Mio Elixier | Mi 09.12. 19:00 |
-| 5 | So 29.11. 07:56 | Bogenschützenkönigin *(B2)* | 105 → 106 | 8T | 450k Dunkles Elixier | Mo 07.12. 07:56 |
-| 6 | So 29.11. 15:05 | Barbarenkönig *(B4)* | 100 → 101 | 8T | 410k Dunkles Elixier | Mo 07.12. 15:05 |
-| 7 | Do 03.12. 19:00 | Dragon Duke *(B6)* | 25 → 26 | 8T | 505k Dunkles Elixier | Fr 11.12. 19:00 |
-| 8 | Fr 04.12. 07:00 | Großer Wächter *(B5)* | 77 → 78 | 8T | 24,5 Mio Elixier | Sa 12.12. 07:00 |
-| 9 | Mo 07.12. 07:56 | Bogenschützenkönigin *(B2)* | 106 → 107 | 8T | 455k Dunkles Elixier | Di 15.12. 07:56 |
-| 10 | Mo 07.12. 15:05 | Barbarenkönig *(B4)* | 101 → 102 | 8T | 420k Dunkles Elixier | Di 15.12. 15:05 |
-| 11 | Mi 09.12. 19:00 | Minion Prince *(B3)* | 95 → 96 | 8T | 505k Dunkles Elixier | Do 17.12. 19:00 |
-| 12 | Fr 11.12. 19:00 | Dragon Duke *(B6)* | 26 → 27 | 8T | 510k Dunkles Elixier | Sa 19.12. 19:00 |
-| 13 | Sa 12.12. 07:00 | Großer Wächter *(B5)* | 78 → 79 | 8T | 25,5 Mio Elixier | So 20.12. 07:00 |
-| 14 | Sa 12.12. 18:36 | Royal Champion *(B1)* | 54 → 55 | 8T | 500k Dunkles Elixier | So 20.12. 18:36 |
-| 15 | Di 15.12. 07:56 | Bogenschützenkönigin *(B2)* | 107 → 108 | 8T | 460k Dunkles Elixier | Mi 23.12. 07:56 |
-| 16 | Di 15.12. 15:05 | Barbarenkönig *(B4)* | 102 → 103 | 8T | 430k Dunkles Elixier | Mi 23.12. 15:05 |
-| 17 | Do 17.12. 19:00 | Minion Prince *(B3)* | 96 → 97 | 8T | 510k Dunkles Elixier | Fr 25.12. 19:00 |
-| 18 | Sa 19.12. 19:00 | Dragon Duke *(B6)* | 27 → 28 | 8T | 515k Dunkles Elixier | So 27.12. 19:00 |
-| 19 | So 20.12. 07:00 | Großer Wächter *(B5)* | 79 → 80 | 8T | 26,5 Mio Elixier | Mo 28.12. 07:00 |
-| 20 | So 20.12. 18:36 | Royal Champion *(B1)* | 55 → 56 | 8T | 505k Dunkles Elixier | Mo 28.12. 18:36 |
-| 21 | Mi 23.12. 07:56 | Bogenschützenkönigin *(B2)* | 108 → 109 | 8T | 465k Dunkles Elixier | Do 31.12. 07:56 |
-| 22 | Mi 23.12. 15:05 | Barbarenkönig *(B4)* | 103 → 104 | 8T | 440k Dunkles Elixier | Do 31.12. 15:05 |
-| 23 | Fr 25.12. 19:00 | Minion Prince *(B3)* | 97 → 98 | 8T | 515k Dunkles Elixier | Sa 02.01. 19:00 |
-| 24 | So 27.12. 19:00 | Dragon Duke *(B6)* | 28 → 29 | 8T | 520k Dunkles Elixier | Mo 04.01. 19:00 |
-| 25 | Mo 28.12. 07:00 | Großer Wächter *(B5)* | 80 → 81 | 8T | 27,5 Mio Elixier | Di 05.01. 07:00 |
+| 1 | Mi 18.11. 07:00 | Heldenhalle *(B5)* | 12 → 13 | 12T 9h | 24,4 Mio Elixier | Mo 30.11. 16:36 |
+| 2 | Mi 18.11. 07:00 | Labor *(B6)* | 16 → 17 | 12T | 24,4 Mio Elixier | Mo 30.11. 07:00 |
+| 3 | Fr 27.11. 18:36 | Clanburg *(B1)* | 14 → 15 | 12T 19h | 25,2 Mio Elixier | Do 10.12. 13:48 |
+| 4 | So 29.11. 07:00 | Zauberfabrik *(B3)* | 9 → 10 | 8T 9h | 14,8 Mio Elixier | Mo 07.12. 16:36 |
+| 5 | So 29.11. 07:56 | Bogenschützenkönigin *(B2)* | 105 → 106 | 6T 9h | 360k Dunkles Elixier | Sa 05.12. 17:32 |
+| 6 | So 29.11. 15:05 | Squad Barracks *(B4)* | 2 → 3 | 4T | 3 Mio Elixier | Do 03.12. 15:05 |
+| 7 | Mo 30.11. 07:00 | Barbarenkönig *(B6)* | 100 → 101 | 6T 9h | 328k Dunkles Elixier | So 06.12. 16:36 |
+| 8 | Mo 30.11. 16:36 | Dragon Duke *(B5)* | 25 → 26 | 6T 9h | 404k Dunkles Elixier | Mo 07.12. 02:12 |
+| 9 | Do 03.12. 15:05 | Großer Wächter *(B4)* | 77 → 78 | 7T 4h | 22,1 Mio Elixier | Do 10.12. 19:53 |
+| 10 | Sa 05.12. 17:32 | Bogenschützenkönigin *(B2)* | 106 → 107 | 7T 4h | 410k Dunkles Elixier | Sa 12.12. 22:20 |
+| 11 | So 06.12. 16:36 | Barbarenkönig *(B6)* | 101 → 102 | 7T 4h | 378k Dunkles Elixier | So 13.12. 21:24 |
+| 12 | Mo 07.12. 07:00 | Dragon Duke *(B5)* | 26 → 27 | 7T 4h | 459k Dunkles Elixier | Mo 14.12. 11:48 |
+| 13 | Mo 07.12. 16:36 | Minion Prince *(B3)* | 95 → 96 | 7T 4h | 454k Dunkles Elixier | Mo 14.12. 21:24 |
+| 14 | Do 10.12. 13:48 | Royal Champion *(B1)* | 54 → 55 | 7T 4h | 450k Dunkles Elixier | Do 17.12. 18:36 |
+| 15 | Do 10.12. 19:53 | Squad Barracks *(B4)* | 3 → 4 | 5T 9h | 5,4 Mio Elixier | Mi 16.12. 05:29 |
+| 16 | Sa 12.12. 22:20 | Bogenschützenkönigin *(B2)* | 107 → 108 | 7T 4h | 414k Dunkles Elixier | So 20.12. 03:08 |
+| 17 | So 13.12. 21:24 | Barbarenkönig *(B6)* | 102 → 103 | 7T 4h | 387k Dunkles Elixier | Mo 21.12. 02:12 |
+| 18 | Mo 14.12. 11:48 | Dragon Duke *(B5)* | 27 → 28 | 7T 4h | 464k Dunkles Elixier | Mo 21.12. 16:36 |
+| 19 | Mo 14.12. 21:24 | Großer Wächter *(B3)* | 78 → 79 | 7T 4h | 22,9 Mio Elixier | Di 22.12. 02:12 |
+| 20 | Mi 16.12. 07:00 | Minion Prince *(B4)* | 96 → 97 | 7T 4h | 459k Dunkles Elixier | Mi 23.12. 11:48 |
+| 21 | Do 17.12. 18:36 | Squad Barracks *(B1)* | 4 → 5 | 6T 7h | 6,8 Mio Elixier | Do 24.12. 01:48 |
+| 22 | So 20.12. 07:00 | Bogenschützenkönigin *(B2)* | 108 → 109 | 7T 4h | 418k Dunkles Elixier | So 27.12. 11:48 |
+| 23 | Mo 21.12. 07:00 | Barbarenkönig *(B6)* | 103 → 104 | 7T 4h | 396k Dunkles Elixier | Mo 28.12. 11:48 |
+| 24 | Mo 21.12. 16:36 | Dragon Duke *(B5)* | 28 → 29 | 7T 4h | 468k Dunkles Elixier | Mo 28.12. 21:24 |
+| 25 | Di 22.12. 07:00 | Großer Wächter *(B3)* | 79 → 80 | 7T 4h | 23,9 Mio Elixier | Di 29.12. 11:48 |
 | … | | *noch 176 weitere Schritte* | | | | |
 
 ## 🧪 Labor – nächste Schritte
 
 | # | Start | Was | Level | Dauer | Kosten | fertig |
 |---|---|---|---|---|---|---|
-| 1 | Di 24.11. 08:22 | Fledermauszauber | 5 → 6 | 7T 6h | 190k Dunkles Elixier | Di 01.12. 14:22 |
-| 2 | Di 01.12. 14:22 | Giftzauber | 8 → 9 | 7T 6h | 175k Dunkles Elixier | Di 08.12. 20:22 |
-| 3 | Di 08.12. 20:22 | Bowler | 6 → 7 | 7T 12h | 175k Dunkles Elixier | Mi 16.12. 08:22 |
-| 4 | Mi 16.12. 08:22 | Ice Golem | 6 → 7 | 7T 12h | 170k Dunkles Elixier | Mi 23.12. 20:22 |
-| 5 | Mi 23.12. 20:22 | Bowler | 7 → 8 | 8T | 205k Dunkles Elixier | Do 31.12. 20:22 |
-| 6 | Do 31.12. 20:22 | Giftzauber | 9 → 10 | 8T | 200k Dunkles Elixier | Fr 08.01. 20:22 |
-| 7 | Fr 08.01. 20:22 | Erdbebenzauber | 5 → 6 | 8T 12h | 200k Dunkles Elixier | So 17.01. 08:22 |
-| 8 | So 17.01. 08:22 | Ice Golem | 7 → 8 | 8T 12h | 225k Dunkles Elixier | Mo 25.01. 20:22 |
-| 9 | Mo 25.01. 20:22 | Bowler | 8 → 9 | 9T | 245k Dunkles Elixier | Mi 03.02. 20:22 |
-| 10 | Mi 03.02. 20:22 | Giftzauber | 10 → 11 | 10T | 280k Dunkles Elixier | Sa 13.02. 20:22 |
-| 11 | Sa 13.02. 20:22 | Kobold | 9 → 10 | 10T 12h | 22 Mio Elixier | Mi 24.02. 08:22 |
-| 12 | Mi 24.02. 08:22 | Fledermauszauber | 6 → 7 | 9T 6h | 245k Dunkles Elixier | Fr 05.03. 14:22 |
-| 13 | Fr 05.03. 14:22 | Ice Block Spell | 4 → 5 | 11T | 290k Dunkles Elixier | Di 16.03. 14:22 |
-| 14 | Di 16.03. 14:22 | Erdbebenzauber | 6 → 7 | 12T | 305k Dunkles Elixier | So 28.03. 15:22 |
-| 15 | So 28.03. 15:22 | Angry Spell | 2 → 3 | 13T | 350k Dunkles Elixier | Sa 10.04. 15:22 |
-| 16 | Sa 10.04. 15:22 | Fledermauszauber | 7 → 8 | 13T | 415k Dunkles Elixier | Fr 23.04. 15:22 |
-| 17 | Fr 23.04. 15:22 | Druid | 5 → 6 | 13T | 415k Dunkles Elixier | Do 06.05. 15:22 |
-| 18 | Do 06.05. 15:22 | Riese | 13 → 14 | 13T | 29,5 Mio Elixier | Mi 19.05. 15:22 |
-| 19 | Mi 19.05. 15:22 | Eilzauber | 6 → 7 | 13T | 415k Dunkles Elixier | Di 01.06. 15:22 |
-| 20 | Di 01.06. 15:22 | Blitzzauber | 12 → 13 | 15T | 31 Mio Elixier | Mi 16.06. 15:22 |
-| 21 | Mi 16.06. 15:22 | Golem | 13 → 14 | 10T 12h | 295k Dunkles Elixier | So 27.06. 03:22 |
-| 22 | So 27.06. 07:00 | Schweinereiter | 13 → 14 | 10T 12h | 285k Dunkles Elixier | Mi 07.07. 19:00 |
-| 23 | Mi 07.07. 19:00 | Bowler | 9 → 10 | 11T 12h | 385k Dunkles Elixier | Mo 19.07. 07:00 |
-| 24 | Mo 19.07. 07:00 | Headhunter | 3 → 4 | 12T 12h | 425k Dunkles Elixier | Sa 31.07. 19:00 |
-| 25 | Sa 31.07. 19:00 | Mauerbrecher | 13 → 14 | 12T 12h | 29 Mio Elixier | Fr 13.08. 07:00 |
+| 1 | Di 24.11. 08:22 | Bowler | 6 → 7 | 6T | 140k Dunkles Elixier | Mo 30.11. 08:22 |
+| 2 | Mo 30.11. 08:22 | Ice Golem | 6 → 7 | 6T | 136k Dunkles Elixier | So 06.12. 08:22 |
+| 3 | So 06.12. 08:22 | Fledermauszauber | 5 → 6 | 6T 12h | 171k Dunkles Elixier | Sa 12.12. 20:58 |
+| 4 | Sa 12.12. 20:58 | Giftzauber | 8 → 9 | 6T 12h | 158k Dunkles Elixier | Sa 19.12. 09:34 |
+| 5 | Sa 19.12. 09:34 | Bowler | 7 → 8 | 7T 4h | 184k Dunkles Elixier | Sa 26.12. 14:22 |
+| 6 | Sa 26.12. 14:22 | Giftzauber | 9 → 10 | 7T 4h | 180k Dunkles Elixier | Sa 02.01. 19:10 |
+| 7 | Sa 02.01. 19:10 | Erdbebenzauber | 5 → 6 | 7T 15h | 180k Dunkles Elixier | So 10.01. 10:46 |
+| 8 | So 10.01. 10:46 | Bowler | 8 → 9 | 8T 2h | 220k Dunkles Elixier | Mo 18.01. 13:10 |
+| 9 | Mo 18.01. 13:10 | Fledermauszauber | 6 → 7 | 8T 7h | 220k Dunkles Elixier | Di 26.01. 20:58 |
+| 10 | Di 26.01. 20:58 | Ice Golem | 7 → 8 | 7T 15h | 202k Dunkles Elixier | Mi 03.02. 12:34 |
+| 11 | Mi 03.02. 12:34 | Giftzauber | 10 → 11 | 9T | 252k Dunkles Elixier | Fr 12.02. 12:34 |
+| 12 | Fr 12.02. 12:34 | Ice Block Spell | 4 → 5 | 9T 21h | 261k Dunkles Elixier | Mo 22.02. 10:10 |
+| 13 | Mo 22.02. 10:10 | Kobold | 9 → 10 | 9T 10h | 19,8 Mio Elixier | Mi 03.03. 20:58 |
+| 14 | Mi 03.03. 20:58 | Golem | 13 → 14 | 9T 10h | 266k Dunkles Elixier | Sa 13.03. 07:46 |
+| 15 | Sa 13.03. 07:46 | Schweinereiter | 13 → 14 | 9T 10h | 256k Dunkles Elixier | Mo 22.03. 18:34 |
+| 16 | Mo 22.03. 18:34 | Erdbebenzauber | 6 → 7 | 10T 19h | 274k Dunkles Elixier | Fr 02.04. 14:46 |
+| 17 | Fr 02.04. 14:46 | Headhunter | 3 → 4 | 11T 6h | 382k Dunkles Elixier | Di 13.04. 20:46 |
+| 18 | Di 13.04. 20:46 | Angry Spell | 2 → 3 | 11T 16h | 315k Dunkles Elixier | So 25.04. 13:34 |
+| 19 | So 25.04. 13:34 | Bowler | 9 → 10 | 10T 8h | 346k Dunkles Elixier | Mi 05.05. 21:58 |
+| 20 | Mi 05.05. 21:58 | Fledermauszauber | 7 → 8 | 11T 16h | 374k Dunkles Elixier | Mo 17.05. 14:46 |
+| 21 | Mo 17.05. 14:46 | Mauerbrecher | 13 → 14 | 11T 6h | 26,1 Mio Elixier | Fr 28.05. 20:46 |
+| 22 | Fr 28.05. 20:46 | Druid | 5 → 6 | 11T 16h | 374k Dunkles Elixier | Mi 09.06. 13:34 |
+| 23 | Mi 09.06. 13:34 | Schweinereiter | 14 → 15 | 12T 3h | 396k Dunkles Elixier | Mo 21.06. 17:10 |
+| 24 | Mo 21.06. 17:10 | Riese | 13 → 14 | 11T 16h | 26,6 Mio Elixier | Sa 03.07. 09:58 |
+| 25 | Sa 03.07. 09:58 | Giftzauber | 11 → 12 | 12T 3h | 382k Dunkles Elixier | Do 15.07. 13:34 |
 | … | | *noch 6 weitere Schritte* | | | | |
 
 ## 🐾 Begleiterhaus – nächste Schritte
@@ -94,8 +94,8 @@
 
 | Warteschlange | Schritte | fertig ungefähr | Kosten |
 |---|---|---|---|
-| Bauarbeiter | 201 | Mo 30.08. 08:56 | 1063,8 Mio Elixier, 18,6 Mio Dunkles Elixier, 1626,5 Mio Gold |
-| Labor | 31 | Sa 06.11. 18:00 | 7,7 Mio Dunkles Elixier, 173,5 Mio Elixier |
+| Bauarbeiter | 201 | Di 27.07. 11:48 | 945,9 Mio Elixier, 16,6 Mio Dunkles Elixier, 1463,8 Mio Gold |
+| Labor | 31 | Fr 01.10. 09:58 | 6,9 Mio Dunkles Elixier, 156,2 Mio Elixier |
 | Begleiterhaus | 3 | Do 17.12. 15:13 | 1,1 Mio Dunkles Elixier |
 
 ---

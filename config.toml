@@ -13,10 +13,16 @@ sleep_end = "07:00"
 
 [boosts]
 # Goldpass-Boost in Prozent (0, 10, 15 oder 20). Senkt laut Supercell Bauzeit UND Kosten.
-# Grundwert, der immer gilt (normalerweise 0):
-builder_percent = 0
-lab_percent = 0
-pet_percent = 0
+# Grundwert, der jeden Monat ab dem 1. gilt (Pass wird gekauft → 10 % gibt es sofort).
+builder_percent = 10
+lab_percent = 10
+pet_percent = 0      # Goldpass boostet das Begleiterhaus nicht
+
+# Aktuelle Saison: schon 20 % – gilt bis Saisonende (1. des nächsten Monats), danach wieder Grundwert.
+[[boosts.schedule]]
+from = "2026-11-17"
+builder = 20
+lab = 20
 
 # Zeitplan: Ab "from" gilt der Boost für alle Upgrades, die ab dann STARTEN.
 # Laufende Upgrades bleiben unverändert. "until" weglassen = bis Saisonende (Monatswechsel).
