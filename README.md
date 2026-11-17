@@ -74,7 +74,7 @@ Ohne Kurzbefehl geht es auch von Hand: **Issues → New issue**, Export als Besc
   tippen. Der Export ersetzt alle Annahmen, danach ist alles wieder exakt.
 - Nach 7 Tagen ohne Export erinnert dich das Repo an einen Abgleich (einstellbar).
 - Jede Meldung kommt pro Ereignis nur einmal.
-- Nachts (Standard 23–7 Uhr) werden Meldungen bis zum Aufwachen zurückgehalten.
+- Meldungen kommen rund um die Uhr. Mit `quiet_at_night = true` werden sie in der Schlafenszeit bis zum Aufwachen zurückgehalten.
 - Gemeldet wird schon **15 Minuten vorher** (einstellbar), weil GitHub-Zeitpläne oft etwas später laufen.
 - Den aktuellen Status siehst du auch unter **Actions → Timer-Check → letzter Lauf** (Zusammenfassung).
 

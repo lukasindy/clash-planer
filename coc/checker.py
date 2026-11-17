@@ -215,9 +215,13 @@ def run_check(v: Village, plan: Plan, cfg: Config, now: float, names: dict[int, 
         if follow_mode(cfg) and lines and lines[0] != REMINDER_LINE:
             # Plan-folgen-Modus: wir gehen davon aus, dass du die Empfehlungen startest
             for r in new_recs:
+                st = r.start
+                # Nachts benachrichtigt (Nachtruhe aus) → du startest wohl gleich, nicht erst morgens
+                if not nconf.get("quiet_at_night", True) and cfg.asleep(now) and st > now:
+                    st = now
                 state.setdefault("assumed", []).append({
                     "uid": r.uid, "data_id": r.data_id, "section": r.section, "queue": r.queue,
-                    "from_lvl": r.from_lvl, "start": r.start, "end": r.end, "name": r.name})
+                    "from_lvl": r.from_lvl, "start": st, "end": st + r.duration, "name": r.name})
     elif quiet and new:
         log.append("🌙 Schlafenszeit – Benachrichtigung wird beim Aufwachen geschickt.")
     elif not soon_log:

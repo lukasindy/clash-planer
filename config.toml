@@ -39,6 +39,8 @@ ahead_minutes = 0
 reminder_hours = 0
 # Erinnerung an einen Abgleich-Export nach so vielen Tagen (0 = aus).
 stale_export_days = 7
+# Auch nachts benachrichtigen (true = Meldungen in der Schlafenszeit bis zum Aufwachen zurückhalten)
+quiet_at_night = false
 # Was überwacht werden soll
 builders = true
 lab = true
