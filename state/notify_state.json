@@ -3,6 +3,9 @@
   "export_ts": 1794924888.0,
   "last_reminder": 0,
   "recommended": [],
-  "sent": {},
+  "sent": {
+    "soon:builder:1794955528:450": 1794952265.5601716,
+    "soon:builder:1794955543:451": 1794952265.5601716
+  },
   "stale_warned": false
 }
