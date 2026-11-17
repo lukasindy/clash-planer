@@ -37,7 +37,7 @@ def send(title: str, message: str, tags: list[str] | None = None, priority: int 
     env = os.environ
     if env.get("NTFY_TOPIC"):
         try:
-            server = env.get("NTFY_SERVER", "https://ntfy.sh").rstrip("/")
+            server = (env.get("NTFY_SERVER") or "https://ntfy.sh").rstrip("/")
             headers = {"Authorization": f"Bearer {env['NTFY_TOKEN']}"} if env.get("NTFY_TOKEN") else {}
             _post(server, {"topic": env["NTFY_TOPIC"], "title": title, "message": message,
                            "tags": tags or [], "priority": priority}, headers)
