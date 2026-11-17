@@ -51,7 +51,21 @@ def main(argv: list[str] | None = None) -> int:
     i = sub.add_parser("import")
     i.add_argument("file")
     sub.add_parser("import-issue")
+    sub.add_parser("test-notify")
     args = ap.parse_args(argv)
+
+    if args.cmd == "test-notify":
+        from . import notify
+        ch = notify.channels()
+        if not ch:
+            msg = "❌ Kein Kanal eingerichtet – Secret NTFY_TOPIC (oder Telegram/Discord) fehlt."
+            print(msg); _summary(msg)
+            return 1
+        errs = notify.send("Clash: Test ✅", "Benachrichtigungen funktionieren! "
+                           "Jetzt nur noch den ersten Export schicken.", tags=["tada"])
+        msg = ("❌ Fehler: " + "; ".join(errs)) if errs else f"✅ Testnachricht gesendet über: {', '.join(ch)}"
+        print(msg); _summary(msg)
+        return 1 if errs else 0
 
     cfg = load_config(args.config)
     now = args.now or time.time()
