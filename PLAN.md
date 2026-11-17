@@ -13,7 +13,7 @@
 | Bauarbeiter | Bogenschützenkönigin | 104 → 105 | Di 17.11. 17:30 | 2h 41m |
 | Bauarbeiter | Royal Champion | 53 → 54 | Di 17.11. 17:30 | 2h 41m |
 | Bauarbeiter | Sprungfeder | 12 → 13 | Mi 18.11. 02:37 | 11h 47m |
-| Bauarbeiter | Sprungfeder | 12 → 13 | Mi 18.11. 02:37 | 11h 48m |
+| Bauarbeiter | Sprungfeder | 12 → 13 | Mi 18.11. 02:37 | 11h 47m |
 | Bauarbeiter (Goblin) | Squad Barracks | 1 → 2 | Mi 18.11. 19:07 | 1T 4h |
 | Labor | Magier | 13 → 14 | Di 24.11. 09:23 | 6T 18h |
 | Begleiterhaus *(angenommen)* | Angry Jelly | 10 → 11 | Mi 25.11. 14:45 | 7T 23h |
