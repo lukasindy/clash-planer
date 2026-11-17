@@ -2,15 +2,15 @@
 
 - **Spieler:** `#L88VCPGG0`
 - **Rathaus:** 19 · **Bauarbeiter:** 6 · **Labor:** 16 · **Begleiterhaus:** 12 · **Heldenhalle:** 12
-- **Export vom:** Di 17.11. 23:37 (vor 37m)
-- **Plan erstellt:** Mi 18.11. 00:14
+- **Export vom:** Di 17.11. 23:37 (vor 38m)
+- **Plan erstellt:** Mi 18.11. 00:15
 
 
 ## ⏳ Läuft gerade
 
 | Warteschlange | Was | Level | fertig am | Restzeit |
 |---|---|---|---|---|
-| Bauarbeiter (Goblin) | Squad Barracks | 1 → 2 | Mi 18.11. 16:15 | 16h 1m |
+| Bauarbeiter (Goblin) | Squad Barracks | 1 → 2 | Mi 18.11. 16:15 | 15h 59m |
 | Begleiterhaus | Angry Jelly | 10 → 11 | Mo 23.11. 15:13 | 5T 14h |
 | Labor | Magier | 13 → 14 | Di 24.11. 07:39 | 6T 7h |
 | Bauarbeiter | Firecracker Tower | 0 → 1 | Fr 27.11. 18:36 | 9T 18h |
@@ -56,30 +56,30 @@
 | # | Start | Was | Level | Dauer | Kosten | fertig |
 |---|---|---|---|---|---|---|
 | 1 | Di 24.11. 07:39 | Bowler | 6 → 7 | 6T | 140k Dunkles Elixier | Mo 30.11. 07:39 |
-| 2 | Di 01.12. 07:00 | Barch Squad | 1 → 2 📖 mit Buch | 0m | 29,2 Mio Elixier | Di 01.12. 07:00 |
-| 3 | Di 01.12. 07:00 | Barch Squad | 2 → 3 📖 mit Buch | 0m | 29,2 Mio Elixier | Di 01.12. 07:00 |
-| 4 | Di 01.12. 07:00 | Fledermauszauber | 5 → 6 | 6T 12h | 171k Dunkles Elixier | Mo 07.12. 19:36 |
-| 5 | Mo 07.12. 19:36 | Bowler | 7 → 8 | 6T 19h | 174k Dunkles Elixier | Mo 14.12. 14:48 |
-| 6 | Mo 14.12. 14:48 | Giftzauber | 8 → 9 | 5T 19h | 140k Dunkles Elixier | So 20.12. 10:00 |
-| 7 | So 20.12. 10:00 | Ice Golem | 6 → 7 | 6T | 136k Dunkles Elixier | Sa 26.12. 10:00 |
-| 8 | Fr 01.01. 07:00 | Flame Flinger | 5 → 6 📖 mit Buch | 0m | 27,9 Mio Elixier | Fr 01.01. 07:00 |
-| 9 | Fr 01.01. 07:00 | Blitzzauber | 12 → 13 📖 mit Buch | 0m | 27,9 Mio Elixier | Fr 01.01. 07:00 |
-| 10 | Fr 01.01. 07:00 | Giftzauber | 9 → 10 | 7T 4h | 180k Dunkles Elixier | Fr 08.01. 11:48 |
-| 11 | Fr 08.01. 11:48 | Erdbebenzauber | 5 → 6 | 6T 19h | 160k Dunkles Elixier | Fr 15.01. 07:00 |
-| 12 | Fr 15.01. 07:00 | Bowler | 8 → 9 | 7T 4h | 196k Dunkles Elixier | Fr 22.01. 11:48 |
-| 13 | Fr 22.01. 11:48 | Ice Golem | 7 → 8 | 6T 19h | 180k Dunkles Elixier | Fr 29.01. 07:00 |
-| 14 | Mo 01.02. 07:00 | Blitzzauber | 13 → 14 📖 mit Buch | 0m | 27,9 Mio Elixier | Mo 01.02. 07:00 |
-| 15 | Mo 01.02. 07:00 | Totem Spell | 4 → 5 📖 mit Buch | 0m | 27,9 Mio Elixier | Mo 01.02. 07:00 |
-| 16 | Mo 01.02. 07:00 | Ice Golem | 8 → 9 | 7T 15h | ≈202k Dunkles Elixier | Mo 08.02. 22:36 |
-| 17 | Mo 08.02. 22:36 | Fledermauszauber | 6 → 7 | 7T 9h | 196k Dunkles Elixier | Di 16.02. 08:12 |
-| 18 | Di 16.02. 08:12 | Giftzauber | 10 → 11 | 8T | 224k Dunkles Elixier | Mi 24.02. 08:12 |
-| 19 | Mo 01.03. 07:00 | Heilzauber | 11 → 12 📖 mit Buch | 0m | 26,6 Mio Elixier | Mo 01.03. 07:00 |
-| 20 | Mo 01.03. 07:00 | Heilzauber | 12 → 13 📖 mit Buch | 0m | 26,6 Mio Elixier | Mo 01.03. 07:00 |
-| 21 | Mo 01.03. 07:00 | Wall Wrecker | 5 → 6 | 9T | ≈15,8 Mio Elixier | Mi 10.03. 07:00 |
-| 22 | Mi 10.03. 07:00 | Battle Blimp | 5 → 6 | 8T 9h | ≈14,8 Mio Elixier | Do 18.03. 16:36 |
-| 23 | Do 18.03. 16:36 | Ice Block Spell | 4 → 5 | 8T 19h | 232k Dunkles Elixier | Sa 27.03. 11:48 |
-| 24 | Do 01.04. 07:00 | Hexe | 7 → 8 📖 mit Buch | 0m | 414k Dunkles Elixier | Do 01.04. 07:00 |
-| 25 | Do 01.04. 07:00 | Hexe | 8 → 9 📖 mit Buch | 0m | 414k Dunkles Elixier | Do 01.04. 07:00 |
+| 2 | Di 01.12. 07:00 | Drache | 13 → 14 📖 mit Buch | 0m | 25,6 Mio Elixier | Di 01.12. 07:00 |
+| 3 | Di 01.12. 07:00 | Dragon Rider | 6 → 7 📖 mit Buch | 0m | 25,6 Mio Elixier | Di 01.12. 07:00 |
+| 4 | Di 01.12. 07:00 | Magier | 14 → 15 🔨 mit Hammer | 0m | – | Di 01.12. 07:00 |
+| 5 | Di 01.12. 07:00 | Fledermauszauber | 5 → 6 | 6T 12h | 171k Dunkles Elixier | Mo 07.12. 19:36 |
+| 6 | Mo 07.12. 19:36 | Bowler | 7 → 8 | 6T 19h | 174k Dunkles Elixier | Mo 14.12. 14:48 |
+| 7 | Mo 14.12. 14:48 | Giftzauber | 8 → 9 | 5T 19h | 140k Dunkles Elixier | So 20.12. 10:00 |
+| 8 | So 20.12. 10:00 | Ice Golem | 6 → 7 | 6T | 136k Dunkles Elixier | Sa 26.12. 10:00 |
+| 9 | Fr 01.01. 07:00 | Barch Squad | 1 → 2 📖 mit Buch | 0m | 29,2 Mio Elixier | Fr 01.01. 07:00 |
+| 10 | Fr 01.01. 07:00 | Barch Squad | 2 → 3 📖 mit Buch | 0m | 29,2 Mio Elixier | Fr 01.01. 07:00 |
+| 11 | Fr 01.01. 07:00 | Giftzauber | 9 → 10 | 7T 4h | 180k Dunkles Elixier | Fr 08.01. 11:48 |
+| 12 | Fr 08.01. 11:48 | Erdbebenzauber | 5 → 6 | 6T 19h | 160k Dunkles Elixier | Fr 15.01. 07:00 |
+| 13 | Fr 15.01. 07:00 | Bowler | 8 → 9 | 7T 4h | 196k Dunkles Elixier | Fr 22.01. 11:48 |
+| 14 | Fr 22.01. 11:48 | Ice Golem | 7 → 8 | 6T 19h | 180k Dunkles Elixier | Fr 29.01. 07:00 |
+| 15 | Mo 01.02. 07:00 | Flame Flinger | 5 → 6 📖 mit Buch | 0m | 27,9 Mio Elixier | Mo 01.02. 07:00 |
+| 16 | Mo 01.02. 07:00 | Blitzzauber | 12 → 13 📖 mit Buch | 0m | 27,9 Mio Elixier | Mo 01.02. 07:00 |
+| 17 | Mo 01.02. 07:00 | Ice Golem | 8 → 9 | 7T 15h | ≈202k Dunkles Elixier | Mo 08.02. 22:36 |
+| 18 | Mo 08.02. 22:36 | Fledermauszauber | 6 → 7 | 7T 9h | 196k Dunkles Elixier | Di 16.02. 08:12 |
+| 19 | Di 16.02. 08:12 | Giftzauber | 10 → 11 | 8T | 224k Dunkles Elixier | Mi 24.02. 08:12 |
+| 20 | Mo 01.03. 07:00 | Blitzzauber | 13 → 14 📖 mit Buch | 0m | 27,9 Mio Elixier | Mo 01.03. 07:00 |
+| 21 | Mo 01.03. 07:00 | Totem Spell | 4 → 5 📖 mit Buch | 0m | 27,9 Mio Elixier | Mo 01.03. 07:00 |
+| 22 | Mo 01.03. 07:00 | Wall Wrecker | 5 → 6 | 9T | ≈15,8 Mio Elixier | Mi 10.03. 07:00 |
+| 23 | Mi 10.03. 07:00 | Battle Blimp | 5 → 6 | 8T 9h | ≈14,8 Mio Elixier | Do 18.03. 16:36 |
+| 24 | Do 18.03. 16:36 | Ice Block Spell | 4 → 5 | 8T 19h | 232k Dunkles Elixier | Sa 27.03. 11:48 |
+| 25 | Do 01.04. 07:00 | Heilzauber | 11 → 12 📖 mit Buch | 0m | 26,6 Mio Elixier | Do 01.04. 07:00 |
 | … | | *noch 55 weitere Schritte* | | | | |
 
 ## 🐾 Begleiterhaus – nächste Schritte
@@ -96,7 +96,7 @@
 | Warteschlange | Schritte | fertig ungefähr | Kosten |
 |---|---|---|---|
 | Bauarbeiter | 205 | Sa 25.09. 02:12 | 850,9 Mio Elixier, 1343,7 Mio Gold, 16,9 Mio Dunkles Elixier |
-| Labor | 80 | Do 23.03. 16:36 | 12,6 Mio Dunkles Elixier, 878,8 Mio Elixier |
+| Labor | 80 | Do 23.03. 16:36 | 12,6 Mio Dunkles Elixier, 852 Mio Elixier |
 | Begleiterhaus | 4 | Sa 19.12. 21:24 | 1,2 Mio Dunkles Elixier |
 
 ---
