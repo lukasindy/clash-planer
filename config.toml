@@ -16,13 +16,14 @@ sleep_end = "07:00"
 # Grundwert, der jeden Monat ab dem 1. gilt (Pass wird gekauft → 10 % gibt es sofort).
 builder_percent = 10
 lab_percent = 10
-pet_percent = 0      # Goldpass boostet das Begleiterhaus nicht
+pet_percent = 10     # Forschungsboost gilt auch fürs Begleiterhaus
 
 # Aktuelle Saison: schon 20 % – gilt bis Saisonende (1. des nächsten Monats), danach wieder Grundwert.
 [[boosts.schedule]]
 from = "2026-11-17"
 builder = 20
 lab = 20
+pets = 20
 
 # Zeitplan: Ab "from" gilt der Boost für alle Upgrades, die ab dann STARTEN.
 # Laufende Upgrades bleiben unverändert. "until" weglassen = bis Saisonende (Monatswechsel).

@@ -2,16 +2,16 @@
 
 - **Spieler:** `#L88VCPGG0`
 - **Rathaus:** 19 · **Bauarbeiter:** 6 · **Labor:** 16 · **Begleiterhaus:** 12 · **Heldenhalle:** 12
-- **Export vom:** Di 17.11. 15:14 (vor 29m)
-- **Plan erstellt:** Di 17.11. 15:44
+- **Export vom:** Di 17.11. 15:14 (vor 31m)
+- **Plan erstellt:** Di 17.11. 15:46
 
 
 ## ⏳ Läuft gerade
 
 | Warteschlange | Was | Level | fertig am | Restzeit |
 |---|---|---|---|---|
-| Bauarbeiter | Sprungfeder | 12 → 13 | Di 17.11. 23:45 | 8h 1m |
-| Bauarbeiter | Sprungfeder | 12 → 13 | Di 17.11. 23:45 | 8h 1m |
+| Bauarbeiter | Sprungfeder | 12 → 13 | Di 17.11. 23:45 | 7h 59m |
+| Bauarbeiter | Sprungfeder | 12 → 13 | Di 17.11. 23:45 | 7h 59m |
 | Bauarbeiter (Goblin) | Squad Barracks | 1 → 2 | Mi 18.11. 16:15 | 1T |
 | Begleiterhaus | Angry Jelly | 10 → 11 | Mo 23.11. 15:13 | 5T 23h |
 | Labor | Magier | 13 → 14 | Di 24.11. 08:22 | 6T 16h |
@@ -86,9 +86,9 @@
 
 | # | Start | Was | Level | Dauer | Kosten | fertig |
 |---|---|---|---|---|---|---|
-| 1 | Mo 23.11. 15:13 | Angry Jelly | 11 → 12 | 8T | 320k Dunkles Elixier | Di 01.12. 15:13 |
-| 2 | Di 01.12. 15:13 | Angry Jelly | 12 → 13 | 8T | 350k Dunkles Elixier | Mi 09.12. 15:13 |
-| 3 | Mi 09.12. 15:13 | Angry Jelly | 13 → 14 | 8T | 380k Dunkles Elixier | Do 17.12. 15:13 |
+| 1 | Mo 23.11. 15:13 | Angry Jelly | 11 → 12 | 6T 9h | 256k Dunkles Elixier | Mo 30.11. 00:49 |
+| 2 | Mo 30.11. 07:00 | Angry Jelly | 12 → 13 | 6T 9h | 280k Dunkles Elixier | So 06.12. 16:36 |
+| 3 | So 06.12. 16:36 | Angry Jelly | 13 → 14 | 7T 4h | 342k Dunkles Elixier | So 13.12. 21:24 |
 
 ## 📊 Bis alles für Rathaus 19 fertig ist
 
@@ -96,7 +96,7 @@
 |---|---|---|---|
 | Bauarbeiter | 201 | Di 27.07. 11:48 | 945,9 Mio Elixier, 16,6 Mio Dunkles Elixier, 1463,8 Mio Gold |
 | Labor | 31 | Fr 01.10. 09:58 | 6,9 Mio Dunkles Elixier, 156,2 Mio Elixier |
-| Begleiterhaus | 3 | Do 17.12. 15:13 | 1,1 Mio Dunkles Elixier |
+| Begleiterhaus | 3 | So 13.12. 21:24 | 878k Dunkles Elixier |
 
 ---
 *Zeiten ohne Bauarbeiter-/Forschungstränke, Helfer und Juwelen. Der Plan geht davon aus, dass genug Rohstoffe da sind. Nach jedem neuen Export wird er neu berechnet.*
