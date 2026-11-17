@@ -2,23 +2,25 @@
 
 - **Spieler:** `#L88VCPGG0`
 - **Rathaus:** 19 · **Bauarbeiter:** 6 · **Labor:** 16 · **Begleiterhaus:** 12 · **Heldenhalle:** 12
-- **Export vom:** Di 17.11. 14:44 (vor 0m)
-- **Plan erstellt:** Di 17.11. 14:45
+- **Export vom:** Di 17.11. 14:44 (vor 3m)
+- **Plan erstellt:** Di 17.11. 14:47
 
-> ⚠️ **Begleiterhaus: 1 frei!** Jetzt etwas starten.
 
 ## ⏳ Läuft gerade
 
 | Warteschlange | Was | Level | fertig am | Restzeit |
 |---|---|---|---|---|
-| Bauarbeiter | Bogenschützenkönigin | 104 → 105 | Di 17.11. 17:30 | 2h 45m |
-| Bauarbeiter | Royal Champion | 53 → 54 | Di 17.11. 17:30 | 2h 45m |
-| Bauarbeiter | Sprungfeder | 12 → 13 | Mi 18.11. 02:37 | 11h 52m |
-| Bauarbeiter | Sprungfeder | 12 → 13 | Mi 18.11. 02:37 | 11h 52m |
+| Bauarbeiter | Bogenschützenkönigin | 104 → 105 | Di 17.11. 17:30 | 2h 43m |
+| Bauarbeiter | Royal Champion | 53 → 54 | Di 17.11. 17:30 | 2h 43m |
+| Bauarbeiter | Sprungfeder | 12 → 13 | Mi 18.11. 02:37 | 11h 49m |
+| Bauarbeiter | Sprungfeder | 12 → 13 | Mi 18.11. 02:37 | 11h 50m |
 | Bauarbeiter (Goblin) | Squad Barracks | 1 → 2 | Mi 18.11. 19:07 | 1T 4h |
 | Labor | Magier | 13 → 14 | Di 24.11. 09:23 | 6T 18h |
+| Begleiterhaus *(angenommen)* | Angry Jelly | 10 → 11 | Mi 25.11. 14:45 | 7T 23h |
 | Bauarbeiter | Firecracker Tower | 0 → 1 | Fr 27.11. 21:28 | 10T 6h |
 | Bauarbeiter | Spiky Tower | 0 → 1 | So 29.11. 10:48 | 11T 20h |
+
+*angenommen* = so wie empfohlen gestartet (Plan-folgen-Modus). Anders gebaut? Einfach einen neuen Export schicken.
 
 ## 🔨 Bauarbeiter – nächste Schritte
 
@@ -86,10 +88,9 @@
 
 | # | Start | Was | Level | Dauer | Kosten | fertig |
 |---|---|---|---|---|---|---|
-| 1 | Di 17.11. 14:45 | Angry Jelly | 10 → 11 | 8T | 290k Dunkles Elixier | Mi 25.11. 14:45 |
-| 2 | Mi 25.11. 14:45 | Angry Jelly | 11 → 12 | 8T | 320k Dunkles Elixier | Do 03.12. 14:45 |
-| 3 | Do 03.12. 14:45 | Angry Jelly | 12 → 13 | 8T | 350k Dunkles Elixier | Fr 11.12. 14:45 |
-| 4 | Fr 11.12. 14:45 | Angry Jelly | 13 → 14 | 8T | 380k Dunkles Elixier | Sa 19.12. 14:45 |
+| 1 | Mi 25.11. 14:45 | Angry Jelly | 11 → 12 | 8T | 320k Dunkles Elixier | Do 03.12. 14:45 |
+| 2 | Do 03.12. 14:45 | Angry Jelly | 12 → 13 | 8T | 350k Dunkles Elixier | Fr 11.12. 14:45 |
+| 3 | Fr 11.12. 14:45 | Angry Jelly | 13 → 14 | 8T | 380k Dunkles Elixier | Sa 19.12. 14:45 |
 
 ## 📊 Bis alles für Rathaus 19 fertig ist
 
@@ -97,7 +98,7 @@
 |---|---|---|---|
 | Bauarbeiter | 609 | So 24.10. 07:00 | 1063,8 Mio Elixier, 19,1 Mio Dunkles Elixier, 2275,6 Mio Gold |
 | Labor | 31 | Sa 06.11. 18:00 | 7,7 Mio Dunkles Elixier, 173,5 Mio Elixier |
-| Begleiterhaus | 4 | Sa 19.12. 14:45 | 1,3 Mio Dunkles Elixier |
+| Begleiterhaus | 3 | Sa 19.12. 14:45 | 1,1 Mio Dunkles Elixier |
 
 ---
 *Zeiten ohne Bauarbeiter-/Forschungstränke, Helfer und Juwelen. Der Plan geht davon aus, dass genug Rohstoffe da sind. Nach jedem neuen Export wird er neu berechnet.*
