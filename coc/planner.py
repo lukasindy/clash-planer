@@ -87,12 +87,6 @@ class Planner:
         self.horizon = self.start + float(pc.get("horizon_days", 730)) * 86400
         self.lab_prio = {n: i for i, n in enumerate(pc.get("lab_priority", []))}
         self.pet_prio = {n: i for i, n in enumerate(pc.get("pet_priority", []))}
-        b = cfg.boosts
-        self.speed = {
-            "builder": 1 - float(b.get("builder_percent", 0)) / 100,
-            "lab": 1 - float(b.get("lab_percent", 0)) / 100,
-            "pets": 1 - float(b.get("pet_percent", 0)) / 100,
-        }
         # Arbeitskopie der Instanzen
         self.inst: dict[int, Instance] = {
             i.uid: Instance(i.uid, i.data_id, i.section, i.queue, i.level, i.end, i.goblin, i.assumed)
@@ -135,7 +129,7 @@ class Planner:
                 self.inst[self._next_uid] = Instance(self._next_uid, data_id, section, "builder", 0)
                 self._next_uid -= 1
 
-    def _candidates(self, q: str) -> list[tuple[tuple, int, Instance, int, int, str]]:
+    def _candidates(self, q: str, start: float) -> list[tuple[tuple, int, Instance, int, int, str]]:
         th = self._lvl(TOWN_HALL)
         lab = self._lvl(LABORATORY)
         ph = self._lvl(PET_HOUSE)
@@ -169,8 +163,9 @@ class Planner:
             dur, cost, res = GameData.upgrade_info(obj, nxt)
             if dur <= 0 and cost <= 0:
                 continue  # Platzhalter-Level in den Spieldaten (noch nicht im Spiel)
-            dur = int(dur * self.speed[q])
-            cost = int(cost * self.speed[q])   # Goldpass-Boost senkt Zeit UND Kosten
+            # Goldpass-Boost, der am STARTZEITPUNKT gilt, senkt Zeit UND Kosten
+            f = self.cfg.boost_factor(q, start)
+            dur, cost = int(dur * f), int(cost * f)
             name = obj["name"]
             if q == "builder":
                 tier = int(self.tiers.get(name, self.default_tier))
@@ -247,10 +242,10 @@ class Planner:
     def _assign_all(self, plan, idle, events, seq, t):
         for q in QUEUES:
             while idle[q]:
-                cands = self._candidates(q)
+                start = self.cfg.earliest_start(t)
+                cands = self._candidates(q, start)
                 if not cands:
                     break
-                start = self.cfg.earliest_start(t)
                 key, group, inst, dur, cost, res = self._choose(cands, start)
                 slot = min(idle[q])
                 idle[q].remove(slot)

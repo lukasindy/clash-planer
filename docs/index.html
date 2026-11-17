@@ -232,6 +232,16 @@ function renderTotals() {
   }).join("");
 }
 
+function boostChip() {
+  const b = D.boost; if (!b) return "";
+  const pct = o => `🔨${o.builder || 0}% · 🧪${o.lab || 0}%` + ((o.pets || 0) ? ` · 🐾${o.pets}%` : "");
+  const day = ts => new Intl.DateTimeFormat("de-AT", {timeZone: D.tz, day: "2-digit", month: "2-digit"}).format(new Date(ts * 1000));
+  const now = b.now || {}, any = (now.builder || 0) + (now.lab || 0) + (now.pets || 0) > 0;
+  let t = any ? `Boost<b>${pct(now)}</b>${b.until ? ` <span class="mute">bis ${day(b.until)}</span>` : ""}` : "";
+  if (b.next) t += `${t ? " · " : "Boost "}<span class="mute">ab ${day(b.next.from)}</span><b>${pct(b.next)}</b>`;
+  return t ? `<span class="chip">${t}</span>` : "";
+}
+
 function render() {
   const age = now() - D.export;
   $("#app").innerHTML = `
@@ -239,7 +249,7 @@ function render() {
     <div class="age ${age > 7 * 86400 ? "stale" : ""}" id="age"></div></header>
   <div class="chips"><span class="chip">Rathaus<b>${D.th}</b></span><span class="chip">Labor<b>${D.lab}</b></span>
     <span class="chip">Begleiterhaus<b>${D.pets}</b></span><span class="chip">Heldenhalle<b>${D.heroHall}</b></span>
-    <span class="chip">Bauarbeiter<b>${D.capacity.builder}</b></span></div>
+    <span class="chip">Bauarbeiter<b>${D.capacity.builder}</b></span>${boostChip()}</div>
   <div class="banner" id="banner"></div>
   <h2>⏳ Läuft gerade</h2><div id="now"></div>
   <div class="tl-head"><h2>📅 Zeitleiste</h2><div class="seg" id="tlseg"><button data-d="7">7 Tage</button><button data-d="30">30 Tage</button></div></div>

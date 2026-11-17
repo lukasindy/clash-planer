@@ -2,20 +2,20 @@
 
 - **Spieler:** `#L88VCPGG0`
 - **Rathaus:** 19 · **Bauarbeiter:** 6 · **Labor:** 16 · **Begleiterhaus:** 12 · **Heldenhalle:** 12
-- **Export vom:** Di 17.11. 15:14 (vor 19m)
-- **Plan erstellt:** Di 17.11. 15:34
+- **Export vom:** Di 17.11. 15:14 (vor 22m)
+- **Plan erstellt:** Di 17.11. 15:37
 
 
 ## ⏳ Läuft gerade
 
 | Warteschlange | Was | Level | fertig am | Restzeit |
 |---|---|---|---|---|
-| Bauarbeiter | Sprungfeder | 12 → 13 | Di 17.11. 23:45 | 8h 10m |
-| Bauarbeiter | Sprungfeder | 12 → 13 | Di 17.11. 23:45 | 8h 11m |
+| Bauarbeiter | Sprungfeder | 12 → 13 | Di 17.11. 23:45 | 8h 7m |
+| Bauarbeiter | Sprungfeder | 12 → 13 | Di 17.11. 23:45 | 8h 8m |
 | Bauarbeiter (Goblin) | Squad Barracks | 1 → 2 | Mi 18.11. 16:15 | 1T |
 | Begleiterhaus | Angry Jelly | 10 → 11 | Mo 23.11. 15:13 | 5T 23h |
 | Labor | Magier | 13 → 14 | Di 24.11. 08:22 | 6T 16h |
-| Bauarbeiter | Firecracker Tower | 0 → 1 | Fr 27.11. 18:36 | 10T 3h |
+| Bauarbeiter | Firecracker Tower | 0 → 1 | Fr 27.11. 18:36 | 10T 2h |
 | Bauarbeiter | Firecracker Tower | 0 → 1 | So 29.11. 04:47 | 11T 13h |
 | Bauarbeiter | Spiky Tower | 0 → 1 | So 29.11. 07:56 | 11T 16h |
 | Bauarbeiter | Spiky Tower | 0 → 1 | So 29.11. 15:05 | 11T 23h |

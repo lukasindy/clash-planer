@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import tomllib
 from dataclasses import dataclass, field
-from datetime import datetime, time as dtime, timedelta
+from datetime import date, datetime, time as dtime, timedelta
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
@@ -16,6 +16,7 @@ class Config:
     sleep_start: dtime
     sleep_end: dtime
     boosts: dict = field(default_factory=dict)
+    boost_schedule: list = field(default_factory=list)   # [(von_ts, bis_ts, {"builder":20,...})]
 
     @property
     def notify(self) -> dict:
@@ -52,6 +53,28 @@ class Config:
         """Sekunden, die etwas nachts fertig herumsteht, bevor du aufwachst."""
         return self.next_wake(end_ts) - end_ts if self.asleep(end_ts) else 0.0
 
+    # ---------- Goldpass-Boost ----------
+    def boost_pct(self, q: str, ts: float) -> float:
+        """Boost in % für Warteschlange q zum Zeitpunkt ts (Zeitplan schlägt Grundwert)."""
+        key = {"builder": "builder_percent", "lab": "lab_percent", "pets": "pet_percent"}.get(q, "")
+        pct = float(self.boosts.get(key, 0) or 0)
+        for start, end, vals in self.boost_schedule:
+            if start <= ts < end and q in vals:
+                pct = float(vals[q])
+        return max(0.0, min(pct, 90.0))
+
+    def boost_factor(self, q: str, ts: float) -> float:
+        return 1 - self.boost_pct(q, ts) / 100
+
+    def boost_info(self, ts: float) -> dict:
+        """Aktueller und nächster Boost-Abschnitt (für Anzeige)."""
+        cur = {q: self.boost_pct(q, ts) for q in ("builder", "lab", "pets")}
+        until = next((e for s, e, _ in self.boost_schedule if s <= ts < e), None)
+        upcoming = [(s, e, v) for s, e, v in self.boost_schedule if s > ts]
+        nxt = min(upcoming, key=lambda x: x[0]) if upcoming else None
+        return {"now": cur, "until": int(until) if until else None,
+                "next": {"from": int(nxt[0]), "until": int(nxt[1]), **nxt[2]} if nxt else None}
+
     def fmt_time(self, ts: float) -> str:
         days = ["Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"]
         d = self._local(ts)
@@ -61,6 +84,37 @@ class Config:
 def _hm(s: str) -> dtime:
     h, m = s.split(":")
     return dtime(int(h), int(m))
+
+
+def _to_ts(value, tz: ZoneInfo) -> float:
+    if isinstance(value, datetime):
+        d = value if value.tzinfo else value.replace(tzinfo=tz)
+    elif isinstance(value, date):
+        d = datetime(value.year, value.month, value.day, tzinfo=tz)
+    else:
+        txt = str(value).strip().replace("T", " ")
+        fmt = "%Y-%m-%d %H:%M" if " " in txt else "%Y-%m-%d"
+        d = datetime.strptime(txt, fmt).replace(tzinfo=tz)
+    return d.timestamp()
+
+
+def _season_end(ts: float, tz: ZoneInfo) -> float:
+    """Goldpass-Saison endet zum Monatswechsel."""
+    d = datetime.fromtimestamp(ts, tz)
+    y, m = (d.year + 1, 1) if d.month == 12 else (d.year, d.month + 1)
+    return datetime(y, m, 1, tzinfo=tz).timestamp()
+
+
+def _schedule(raw: dict, tz: ZoneInfo) -> list:
+    out = []
+    for e in raw.get("boosts", {}).get("schedule", []) or []:
+        if "from" not in e:
+            continue
+        start = _to_ts(e["from"], tz)
+        end = _to_ts(e["until"], tz) if e.get("until") else _season_end(start, tz)
+        vals = {q: e[k] for q, k in (("builder", "builder"), ("lab", "lab"), ("pets", "pets")) if k in e}
+        out.append((start, end, vals))
+    return sorted(out, key=lambda x: x[0])
 
 
 def load_config(path: str = "config.toml") -> Config:
@@ -74,4 +128,5 @@ def load_config(path: str = "config.toml") -> Config:
         sleep_start=_hm(sch.get("sleep_start", "23:00")),
         sleep_end=_hm(sch.get("sleep_end", "07:00")),
         boosts=raw.get("boosts", {}),
+        boost_schedule=_schedule(raw, ZoneInfo(raw.get("timezone", "Europe/Vienna"))),
     )

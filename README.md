@@ -83,7 +83,7 @@ Ohne Kurzbefehl geht es auch von Hand: **Issues → New issue**, Export als Besc
 | Einstellung | Bedeutung |
 |---|---|
 | `sleep_start` / `sleep_end` | Deine Schlafenszeit. Der Planer startet nachts nichts und wählt Upgrades so, dass sie möglichst nicht nachts fertig werden. |
-| `[boosts]` | Goldpass-Bonus in % für Bauarbeiter/Labor/Begleiterhaus |
+| `[boosts]` + `[[boosts.schedule]]` | Goldpass-Boost (senkt Zeit + Kosten), auch als Zeitplan „ab Tag X“. Gilt für Upgrades, die ab dann starten |
 | `follow_plan` | Plan-folgen-Modus an/aus |
 | `stale_export_days` | Erinnerung an einen Abgleich-Export nach X Tagen |
 | `ahead_minutes` | wie früh vorher benachrichtigt wird |

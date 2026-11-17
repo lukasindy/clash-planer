@@ -29,13 +29,11 @@ def _step(s, extra=None) -> dict:
 
 
 def site_data(gd: GameData, v: Village, plan: Plan, cfg: Config, now: float) -> dict:
-    speed = {q: 1 - float(cfg.boosts.get(k, 0)) / 100
-             for q, k in (("builder", "builder_percent"), ("lab", "lab_percent"), ("pets", "pet_percent"))}
     running = []
     for s in plan.running:
         # Startzeit = Ende minus volle Dauer des Levels (für den Fortschrittsbalken)
         obj, lvl = gd.get(s.data_id), gd.level(s.data_id, s.to_lvl)
-        dur = int(GameData.upgrade_info(obj, lvl)[0] * speed.get(s.queue, 1)) if obj and lvl else 0
+        dur = int(GameData.upgrade_info(obj, lvl)[0] * cfg.boost_factor(s.queue, now)) if obj and lvl else 0
         start = s.assumed and s.start or (s.end - dur if dur else v.timestamp)
         extra = {"start": int(start)}
         if obj and lvl:
@@ -49,6 +47,7 @@ def site_data(gd: GameData, v: Village, plan: Plan, cfg: Config, now: float) -> 
         "capacity": {q: v.capacity(q) for q in QUEUES},
         "tz": str(cfg.tz), "sleep": [cfg.sleep_start.strftime("%H:%M"), cfg.sleep_end.strftime("%H:%M")]
         if cfg.sleep_aware else None,
+        "boost": cfg.boost_info(now),
         "running": running,
         "steps": [_step(s) for s in sorted(plan.steps, key=lambda s: s.start)[:MAX_STEPS]],
         "stepCount": {q: len(plan.for_queue(q)) for q in QUEUES},
