@@ -68,6 +68,7 @@ class GameData:
             for obj in raw.get(section, []):
                 self.by_id[obj["_id"]] = obj
                 self.kind[obj["_id"]] = kind
+        self._estimate_missing()
         th = self.by_id.get(1000001)
         # Wie viele Gebäude/Fallen von jeder Sorte pro Rathaus-Level erlaubt sind
         self._unlocks: dict[int, dict[int, int]] = {}
@@ -77,6 +78,25 @@ class GameData:
                 for u in lvl.get("unlocks", []) or []:
                     running[u["_id"]] = running.get(u["_id"], 0) + int(u.get("quantity", 0))
                 self._unlocks[lvl["level"]] = dict(running)
+
+    def _estimate_missing(self) -> None:
+        """Neue Level (z. B. Labor 17 / Rathaus 19) stehen teils ohne Zeit/Kosten in den Daten.
+        Die gibt es im Spiel aber schon → Werte vom letzten bekannten Level übernehmen (geschätzt)."""
+        for obj in self.by_id.values():
+            last = None
+            for l in sorted(obj.get("levels", []), key=lambda l: l["level"]):
+                t = l.get("build_time", l.get("upgrade_time")) or 0
+                c = l.get("build_cost", l.get("upgrade_cost")) or 0
+                if t or c:
+                    last = (t, c)
+                    continue
+                real = l.get("required_lab_level") or l.get("required_hero_tavern_level") or \
+                    l.get("required_pet_house_level")
+                if l["level"] > 1 and real and last:
+                    key_t = "build_time" if "build_time" in l else "upgrade_time"
+                    key_c = "build_cost" if "build_cost" in l else "upgrade_cost"
+                    l[key_t], l[key_c] = last
+                    l["estimated"] = True
 
     @classmethod
     def load(cls, force: bool = False) -> "GameData":

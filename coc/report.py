@@ -31,7 +31,7 @@ def fmt_num(n: int) -> str:
 def fmt_cost(s: Step) -> str:
     if not s.cost:
         return "–"
-    return f"{fmt_num(s.cost)} {RES_SHORT.get(s.resource, s.resource)}"
+    return ("≈" if getattr(s, "est", False) else "") + f"{fmt_num(s.cost)} {RES_SHORT.get(s.resource, s.resource)}"
 
 
 def level_txt(s: Step) -> str:

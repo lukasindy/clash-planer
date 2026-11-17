@@ -30,6 +30,8 @@ def _step(s, extra=None) -> dict:
         d["hammer"] = s.hammer
     if getattr(s, "pick", ""):
         d["pick"] = True
+    if getattr(s, "est", False):
+        d["est"] = True
     if extra:
         d.update(extra)
     return d

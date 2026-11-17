@@ -49,6 +49,7 @@ class Step:
     book: bool = False            # mit Buch sofort fertig (Bücher-Tag am Monatsanfang)
     hammer: str = ""              # mit Hammer sofort fertig: building/heroes/fighting/spells
     pick: str = ""                # dein Wunsch aus config.toml, der hier erfüllt wurde
+    est: bool = False             # Zeit/Kosten geschätzt (fehlen in den Spieldaten)
 
     @property
     def duration(self) -> float:
@@ -510,7 +511,8 @@ class Planner:
                 obj = self.gd.get(inst.data_id)
                 plan.steps.append(Step(q, slot, start, end, inst.uid, inst.data_id,
                                        de_name(obj["name"]), inst.level, inst.level + 1,
-                                       cost, res, new=inst.level == 0, section=inst.section))
+                                       cost, res, new=inst.level == 0, section=inst.section,
+                                       est=bool((self.gd.level(inst.data_id, inst.level + 1) or {}).get("estimated"))))
                 heapq.heappush(events, (end, next(seq), "done", q, slot, inst.uid))
                 self._ends[inst.uid] = end
 
