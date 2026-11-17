@@ -1,0 +1,103 @@
+# Einstellungen für den Clash-of-Clans-Upgrade-Planer
+# Namen von Gebäuden/Truppen bitte auf Englisch (so heißen sie in den Spieldaten).
+
+timezone = "Europe/Vienna"
+village_file = "data/village.json"
+
+[schedule]
+# Schlafensplanung: der Planer weiß, dass du nachts nichts starten kannst,
+# und wählt Upgrades so, dass sie möglichst nicht mitten in der Nacht fertig werden.
+sleep_aware = true
+sleep_start = "23:00"
+sleep_end = "07:00"
+
+[boosts]
+# Goldpass-Bonus in Prozent (0–20), verkürzt die Zeiten im Plan.
+builder_percent = 0
+lab_percent = 0
+pet_percent = 0
+
+[notify]
+# Benachrichtigung schon X Minuten bevor etwas frei wird
+# (gleicht aus, dass GitHub-Zeitpläne nur alle ~30 Min. laufen).
+ahead_minutes = 15
+# Erinnerung, wenn etwas weiter untätig ist (0 = aus).
+reminder_hours = 0
+# Hinweis, wenn der Export älter als so viele Tage ist.
+stale_export_days = 4
+# Was überwacht werden soll
+builders = true
+lab = true
+pets = true
+
+[planner]
+include_townhall = false        # Rathaus nur einplanen, wenn true (kommt dann ganz zum Schluss)
+include_new_buildings = true    # noch nicht gebaute Gebäude/Fallen einplanen
+steps_shown = 25                # wie viele Schritte pro Warteschlange in PLAN.md
+horizon_days = 730
+
+# Reihenfolge fürs Labor (englische Namen). Diese kommen zuerst, in dieser Reihenfolge.
+# Alles andere danach, kürzeste Forschungen zuerst.
+lab_priority = []
+# Beispiel: lab_priority = ["Electro Dragon", "Balloon", "Rage Spell", "Freeze Spell", "Battle Blimp"]
+
+# Reihenfolge fürs Begleiterhaus (englische Namen).
+pet_priority = ["Spirit Fox", "Electro Owl", "Unicorn", "L.A.S.S.I", "Frosty", "Angry Jelly",
+                "Phoenix", "Mighty Yak", "Diggy", "Poison Lizard", "Sneezy", "Greedy Raven"]
+
+# Prioritätsstufe pro Gebäude für die Bauarbeiter (1 = zuerst). Innerhalb einer Stufe:
+# neue Gebäude zuerst, dann die längsten Upgrades (hält die Bauarbeiter am längsten beschäftigt).
+default_tier = 4
+
+[planner.tiers]
+"Laboratory" = 1
+"Clan Castle" = 1
+"Army Camp" = 1
+"Pet House" = 1
+"Blacksmith" = 1
+"Hero Hall" = 1
+"Spell Factory" = 1
+"Dark Spell Factory" = 1
+"Workshop" = 1
+"Barracks" = 2
+"Dark Barracks" = 2
+"Squad Barracks" = 2
+# Helden
+"Barbarian King" = 2
+"Archer Queen" = 2
+"Grand Warden" = 2
+"Royal Champion" = 2
+"Minion Prince" = 2
+"Dragon Duke" = 2
+# Wichtige Verteidigung
+"Eagle Artillery" = 3
+"Scattershot" = 3
+"Inferno Tower" = 3
+"Monolith" = 3
+"Spell Tower" = 3
+"X-Bow" = 3
+"Multi-Archer Tower" = 3
+"Ricochet Cannon" = 3
+"Firespitter" = 3
+"Multi-Gear Tower" = 3
+"Super Wizard Tower" = 3
+"Revenge Tower" = 3
+"Air Defense" = 3
+"Spiky Tower" = 3
+"Firecracker Tower" = 3
+"Longshot" = 3
+# Rest der Verteidigung, Lager, Hütten = default_tier (4)
+# Fallen
+"Bomb" = 5
+"Spring Trap" = 5
+"Air Bomb" = 5
+"Giant Bomb" = 5
+"Seeking Air Mine" = 5
+"Skeleton Trap" = 5
+"Tornado Trap" = 5
+"Giga Bomb" = 5
+# Sammler zuletzt
+"Elixir Collector" = 6
+"Gold Mine" = 6
+"Dark Elixir Drill" = 6
+"Town Hall" = 9
