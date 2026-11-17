@@ -92,6 +92,10 @@ class Planner:
             i.uid: Instance(i.uid, i.data_id, i.section, i.queue, i.level, i.end, i.goblin, i.assumed)
             for i in village.instances if i.queue in QUEUES
         }
+        cwl = pc.get("cwl", {})
+        self.cwl_on = bool(cwl.get("heroes_blocked", True))
+        self.cwl_days = (int(cwl.get("start_day", 1)), int(cwl.get("end_day", 11)))
+        self._retry_at: float | None = None
         self.busy: set[int] = set()
         self._next_uid = min(list(self.inst) + [0]) - 1
         self._known_th = 0
@@ -166,6 +170,12 @@ class Planner:
             # Goldpass-Boost, der am STARTZEITPUNKT gilt, senkt Zeit UND Kosten
             f = self.cfg.boost_factor(q, start)
             dur, cost = int(dur * f), int(cost * f)
+            if inst.section == "heroes" and self.cwl_on:
+                clash = self._cwl_overlap(start, start + dur)
+                if clash is not None:
+                    # Held wäre während der CWL im Upgrade → später nochmal versuchen
+                    self._retry_at = clash if self._retry_at is None else min(self._retry_at, clash)
+                    continue
             name = obj["name"]
             if q == "builder":
                 tier = int(self.tiers.get(name, self.default_tier))
@@ -179,6 +189,25 @@ class Planner:
             out.append((key, group, inst, dur, cost, res))
         out.sort(key=lambda c: c[0])
         return out
+
+    def _cwl_windows(self, a: float, b: float):
+        """CWL-Zeiträume (Start, Ende) im Bereich a..b, in deiner Zeitzone."""
+        from datetime import datetime
+        tz = self.cfg.tz
+        d = datetime.fromtimestamp(a, tz).replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        sd, ed = self.cwl_days
+        while d.timestamp() <= b:
+            ws = d.replace(day=sd).timestamp()
+            we = d.replace(day=ed).timestamp() + 86400
+            yield ws, we
+            d = d.replace(year=d.year + 1, month=1) if d.month == 12 else d.replace(month=d.month + 1)
+
+    def _cwl_overlap(self, a: float, b: float) -> float | None:
+        """Ende des CWL-Fensters, das mit [a, b) überlappt (= frühester neuer Versuch), sonst None."""
+        for ws, we in self._cwl_windows(a, b):
+            if a < we and b > ws:
+                return we
+        return None
 
     def _choose(self, cands, start: float):
         best_group = cands[0][1]
@@ -230,6 +259,8 @@ class Planner:
             t, _, kind, q, slot, uid = heapq.heappop(events)
             if t > self.horizon:
                 break
+            if kind == "retry":
+                self._retry_pending = False
             if kind == "done":
                 self.inst[uid].level += 1
                 self.busy.discard(uid)
@@ -240,6 +271,14 @@ class Planner:
         return plan
 
     def _assign_all(self, plan, idle, events, seq, t):
+        self._retry_at = None
+        self._assign_queues(plan, idle, events, seq, t)
+        # Freie Bauarbeiter, aber Helden durch CWL blockiert → nach der CWL erneut planen
+        if self._retry_at and idle["builder"] and not getattr(self, "_retry_pending", False):
+            self._retry_pending = True
+            heapq.heappush(events, (self._retry_at, next(seq), "retry", "builder", None, None))
+
+    def _assign_queues(self, plan, idle, events, seq, t):
         for q in QUEUES:
             while idle[q]:
                 start = self.cfg.earliest_start(t)

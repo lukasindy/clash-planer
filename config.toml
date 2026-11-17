@@ -88,13 +88,14 @@ default_tier = 4
 "Barracks" = 2
 "Dark Barracks" = 2
 "Squad Barracks" = 2
-# Helden
-"Barbarian King" = 2
-"Archer Queen" = 2
-"Grand Warden" = 2
-"Royal Champion" = 2
-"Minion Prince" = 2
-"Dragon Duke" = 2
+# Helden (nie während der CWL, siehe [planner.cwl])
+# Mains = wichtig (Stufe 3), Rest = niedrig (Stufe 5)
+"Archer Queen" = 3
+"Dragon Duke" = 3
+"Minion Prince" = 3
+"Grand Warden" = 3
+"Barbarian King" = 5
+"Royal Champion" = 5
 # Wichtige Verteidigung
 "Eagle Artillery" = 3
 "Scattershot" = 3
@@ -114,16 +115,23 @@ default_tier = 4
 "Longshot" = 3
 # Rest der Verteidigung, Lager, Hütten = default_tier (4)
 # Fallen
-"Bomb" = 5
-"Spring Trap" = 5
-"Air Bomb" = 5
-"Giant Bomb" = 5
-"Seeking Air Mine" = 5
-"Skeleton Trap" = 5
-"Tornado Trap" = 5
-"Giga Bomb" = 5
+"Bomb" = 6
+"Spring Trap" = 6
+"Air Bomb" = 6
+"Giant Bomb" = 6
+"Seeking Air Mine" = 6
+"Skeleton Trap" = 6
+"Tornado Trap" = 6
+"Giga Bomb" = 6
 # Sammler zuletzt
-"Elixir Collector" = 6
-"Gold Mine" = 6
-"Dark Elixir Drill" = 6
+"Elixir Collector" = 7
+"Gold Mine" = 7
+"Dark Elixir Drill" = 7
 "Town Hall" = 9
+
+# CWL: Helden werden nur so eingeplant, dass sie NICHT während der Clankriegsliga im Upgrade sind
+# (vom start_day bis einschließlich end_day jedes Monats).
+[planner.cwl]
+heroes_blocked = true
+start_day = 1
+end_day = 11

@@ -92,6 +92,7 @@ Ohne Kurzbefehl geht es auch von Hand: **Issues → New issue**, Export als Besc
 | `pet_priority` | Wunsch-Reihenfolge fürs Begleiterhaus |
 | `[planner.tiers]` | Prioritätsstufe pro Gebäude (1 = zuerst). Voreinstellung: Armee-Gebäude & Labor → Helden → wichtige Verteidigung → Rest → Fallen → Sammler |
 | `include_townhall` | Rathaus mit einplanen (ganz zum Schluss) |
+| `[planner.cwl]` | Helden nie während der CWL im Upgrade (Standard: 1.–11. jedes Monats) |
 
 Namen in der Config sind **englisch** (so heißen sie in den Spieldaten). Deutsche Anzeigenamen
 stehen in `coc/names_de.py` und lassen sich dort ergänzen.

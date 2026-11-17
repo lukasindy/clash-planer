@@ -2,21 +2,21 @@
 
 - **Spieler:** `#L88VCPGG0`
 - **Rathaus:** 19 · **Bauarbeiter:** 6 · **Labor:** 16 · **Begleiterhaus:** 12 · **Heldenhalle:** 12
-- **Export vom:** Di 17.11. 15:14 (vor 31m)
-- **Plan erstellt:** Di 17.11. 15:46
+- **Export vom:** Di 17.11. 15:14 (vor 36m)
+- **Plan erstellt:** Di 17.11. 15:51
 
 
 ## ⏳ Läuft gerade
 
 | Warteschlange | Was | Level | fertig am | Restzeit |
 |---|---|---|---|---|
-| Bauarbeiter | Sprungfeder | 12 → 13 | Di 17.11. 23:45 | 7h 58m |
-| Bauarbeiter | Sprungfeder | 12 → 13 | Di 17.11. 23:45 | 7h 59m |
+| Bauarbeiter | Sprungfeder | 12 → 13 | Di 17.11. 23:45 | 7h 54m |
+| Bauarbeiter | Sprungfeder | 12 → 13 | Di 17.11. 23:45 | 7h 54m |
 | Bauarbeiter (Goblin) | Squad Barracks | 1 → 2 | Mi 18.11. 16:15 | 1T |
 | Begleiterhaus | Angry Jelly | 10 → 11 | Mo 23.11. 15:13 | 5T 23h |
 | Labor | Magier | 13 → 14 | Di 24.11. 08:22 | 6T 16h |
 | Bauarbeiter | Firecracker Tower | 0 → 1 | Fr 27.11. 18:36 | 10T 2h |
-| Bauarbeiter | Firecracker Tower | 0 → 1 | So 29.11. 04:47 | 11T 13h |
+| Bauarbeiter | Firecracker Tower | 0 → 1 | So 29.11. 04:47 | 11T 12h |
 | Bauarbeiter | Spiky Tower | 0 → 1 | So 29.11. 07:56 | 11T 16h |
 | Bauarbeiter | Spiky Tower | 0 → 1 | So 29.11. 15:05 | 11T 23h |
 
@@ -28,27 +28,27 @@
 | 2 | Mi 18.11. 07:00 | Labor *(B6)* | 16 → 17 | 12T | 24,4 Mio Elixier | Mo 30.11. 07:00 |
 | 3 | Fr 27.11. 18:36 | Clanburg *(B1)* | 14 → 15 | 12T 19h | 25,2 Mio Elixier | Do 10.12. 13:48 |
 | 4 | So 29.11. 07:00 | Zauberfabrik *(B3)* | 9 → 10 | 8T 9h | 14,8 Mio Elixier | Mo 07.12. 16:36 |
-| 5 | So 29.11. 07:56 | Bogenschützenkönigin *(B2)* | 105 → 106 | 6T 9h | 360k Dunkles Elixier | Sa 05.12. 17:32 |
-| 6 | So 29.11. 15:05 | Squad Barracks *(B4)* | 2 → 3 | 4T | 3 Mio Elixier | Do 03.12. 15:05 |
-| 7 | Mo 30.11. 07:00 | Barbarenkönig *(B6)* | 100 → 101 | 6T 9h | 328k Dunkles Elixier | So 06.12. 16:36 |
-| 8 | Mo 30.11. 16:36 | Dragon Duke *(B5)* | 25 → 26 | 6T 9h | 404k Dunkles Elixier | Mo 07.12. 02:12 |
-| 9 | Do 03.12. 15:05 | Großer Wächter *(B4)* | 77 → 78 | 7T 4h | 22,1 Mio Elixier | Do 10.12. 19:53 |
-| 10 | Sa 05.12. 17:32 | Bogenschützenkönigin *(B2)* | 106 → 107 | 7T 4h | 410k Dunkles Elixier | Sa 12.12. 22:20 |
-| 11 | So 06.12. 16:36 | Barbarenkönig *(B6)* | 101 → 102 | 7T 4h | 378k Dunkles Elixier | So 13.12. 21:24 |
-| 12 | Mo 07.12. 07:00 | Dragon Duke *(B5)* | 26 → 27 | 7T 4h | 459k Dunkles Elixier | Mo 14.12. 11:48 |
-| 13 | Mo 07.12. 16:36 | Minion Prince *(B3)* | 95 → 96 | 7T 4h | 454k Dunkles Elixier | Mo 14.12. 21:24 |
-| 14 | Do 10.12. 13:48 | Royal Champion *(B1)* | 54 → 55 | 7T 4h | 450k Dunkles Elixier | Do 17.12. 18:36 |
-| 15 | Do 10.12. 19:53 | Squad Barracks *(B4)* | 3 → 4 | 5T 9h | 5,4 Mio Elixier | Mi 16.12. 05:29 |
-| 16 | Sa 12.12. 22:20 | Bogenschützenkönigin *(B2)* | 107 → 108 | 7T 4h | 414k Dunkles Elixier | So 20.12. 03:08 |
-| 17 | So 13.12. 21:24 | Barbarenkönig *(B6)* | 102 → 103 | 7T 4h | 387k Dunkles Elixier | Mo 21.12. 02:12 |
-| 18 | Mo 14.12. 11:48 | Dragon Duke *(B5)* | 27 → 28 | 7T 4h | 464k Dunkles Elixier | Mo 21.12. 16:36 |
-| 19 | Mo 14.12. 21:24 | Großer Wächter *(B3)* | 78 → 79 | 7T 4h | 22,9 Mio Elixier | Di 22.12. 02:12 |
-| 20 | Mi 16.12. 07:00 | Minion Prince *(B4)* | 96 → 97 | 7T 4h | 459k Dunkles Elixier | Mi 23.12. 11:48 |
-| 21 | Do 17.12. 18:36 | Squad Barracks *(B1)* | 4 → 5 | 6T 7h | 6,8 Mio Elixier | Do 24.12. 01:48 |
-| 22 | So 20.12. 07:00 | Bogenschützenkönigin *(B2)* | 108 → 109 | 7T 4h | 418k Dunkles Elixier | So 27.12. 11:48 |
-| 23 | Mo 21.12. 07:00 | Barbarenkönig *(B6)* | 103 → 104 | 7T 4h | 396k Dunkles Elixier | Mo 28.12. 11:48 |
-| 24 | Mo 21.12. 16:36 | Dragon Duke *(B5)* | 28 → 29 | 7T 4h | 468k Dunkles Elixier | Mo 28.12. 21:24 |
-| 25 | Di 22.12. 07:00 | Großer Wächter *(B3)* | 79 → 80 | 7T 4h | 23,9 Mio Elixier | Di 29.12. 11:48 |
+| 5 | So 29.11. 07:56 | Squad Barracks *(B2)* | 2 → 3 | 4T | 3 Mio Elixier | Do 03.12. 07:56 |
+| 6 | So 29.11. 15:05 | Firecracker Tower *(B4)* | 1 → 2 | 12T | 25,6 Mio Gold | Fr 11.12. 15:05 |
+| 7 | Mo 30.11. 07:00 | Spiky Tower *(B6)* | 1 → 2 | 12T 9h | 408k Dunkles Elixier | Sa 12.12. 16:36 |
+| 8 | Mo 30.11. 16:36 | Firecracker Tower *(B5)* | 1 → 2 | 12T | 25,6 Mio Gold | Sa 12.12. 16:36 |
+| 9 | Do 03.12. 07:56 | Squad Barracks *(B2)* | 3 → 4 | 5T 9h | 5,4 Mio Elixier | Di 08.12. 17:32 |
+| 10 | Mo 07.12. 16:36 | Spiky Tower *(B3)* | 1 → 2 | 13T 22h | 459k Dunkles Elixier | Mo 21.12. 15:24 |
+| 11 | Di 08.12. 17:32 | Squad Barracks *(B2)* | 4 → 5 | 6T 7h | 6,8 Mio Elixier | Di 15.12. 00:44 |
+| 12 | Do 10.12. 13:48 | Multi-Archer Tower *(B1)* | 4 → 5 | 13T 1h | 26,1 Mio Gold | Mi 23.12. 15:00 |
+| 13 | Fr 11.12. 15:05 | Multi-Archer Tower *(B4)* | 4 → 5 | 13T 1h | 26,1 Mio Gold | Do 24.12. 16:17 |
+| 14 | Sa 12.12. 16:36 | Multi-Archer Tower *(B6)* | 4 → 5 | 13T 1h | 26,1 Mio Gold | Fr 25.12. 17:48 |
+| 15 | Sa 12.12. 16:36 | Multi-Gear Tower *(B5)* | 3 → 4 | 13T 1h | 27 Mio Gold | Fr 25.12. 17:48 |
+| 16 | Di 15.12. 07:00 | Squad Barracks *(B2)* | 5 → 6 | 6T 18h | 9 Mio Elixier | Di 22.12. 01:00 |
+| 17 | Mo 21.12. 15:24 | Longshot *(B3)* | 1 → 2 | 8T 2h | 19,8 Mio Elixier | Di 29.12. 17:48 |
+| 18 | Di 22.12. 07:00 | Squad Barracks *(B2)* | 6 → 7 | 7T 4h | 11,2 Mio Elixier | Di 29.12. 11:48 |
+| 19 | Mi 23.12. 15:00 | Bogenschützenkönigin *(B1)* | 105 → 106 | 7T 4h | 405k Dunkles Elixier | Mi 30.12. 19:48 |
+| 20 | Do 24.12. 16:17 | Dragon Duke *(B4)* | 25 → 26 | 7T 4h | 454k Dunkles Elixier | Do 31.12. 21:05 |
+| 21 | Fr 25.12. 17:48 | Luftabwehr *(B6)* | 16 → 17 | 12T 14h | 25,6 Mio Gold | Do 07.01. 08:12 |
+| 22 | Fr 25.12. 17:48 | Luftabwehr *(B5)* | 16 → 17 | 12T 14h | 25,6 Mio Gold | Do 07.01. 08:12 |
+| 23 | Di 29.12. 11:48 | Squad Barracks *(B2)* | 7 → 8 | 8T 13h | 13,5 Mio Elixier | Do 07.01. 01:00 |
+| 24 | Di 29.12. 17:48 | Luftabwehr *(B3)* | 16 → 17 | 12T 14h | 25,6 Mio Gold | Mo 11.01. 08:12 |
+| 25 | Mi 30.12. 19:48 | Luftabwehr *(B1)* | 16 → 17 | 12T 14h | 25,6 Mio Gold | Di 12.01. 10:12 |
 | … | | *noch 176 weitere Schritte* | | | | |
 
 ## 🧪 Labor – nächste Schritte
@@ -94,7 +94,7 @@
 
 | Warteschlange | Schritte | fertig ungefähr | Kosten |
 |---|---|---|---|
-| Bauarbeiter | 201 | Di 27.07. 11:48 | 945,9 Mio Elixier, 16,6 Mio Dunkles Elixier, 1463,8 Mio Gold |
+| Bauarbeiter | 201 | Fr 19.11. 11:48 | 945,9 Mio Elixier, 1457,4 Mio Gold, 16,7 Mio Dunkles Elixier |
 | Labor | 31 | Fr 01.10. 09:58 | 6,9 Mio Dunkles Elixier, 156,2 Mio Elixier |
 | Begleiterhaus | 3 | So 13.12. 21:24 | 878k Dunkles Elixier |
 
