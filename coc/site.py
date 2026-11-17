@@ -91,5 +91,11 @@ def site_data(gd: GameData, v: Village, plan: Plan, cfg: Config, now: float) -> 
 
 
 def write_site(path: str, data: dict) -> None:
+    import re
     Path(path).parent.mkdir(parents=True, exist_ok=True)
+    html = Path(path).parent / "index.html"
+    if html.exists():
+        m = re.search(r'APP_VERSION = "([^"]+)"', html.read_text("utf-8"))
+        if m:
+            data["appVersion"] = m.group(1)
     Path(path).write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")), "utf-8")
