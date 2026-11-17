@@ -15,13 +15,13 @@ import sys
 import time
 from pathlib import Path
 
-from .checker import run_check
+from .checker import effective_village, run_check
 from .config import load_config
 from .gamedata import GameData
 from .names_de import de_name
 from .planner import make_plan
 from .report import plan_markdown, status_markdown
-from .village import load_village, parse_export
+from .village import parse_export
 
 
 def _summary(text: str) -> None:
@@ -86,7 +86,7 @@ def main(argv: list[str] | None = None) -> int:
         return 0
 
     gd = GameData.load()
-    v = load_village(cfg.village_file)
+    v = effective_village(cfg)
     plan = make_plan(gd, v, cfg, now)
 
     if args.cmd == "status":

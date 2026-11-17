@@ -18,13 +18,16 @@ lab_percent = 0
 pet_percent = 0
 
 [notify]
+# Plan-folgen-Modus: Nach jeder Benachrichtigung geht das Repo davon aus, dass du die
+# Empfehlung startest, und rechnet selbst weiter. Neuer Export nur, wenn du abweichst.
+follow_plan = true
 # Benachrichtigung schon X Minuten bevor etwas frei wird
 # (gleicht aus, dass GitHub-Zeitpläne nur alle ~30 Min. laufen).
 ahead_minutes = 15
 # Erinnerung, wenn etwas weiter untätig ist (0 = aus).
 reminder_hours = 0
-# Hinweis, wenn der Export älter als so viele Tage ist.
-stale_export_days = 4
+# Erinnerung an einen Abgleich-Export nach so vielen Tagen (0 = aus).
+stale_export_days = 7
 # Was überwacht werden soll
 builders = true
 lab = true

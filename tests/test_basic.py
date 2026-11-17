@@ -47,6 +47,23 @@ class BasicTest(unittest.TestCase):
             self.assertFalse(self.cfg.asleep(s.start) and s.start > plan.start + 1, s)
         self.assertIn("Upgrade-Plan", plan_markdown(self.v, plan, self.cfg, self.now))
 
+    def test_follow_mode(self):
+        import tempfile, os
+        from coc import checker
+        from coc.village import apply_assumptions
+        with tempfile.TemporaryDirectory() as d:
+            checker.STATE_FILE = Path(d) / "s.json"
+            plan = make_plan(self.gd, self.v, self.cfg, self.now)
+            os.environ.pop("NTFY_TOPIC", None)
+            checker.run_check(self.v, plan, self.cfg, self.now, {})
+            st = checker.load_state()
+            self.assertEqual(len(st["assumed"]), 4)  # 2 frei + 1 fertig (Bauarbeiter) + Begleiterhaus
+            v2 = parse_export(dict(self.v.raw))
+            apply_assumptions(v2, st["assumed"])
+            plan2 = make_plan(self.gd, v2, self.cfg, self.now)
+            self.assertEqual(plan2.idle_at_start["builder"], 0)
+            self.assertEqual(plan2.idle_at_start["pets"], 0)
+
 
 if __name__ == "__main__":
     unittest.main()

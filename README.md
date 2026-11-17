@@ -7,6 +7,8 @@ Läuft komplett gratis auf GitHub Actions:
 - **Timer:** zeigt, wie lange jedes laufende Upgrade noch braucht.
 - **Benachrichtigung:** Push aufs Handy, sobald ein **Bauarbeiter**, das **Labor** oder das
   **Begleiterhaus** frei wird, zusammen mit einer Empfehlung, was du als Nächstes starten solltest.
+- **Plan-folgen-Modus:** Das Repo geht davon aus, dass du die Empfehlung startest, und rechnet
+  selbst weiter. Einen neuen Export brauchst du nur, wenn du vom Plan abweichst.
 
 ## Wie es funktioniert
 
@@ -15,9 +17,10 @@ aber einen eingebauten **Dorf-Export**, der alles enthält (Level + Restzeiten).
 legst ihn als Issue an. Den Rest erledigt das Repo:
 
 ```
-Spiel → Datenexport kopieren → neues GitHub-Issue einfügen
-      → Plan wird berechnet, Issue bekommt eine Zusammenfassung
-      → alle 30 Min. prüft GitHub die Timer → Push, wenn etwas frei wird
+Spiel → Datenexport kopieren → iPhone-Rückseite doppelt antippen (Kurzbefehl legt das Issue an)
+      → Plan wird berechnet
+      → alle 30 Min. prüft GitHub die Timer → Push „Bauarbeiter frei – Empfehlung: …“
+      → du startest die Empfehlung im Spiel → das Repo rechnet selbst weiter
 ```
 
 Kosten, Bauzeiten und Voraussetzungen kommen aus den öffentlichen Spieldaten von
@@ -53,17 +56,22 @@ Alternativ oder zusätzlich:
 Tab **Actions** öffnen und Workflows aktivieren, falls GitHub fragt. Falls später beim Speichern
 ein Fehler kommt: **Settings → Actions → General → Workflow permissions → Read and write**.
 
-### 4. Ersten Export einspielen
+### 4. Kurzbefehl einrichten & ersten Export senden
+Anleitung: [`KURZBEFEHL-iOS.md`](KURZBEFEHL-iOS.md). Danach:
 1. Im Spiel: **Einstellungen → Weitere Einstellungen → Datenexport → Kopieren**
-2. Im Repo (geht gut in der GitHub-App): **Issues → New issue**, Titel egal (z. B. „Export“),
-   den kopierten Text als Beschreibung einfügen → **Submit**.
-3. Nach ca. einer Minute: Kommentar mit Status, `PLAN.md` ist aktualisiert, das Issue wird geschlossen.
+2. iPhone-Rückseite doppelt antippen
+3. Nach ca. einer Minute: `PLAN.md` ist aktualisiert, freie Bauarbeiter werden sofort gemeldet.
+
+Ohne Kurzbefehl geht es auch von Hand: **Issues → New issue**, Export als Beschreibung einfügen.
 
 ## Alltag
 
-- **Nach dem Starten neuer Upgrades einen neuen Export als Issue einspielen.** Der Export ist ein
-  Schnappschuss: Läuft ein Timer ab, meldet das Repo „frei“, bis es neue Daten bekommt.
-  Jede Meldung kommt pro Ereignis nur einmal.
+- **Push kommt → Empfehlung im Spiel starten → fertig.** Das Repo nimmt an, dass du genau das
+  gestartet hast, und meldet sich, wenn es fertig ist. Im Plan steht es als *(angenommen)*.
+- **Abgewichen?** Etwas anderes gebaut, Trank oder Juwelen benutzt: Export kopieren und Kurzbefehl
+  tippen. Der Export ersetzt alle Annahmen, danach ist alles wieder exakt.
+- Nach 7 Tagen ohne Export erinnert dich das Repo an einen Abgleich (einstellbar).
+- Jede Meldung kommt pro Ereignis nur einmal.
 - Nachts (Standard 23–7 Uhr) werden Meldungen bis zum Aufwachen zurückgehalten.
 - Gemeldet wird schon **15 Minuten vorher** (einstellbar), weil GitHub-Zeitpläne oft etwas später laufen.
 - Den aktuellen Status siehst du auch unter **Actions → Timer-Check → letzter Lauf** (Zusammenfassung).
@@ -74,6 +82,8 @@ ein Fehler kommt: **Settings → Actions → General → Workflow permissions �
 |---|---|
 | `sleep_start` / `sleep_end` | Deine Schlafenszeit. Der Planer startet nachts nichts und wählt Upgrades so, dass sie möglichst nicht nachts fertig werden. |
 | `[boosts]` | Goldpass-Bonus in % für Bauarbeiter/Labor/Begleiterhaus |
+| `follow_plan` | Plan-folgen-Modus an/aus |
+| `stale_export_days` | Erinnerung an einen Abgleich-Export nach X Tagen |
 | `ahead_minutes` | wie früh vorher benachrichtigt wird |
 | `reminder_hours` | Erinnerung, wenn etwas länger frei bleibt (0 = aus) |
 | `lab_priority` | deine Wunsch-Reihenfolge fürs Labor, z. B. deine Angriffsarmee |
@@ -104,8 +114,12 @@ python -m unittest discover tests    # Tests (nutzt data/village.example.json)
 Benötigt nur Python ≥ 3.11, keine weiteren Pakete.
 
 ## Grenzen
+- Ein vollautomatisches Auslesen ohne Export gibt es nicht. Die offizielle API kennt keine Gebäude
+  und keine Timer, und Tools, die das Spiel fernsteuern, verstoßen gegen Supercells Regeln.
 - Bauarbeiter-/Forschungstränke, Helfer, Juwelen und Goblin-Bauarbeiter fließen nicht in den Plan
   ein. Ein neuer Export korrigiert alles.
+- Im Plan-folgen-Modus nimmt das Repo als Startzeit den Moment der Benachrichtigung. Startest du
+  deutlich später, kommt die nächste Meldung entsprechend etwas zu früh.
 - Rohstoffe: Der Plan nimmt an, dass genug da ist, und listet die Gesamtkosten auf.
 - Mauern sind nicht im Plan (gehen sofort, ohne Bauarbeiter). Die Bauarbeiterbasis wird nicht überwacht.
 - GitHub-Zeitpläne können sich um einige Minuten verzögern. Nach 60 Tagen ohne Aktivität im Repo

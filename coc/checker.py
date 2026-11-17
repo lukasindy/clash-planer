@@ -13,9 +13,10 @@ from . import notify
 from .config import Config
 from .planner import QUEUE_LABEL, Plan
 from .report import fmt_cost, fmt_dur, level_txt
-from .village import Village
+from .village import Village, apply_assumptions, load_village
 
 STATE_FILE = Path("state/notify_state.json")
+REMINDER_LINE = "Falls du schon etwas gestartet hast: bitte neuen Export einspielen."
 ICON = {"builder": "🔨", "lab": "🧪", "pets": "🐾"}
 
 
@@ -31,6 +32,19 @@ def load_state() -> dict:
 def save_state(state: dict) -> None:
     STATE_FILE.parent.mkdir(parents=True, exist_ok=True)
     STATE_FILE.write_text(json.dumps(state, indent=2, sort_keys=True) + "\n", "utf-8")
+
+
+def follow_mode(cfg: Config) -> bool:
+    return bool(cfg.notify.get("follow_plan", True))
+
+
+def effective_village(cfg: Config) -> Village:
+    """Export + (im Plan-folgen-Modus) alle seitdem angenommenen Upgrades."""
+    v = load_village(cfg.village_file)
+    st = load_state()
+    if follow_mode(cfg) and st.get("export_ts") == v.timestamp:
+        apply_assumptions(v, st.get("assumed", []))
+    return v
 
 
 def enabled_queues(cfg: Config) -> list[str]:
@@ -63,7 +77,7 @@ def run_check(v: Village, plan: Plan, cfg: Config, now: float, names: dict[int, 
               dry_run: bool = False) -> str:
     state = load_state()
     if state.get("export_ts") != v.timestamp:
-        state = {"export_ts": v.timestamp, "sent": {}, "recommended": [],
+        state = {"export_ts": v.timestamp, "sent": {}, "recommended": [], "assumed": [],
                  "last_reminder": 0, "stale_warned": False}
     sent: dict = state.setdefault("sent", {})
     nconf = cfg.notify
@@ -76,7 +90,7 @@ def run_check(v: Village, plan: Plan, cfg: Config, now: float, names: dict[int, 
     lines: list[str] = []
     log: list[str] = []
     recommended = set(state.setdefault("recommended", []))
-    new_recs: list[str] = []
+    new_recs: list = []
     for q, evs in new.items():
         parts = []
         n_free = sum(1 for e in evs if not e[2].startswith("#"))
@@ -93,11 +107,14 @@ def run_check(v: Village, plan: Plan, cfg: Config, now: float, names: dict[int, 
         recs = [r for r in plan.for_queue(q) if f"{r.uid}:{r.to_lvl}" not in recommended][:len(evs)]
         for r in recs:
             lines.append(f"   👉 Empfehlung: {r.name} {level_txt(r)} ({fmt_dur(r.duration)}, {fmt_cost(r)})")
-            new_recs.append(f"{r.uid}:{r.to_lvl}")
+            new_recs.append(r)
 
     title = None
     if lines and not quiet:
         title = "Clash: " + " & ".join(QUEUE_LABEL[q] for q in new) + " frei!"
+        if follow_mode(cfg) and new_recs:
+            lines.append("")
+            lines.append("Anders gebaut oder Trank benutzt? Export kopieren & Kurzbefehl tippen.")
     elif not lines:
         # Erinnerung, falls etwas weiter untätig ist
         rh = float(nconf.get("reminder_hours", 0))
@@ -105,14 +122,14 @@ def run_check(v: Village, plan: Plan, cfg: Config, now: float, names: dict[int, 
                     if v.capacity(q) - sum(1 for i in v.active(q) if i.end > now) > 0]
         if rh > 0 and idle_now and now - state.get("last_reminder", 0) >= rh * 3600 and not cfg.asleep(now):
             title = "Clash: Erinnerung – " + " & ".join(QUEUE_LABEL[q] for q in idle_now) + " noch frei"
-            lines = ["Falls du schon etwas gestartet hast: bitte neuen Export einspielen."]
+            lines = [REMINDER_LINE]
             state["last_reminder"] = now
 
-    stale_days = float(nconf.get("stale_export_days", 4))
+    stale_days = float(nconf.get("stale_export_days", 7))
     stale_msg = None
     if stale_days and now - v.timestamp > stale_days * 86400 and not state.get("stale_warned") and not quiet:
-        stale_msg = (f"Dein Dorf-Export ist {fmt_dur(now - v.timestamp)} alt. "
-                     "Für genaue Benachrichtigungen bitte einen neuen Export einspielen.")
+        stale_msg = (f"Dein letzter Export ist {fmt_dur(now - v.timestamp)} alt. Zeit für einen "
+                     "Abgleich: Export kopieren & Kurzbefehl tippen.")
 
     if title:
         msg = "\n".join(lines)
@@ -126,7 +143,13 @@ def run_check(v: Village, plan: Plan, cfg: Config, now: float, names: dict[int, 
         for evs in new.values():
             for key, *_ in evs:
                 sent[key] = now
-        state["recommended"] = sorted(recommended | set(new_recs))
+        state["recommended"] = sorted(recommended | {f"{r.uid}:{r.to_lvl}" for r in new_recs})
+        if follow_mode(cfg) and lines and lines[0] != REMINDER_LINE:
+            # Plan-folgen-Modus: wir gehen davon aus, dass du die Empfehlungen startest
+            for r in new_recs:
+                state.setdefault("assumed", []).append({
+                    "uid": r.uid, "data_id": r.data_id, "section": r.section, "queue": r.queue,
+                    "from_lvl": r.from_lvl, "start": r.start, "end": r.end, "name": r.name})
     elif quiet and new:
         log.append("🌙 Schlafenszeit – Benachrichtigung wird beim Aufwachen geschickt.")
     else:

@@ -44,6 +44,8 @@ class Step:
     resource: str
     new: bool = False
     goblin: bool = False
+    assumed: bool = False
+    section: str = ""
 
     @property
     def duration(self) -> float:
@@ -93,11 +95,11 @@ class Planner:
         }
         # Arbeitskopie der Instanzen
         self.inst: dict[int, Instance] = {
-            i.uid: Instance(i.uid, i.data_id, i.section, i.queue, i.level, i.end, i.goblin)
+            i.uid: Instance(i.uid, i.data_id, i.section, i.queue, i.level, i.end, i.goblin, i.assumed)
             for i in village.instances if i.queue in QUEUES
         }
         self.busy: set[int] = set()
-        self._next_uid = -1
+        self._next_uid = min(list(self.inst) + [0]) - 1
         self._known_th = 0
 
     # ---------- Zustand ----------
@@ -212,7 +214,8 @@ class Planner:
             obj = self.gd.get(inst.data_id) or {"name": f"#{inst.data_id}"}
             plan.running.append(Step(inst.queue, slot if slot is not None else -1, self.v.timestamp,
                                      inst.end, inst.uid, inst.data_id, de_name(obj["name"]),
-                                     inst.level, inst.level + 1, 0, "", goblin=inst.goblin))
+                                     inst.level, inst.level + 1, 0, "", goblin=inst.goblin,
+                                     assumed=inst.assumed, section=inst.section))
             heapq.heappush(events, (inst.end, next(seq), "done", inst.queue, slot, inst.uid))
             inst.end = None
         for q in QUEUES:
@@ -252,7 +255,7 @@ class Planner:
                 obj = self.gd.get(inst.data_id)
                 plan.steps.append(Step(q, slot, start, end, inst.uid, inst.data_id,
                                        de_name(obj["name"]), inst.level, inst.level + 1,
-                                       cost, res, new=inst.level == 0))
+                                       cost, res, new=inst.level == 0, section=inst.section))
                 heapq.heappush(events, (end, next(seq), "done", q, slot, inst.uid))
 
 

@@ -42,10 +42,15 @@ def running_table(plan: Plan, cfg: Config, now: float) -> list[str]:
     out = ["| Warteschlange | Was | Level | fertig am | Restzeit |", "|---|---|---|---|---|"]
     for s in sorted(plan.running, key=lambda s: s.end):
         label = QUEUE_LABEL.get(s.queue, s.queue) + (" (Goblin)" if s.goblin else "")
+        if s.assumed:
+            label += " *(angenommen)*"
         rest = "✅ fertig" if s.end <= now else fmt_dur(s.end - now)
         out.append(f"| {label} | {s.name} | {s.from_lvl} → {s.to_lvl} | {cfg.fmt_time(s.end)} | {rest} |")
     if len(out) == 2:
         out.append("| – | nichts läuft | | | |")
+    if any(s.assumed for s in plan.running):
+        out += ["", "*angenommen* = so wie empfohlen gestartet (Plan-folgen-Modus). "
+                "Anders gebaut? Einfach einen neuen Export schicken."]
     return out
 
 

@@ -2,8 +2,8 @@
 
 - **Spieler:** `#SAMPLE123`
 - **Rathaus:** 14 · **Bauarbeiter:** 6 · **Labor:** 11 · **Begleiterhaus:** 2 · **Heldenhalle:** 7
-- **Export vom:** Di 17.11. 10:56 (vor 3h 2m)
-- **Plan erstellt:** Di 17.11. 13:58
+- **Export vom:** Di 17.11. 10:56 (vor 3h 13m)
+- **Plan erstellt:** Di 17.11. 14:09
 
 > ⚠️ **Bauarbeiter: 3 frei!** Jetzt etwas starten.
 > ⚠️ **Begleiterhaus: 1 frei!** Jetzt etwas starten.
@@ -12,8 +12,8 @@
 
 | Warteschlange | Was | Level | fertig am | Restzeit |
 |---|---|---|---|---|
-| Bauarbeiter | Clanburg | 9 → 10 | Di 17.11. 15:56 | 1h 57m |
-| Labor | Ballon | 7 → 8 | Mi 18.11. 11:26 | 21h 27m |
+| Bauarbeiter | Clanburg | 9 → 10 | Di 17.11. 15:56 | 1h 46m |
+| Labor | Ballon | 7 → 8 | Mi 18.11. 11:26 | 21h 16m |
 | Bauarbeiter | Inferno-Turm | 7 → 8 | Do 19.11. 11:56 | 1T 21h |
 | Bauarbeiter | Bogenschützenkönigin | 78 → 79 | Fr 20.11. 10:56 | 2T 20h |
 
@@ -21,31 +21,31 @@
 
 | # | Start | Was | Level | Dauer | Kosten | fertig |
 |---|---|---|---|---|---|---|
-| 1 | Di 17.11. 13:58 | Dunkle Zauberfabrik *(B4)* | 6 → 7 | 7T | 11 Mio Elixier | Di 24.11. 13:58 |
-| 2 | Di 17.11. 13:58 | Labor *(B5)* | 11 → 12 | 7T | 8,1 Mio Elixier | Di 24.11. 13:58 |
-| 3 | Di 17.11. 13:58 | Schmiede *(B6)* | 6 → 7 | 5T | 9,2 Mio Elixier | So 22.11. 13:58 |
+| 1 | Di 17.11. 14:09 | Dunkle Zauberfabrik *(B4)* | 6 → 7 | 7T | 11 Mio Elixier | Di 24.11. 14:09 |
+| 2 | Di 17.11. 14:09 | Labor *(B5)* | 11 → 12 | 7T | 8,1 Mio Elixier | Di 24.11. 14:09 |
+| 3 | Di 17.11. 14:09 | Schmiede *(B6)* | 6 → 7 | 5T | 9,2 Mio Elixier | So 22.11. 14:09 |
 | 4 | Di 17.11. 15:56 | Werkstatt *(B1)* | 5 → 6 | 4T 18h | 8,5 Mio Elixier | So 22.11. 09:56 |
 | 5 | Do 19.11. 11:56 | Begleiterhaus *(B2)* | 2 → 3 | 3T | 5 Mio Elixier | So 22.11. 11:56 |
 | 6 | Fr 20.11. 10:56 | Heldenhalle *(B3)* | 7 → 8 | 6T 12h | 9,5 Mio Elixier | Do 26.11. 22:56 |
 | 7 | So 22.11. 09:56 | Dunkle Kaserne *(B1)* | 10 → 11 | 8T | 12 Mio Elixier | Mo 30.11. 09:56 |
 | 8 | So 22.11. 11:56 | Begleiterhaus *(B2)* | 3 → 4 | 3T 12h | 6 Mio Elixier | Mi 25.11. 23:56 |
-| 9 | So 22.11. 13:58 | Squad Barracks *(B6)* | 6 → 7 | 8T | 12,5 Mio Elixier | Mo 30.11. 13:58 |
-| 10 | Di 24.11. 13:58 | Royal Champion *(B4)* | 20 → 21 | 2T | 100k Dunkles Elixier | Do 26.11. 13:58 |
-| 11 | Di 24.11. 13:58 | Kaserne *(B5)* | 15 → 16 | 7T 12h | 11 Mio Elixier | Mi 02.12. 01:58 |
+| 9 | So 22.11. 14:09 | Squad Barracks *(B6)* | 6 → 7 | 8T | 12,5 Mio Elixier | Mo 30.11. 14:09 |
+| 10 | Di 24.11. 14:09 | Royal Champion *(B4)* | 20 → 21 | 2T | 100k Dunkles Elixier | Do 26.11. 14:09 |
+| 11 | Di 24.11. 14:09 | Kaserne *(B5)* | 15 → 16 | 7T 12h | 11 Mio Elixier | Mi 02.12. 02:09 |
 | 12 | Do 26.11. 07:00 | Scattershot *(B2)* | 2 → 3 | 7T 12h | 11 Mio Gold | Do 03.12. 19:00 |
-| 13 | Do 26.11. 13:58 | Royal Champion *(B4)* | 21 → 22 | 2T | 105k Dunkles Elixier | Sa 28.11. 13:58 |
+| 13 | Do 26.11. 14:09 | Royal Champion *(B4)* | 21 → 22 | 2T | 105k Dunkles Elixier | Sa 28.11. 14:09 |
 | 14 | Do 26.11. 22:56 | Bogenschützenkönigin *(B3)* | 79 → 80 | 5T | 180k Dunkles Elixier | Di 01.12. 22:56 |
-| 15 | Sa 28.11. 13:58 | Barbarenkönig *(B4)* | 75 → 76 | 4T | 160k Dunkles Elixier | Mi 02.12. 13:58 |
+| 15 | Sa 28.11. 14:09 | Barbarenkönig *(B4)* | 75 → 76 | 4T | 160k Dunkles Elixier | Mi 02.12. 14:09 |
 | 16 | Mo 30.11. 09:56 | Großer Wächter *(B1)* | 50 → 51 | 4T | 11,8 Mio Elixier | Fr 04.12. 09:56 |
-| 17 | Mo 30.11. 13:58 | Royal Champion *(B6)* | 22 → 23 | 2T | 110k Dunkles Elixier | Mi 02.12. 13:58 |
+| 17 | Mo 30.11. 14:09 | Royal Champion *(B6)* | 22 → 23 | 2T | 110k Dunkles Elixier | Mi 02.12. 14:09 |
 | 18 | Di 01.12. 22:56 | Bogenschützenkönigin *(B3)* | 80 → 81 | 5T | 185k Dunkles Elixier | So 06.12. 22:56 |
 | 19 | Mi 02.12. 07:00 | Scattershot *(B5)* | 2 → 3 | 7T 12h | 11 Mio Gold | Mi 09.12. 19:00 |
-| 20 | Mi 02.12. 13:58 | Barbarenkönig *(B4)* | 76 → 77 | 4T | 165k Dunkles Elixier | So 06.12. 13:58 |
-| 21 | Mi 02.12. 13:58 | Royal Champion *(B6)* | 23 → 24 | 2T | 115k Dunkles Elixier | Fr 04.12. 13:58 |
+| 20 | Mi 02.12. 14:09 | Barbarenkönig *(B4)* | 76 → 77 | 4T | 165k Dunkles Elixier | So 06.12. 14:09 |
+| 21 | Mi 02.12. 14:09 | Royal Champion *(B6)* | 23 → 24 | 2T | 115k Dunkles Elixier | Fr 04.12. 14:09 |
 | 22 | Do 03.12. 19:00 | Adlerartillerie *(B2)* | 4 → 5 | 7T | 12 Mio Gold | Do 10.12. 19:00 |
 | 23 | Fr 04.12. 09:56 | Großer Wächter *(B1)* | 51 → 52 | 4T | 12,2 Mio Elixier | Di 08.12. 09:56 |
-| 24 | Fr 04.12. 13:58 | Royal Champion *(B6)* | 24 → 25 | 3T | 120k Dunkles Elixier | Mo 07.12. 13:58 |
-| 25 | So 06.12. 13:58 | Barbarenkönig *(B4)* | 77 → 78 | 4T | 170k Dunkles Elixier | Do 10.12. 13:58 |
+| 24 | Fr 04.12. 14:09 | Royal Champion *(B6)* | 24 → 25 | 3T | 120k Dunkles Elixier | Mo 07.12. 14:09 |
+| 25 | So 06.12. 14:09 | Barbarenkönig *(B4)* | 77 → 78 | 4T | 170k Dunkles Elixier | Do 10.12. 14:09 |
 | … | | *noch 136 weitere Schritte* | | | | |
 
 ## 🧪 Labor – nächste Schritte
@@ -83,8 +83,8 @@
 
 | # | Start | Was | Level | Dauer | Kosten | fertig |
 |---|---|---|---|---|---|---|
-| 1 | Di 17.11. 13:58 | Electro Owl | 3 → 4 | 4T | 75k Dunkles Elixier | Sa 21.11. 13:58 |
-| 2 | Sa 21.11. 13:58 | Electro Owl | 4 → 5 | 4T 12h | 90k Dunkles Elixier | Do 26.11. 01:58 |
+| 1 | Di 17.11. 14:09 | Electro Owl | 3 → 4 | 4T | 75k Dunkles Elixier | Sa 21.11. 14:09 |
+| 2 | Sa 21.11. 14:09 | Electro Owl | 4 → 5 | 4T 12h | 90k Dunkles Elixier | Do 26.11. 02:09 |
 | 3 | Do 26.11. 07:00 | Electro Owl | 5 → 6 | 5T | 105k Dunkles Elixier | Di 01.12. 07:00 |
 | 4 | Di 01.12. 07:00 | Electro Owl | 6 → 7 | 5T 12h | 120k Dunkles Elixier | So 06.12. 19:00 |
 | 5 | So 06.12. 19:00 | Electro Owl | 7 → 8 | 6T | 135k Dunkles Elixier | Sa 12.12. 19:00 |

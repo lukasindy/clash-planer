@@ -50,6 +50,7 @@ class Instance:
     level: int
     end: float | None = None      # Unix-Zeit, wann das laufende Upgrade fertig ist
     goblin: bool = False          # Goblin-Bauarbeiter/-Forscher (zusätzlicher Slot)
+    assumed: bool = False         # vom Plan-folgen-Modus angenommen (nicht aus dem Export)
 
     @property
     def busy(self) -> bool:
@@ -153,6 +154,24 @@ def parse_export(text_or_obj) -> Village:
                 v.instances.append(Instance(uid, int(row["data"]), section, queue, lvl, end, goblin))
                 uid += 1
     return v
+
+
+def apply_assumptions(v: Village, assumed: list[dict]) -> None:
+    """Plan-folgen-Modus: angenommene (empfohlene) Upgrades in den Export einrechnen."""
+    by_uid = {i.uid: i for i in v.instances}
+    for a in sorted(assumed, key=lambda a: a["start"]):
+        inst = by_uid.get(a["uid"])
+        if inst is None:
+            if a["uid"] >= 0:
+                continue
+            inst = Instance(a["uid"], a["data_id"], a["section"], a["queue"], 0)
+            v.instances.append(inst)
+            by_uid[inst.uid] = inst
+        if inst.data_id != a["data_id"]:
+            continue  # passt nicht (anderer Export) – ignorieren
+        inst.level = a["from_lvl"]
+        inst.end = a["end"]
+        inst.assumed = True
 
 
 def load_village(path: str) -> Village:
