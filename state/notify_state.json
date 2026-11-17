@@ -1,0 +1,23 @@
+{
+  "assumed": [
+    {
+      "data_id": 73000011,
+      "end": 1795614301.7029643,
+      "from_lvl": 10,
+      "name": "Angry Jelly",
+      "queue": "pets",
+      "section": "pets",
+      "start": 1794923101.7029643,
+      "uid": 574
+    }
+  ],
+  "export_ts": 1794923055.0,
+  "last_reminder": 0,
+  "recommended": [
+    "574:11"
+  ],
+  "sent": {
+    "pets:free:0": 1794923101.7029643
+  },
+  "stale_warned": false
+}
