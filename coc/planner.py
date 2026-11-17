@@ -26,7 +26,7 @@ from .village import (BOB_HUT, BUILDERS_HUT, HERO_HALL, LABORATORY, PET_HOUSE, T
 
 QUEUES = ("builder", "lab", "pets")
 QUEUE_LABEL = {"builder": "Bauarbeiter", "lab": "Labor", "pets": "Begleiterhaus"}
-NEVER_PLAN = {WALL, BOB_HUT}
+NEVER_PLAN = {WALL, BOB_HUT, 1000093, 1000097, 1000105}  # Mauer, B.O.B, Helferhütte, Werkbank, Wächterschrein
 
 
 @dataclass
@@ -164,8 +164,8 @@ class Planner:
                 if inst.level < 1 or (nxt.get("required_pet_house_level") or 0) > ph:
                     continue
             dur, cost, res = GameData.upgrade_info(obj, nxt)
-            if q in ("lab", "pets") and dur <= 0 and cost <= 0:
-                continue
+            if dur <= 0 and cost <= 0:
+                continue  # Platzhalter-Level in den Spieldaten (noch nicht im Spiel)
             dur = int(dur * self.speed[q])
             name = obj["name"]
             if q == "builder":

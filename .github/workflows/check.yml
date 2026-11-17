@@ -45,12 +45,15 @@ jobs:
           TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
           DISCORD_WEBHOOK_URL: ${{ secrets.DISCORD_WEBHOOK_URL }}
 
-      - name: Gemerkte Benachrichtigungen speichern
+      - name: Gemerkte Benachrichtigungen speichern (+ Web-App aktualisieren)
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
           git add state/
           if ! git diff --cached --quiet; then
+            # Status hat sich geändert (z. B. angenommene Upgrades) → Plan & Web-App neu
+            python -m coc plan > /dev/null
+            git add PLAN.md docs/
             git commit -m "Benachrichtigungsstatus aktualisiert"
             git pull --rebase --autostash
             git push

@@ -46,6 +46,7 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("status")
     p = sub.add_parser("plan")
     p.add_argument("--out", default="PLAN.md")
+    p.add_argument("--site", default="docs/data.json")
     c = sub.add_parser("check")
     c.add_argument("--dry-run", action="store_true")
     i = sub.add_parser("import")
@@ -110,6 +111,8 @@ def main(argv: list[str] | None = None) -> int:
     elif args.cmd == "plan":
         md = plan_markdown(v, plan, cfg, now)
         Path(args.out).write_text(md, "utf-8")
+        from .site import site_data, write_site
+        write_site(getattr(args, "site", "docs/data.json"), site_data(gd, v, plan, cfg, now))
         status = status_markdown(v, plan, cfg, now)
         print(status)
         _summary(status)

@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Clash-Planer">
+<meta name="theme-color" content="#14110f">
+<title>Clash-Planer</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏰</text></svg>">
+<link rel="apple-touch-icon" href="icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lilita+One&family=Nunito:wght@500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#14110f; --panel:#201b17; --panel2:#2a231d; --line:#3a3028; --text:#f4ece1; --mute:#a8998a;
+  --gold:#f2c230; --elixir:#e05ce6; --dark:#8b6cff; --ok:#5fd16a; --warn:#ff6b4a; --accent:#f2c230;
+  --r:16px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--text);font-family:Nunito,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+body{padding:calc(env(safe-area-inset-top) + 12px) 14px calc(env(safe-area-inset-bottom) + 40px);max-width:980px;margin:0 auto}
+h1,h2,.num{font-family:"Lilita One",system-ui,sans-serif;font-weight:400;letter-spacing:.3px}
+h1{font-size:26px;margin:0}
+h2{font-size:20px;margin:28px 0 10px;display:flex;align-items:center;gap:8px}
+.mute{color:var(--mute)}
+header{display:flex;justify-content:space-between;align-items:flex-start;gap:10px}
+.tag{font-size:13px;color:var(--mute);margin-top:2px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.chip{background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:5px 11px;font-size:13px;font-weight:700}
+.chip b{color:var(--gold);font-family:"Lilita One";font-weight:400;margin-left:3px}
+.age{font-size:12px;text-align:right;color:var(--mute);white-space:nowrap}
+.age.stale{color:var(--warn)}
+.banner{margin-top:16px;border-radius:var(--r);padding:14px 16px;background:linear-gradient(135deg,#3a1d14,#2a1611);border:1px solid #6b2c1c;display:none}
+.banner.show{display:block;animation:pulse 2s ease-in-out infinite}
+.banner strong{font-family:"Lilita One";font-weight:400;font-size:18px;color:#ffb199}
+@keyframes pulse{50%{border-color:#ff6b4a}}
+.grid{display:grid;gap:12px}
+@media(min-width:760px){.grid.two{grid-template-columns:1fr 1fr}}
+.card{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:14px}
+.card h3{margin:0 0 10px;font-family:"Lilita One";font-weight:400;font-size:17px;display:flex;justify-content:space-between}
+.card h3 span{font-family:Nunito;font-size:13px;color:var(--mute);font-weight:700}
+.slot{padding:10px 0;border-top:1px solid var(--line)}
+.slot:first-of-type{border-top:0;padding-top:2px}
+.row{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.sname{font-weight:800;font-size:15px}
+.lvl{color:var(--mute);font-size:13px;font-weight:700;white-space:nowrap}
+.cd{font-family:"Lilita One";font-size:17px;white-space:nowrap}
+.sub{font-size:12px;color:var(--mute);margin-top:3px;display:flex;justify-content:space-between;gap:8px}
+.bar{height:9px;background:#0f0c0a;border-radius:99px;margin-top:7px;overflow:hidden;border:1px solid #2c241e}
+.bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,#b8860b,var(--gold));transition:width 1s linear}
+.bar.lab i{background:linear-gradient(90deg,#9b2ea1,var(--elixir))}
+.bar.pets i{background:linear-gradient(90deg,#4f37b5,var(--dark))}
+.badge{font-size:10px;font-weight:800;padding:2px 6px;border-radius:6px;background:#3b3026;color:var(--mute);margin-left:6px;vertical-align:2px;text-transform:uppercase;letter-spacing:.4px}
+.badge.g{background:#1f3a22;color:#7fe08a}
+.free{color:var(--warn)}
+.free .sname{color:var(--warn)}
+.rec{font-size:13px;margin-top:4px;color:var(--text)}
+.rec b{color:var(--gold)}
+/* Zeitleiste */
+.tl-head{display:flex;justify-content:space-between;align-items:center}
+.seg{display:inline-flex;background:var(--panel2);border:1px solid var(--line);border-radius:10px;padding:3px}
+.seg button{all:unset;cursor:pointer;padding:5px 11px;border-radius:7px;font-size:13px;font-weight:800;color:var(--mute)}
+.seg button.on{background:var(--gold);color:#1a1408}
+.tl{position:relative;overflow-x:auto;-webkit-overflow-scrolling:touch;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);margin-top:10px}
+.tl-inner{position:relative}
+.tl-labels{position:sticky;left:0;z-index:3;float:left;background:var(--panel);border-right:1px solid var(--line)}
+.tl-labels div{height:38px;line-height:38px;padding:0 10px;font-size:12px;font-weight:800;color:var(--mute);white-space:nowrap}
+.tl-labels .hd{height:30px;line-height:30px}
+.tl-body{position:relative;margin-left:0}
+.tl-days{height:30px;position:relative;border-bottom:1px solid var(--line)}
+.tl-days span{position:absolute;top:0;height:30px;line-height:30px;font-size:11px;color:var(--mute);padding-left:4px;border-left:1px solid var(--line);white-space:nowrap}
+.tl-row{height:38px;position:relative;border-bottom:1px solid #2a231d}
+.night{position:absolute;top:0;bottom:0;background:rgba(0,0,0,.28);pointer-events:none}
+.tb{position:absolute;top:6px;height:26px;border-radius:7px;font-size:11px;font-weight:800;line-height:26px;padding:0 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;color:#1a1408;cursor:pointer;border:1px solid rgba(0,0,0,.35)}
+.tb.plan{opacity:.55;border-style:dashed}
+.tb.Gold{background:var(--gold)} .tb.Elixir{background:var(--elixir)} .tb.Dark{background:var(--dark);color:#fff}
+.tb.none{background:#8a7a6a}
+.now{position:absolute;top:0;bottom:0;width:2px;background:var(--warn);z-index:2;box-shadow:0 0 8px var(--warn)}
+.detail{margin-top:8px;font-size:13px;min-height:20px;color:var(--mute)}
+.detail b{color:var(--text)}
+/* Listen */
+.tabs{display:flex;gap:6px;margin-bottom:8px;flex-wrap:wrap}
+.list{background:var(--panel);border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.li{display:grid;grid-template-columns:28px 1fr auto;gap:10px;padding:10px 12px;border-top:1px solid var(--line);align-items:center}
+.li:first-child{border-top:0}
+.li .n{font-family:"Lilita One";color:var(--mute);font-size:15px;text-align:center}
+.li .t{font-size:12px;color:var(--mute)}
+.cost{font-size:12px;font-weight:800;white-space:nowrap;text-align:right}
+.cost.Gold{color:var(--gold)} .cost.Elixir{color:var(--elixir)} .cost.Dark{color:var(--dark)}
+.more{padding:10px;text-align:center;font-size:13px;color:var(--mute)}
+.tot{display:grid;gap:10px}
+@media(min-width:760px){.tot{grid-template-columns:repeat(3,1fr)}}
+.tot .card .num{font-size:22px;color:var(--gold)}
+.costs{margin-top:6px;font-size:13px;line-height:1.6}
+footer{margin-top:30px;font-size:12px;color:var(--mute);text-align:center;line-height:1.6}
+footer a{color:var(--mute)}
+.empty{padding:40px 10px;text-align:center;color:var(--mute)}
+</style>
+</head>
+<body>
+<div id="app"><div class="empty">Lade…</div></div>
+
+<script>
+const ICON = {builder:"🔨", lab:"🧪", pets:"🐾"};
+const LABEL = {builder:"Bauarbeiter", lab:"Labor", pets:"Begleiterhaus"};
+const RES = {"Gold":"Gold","Elixir":"Elixier","Dark Elixir":"Dunkles E."};
+let D = null, tlDays = 7, listQ = "builder";
+
+const $ = s => document.querySelector(s);
+const now = () => Date.now() / 1000;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const resCls = r => r === "Dark Elixir" ? "Dark" : (r === "Gold" || r === "Elixir") ? r : "none";
+
+function fmtDur(s, secs) {
+  s = Math.max(0, Math.round(s));
+  const d = Math.floor(s / 86400), h = Math.floor(s % 86400 / 3600), m = Math.floor(s % 3600 / 60), x = s % 60;
+  if (d) return `${d}T ${h}h` + (secs ? ` ${m}m` : "");
+  if (h) return `${h}h ${m}m` + (secs ? ` ${String(x).padStart(2,"0")}s` : "");
+  return secs ? `${m}m ${String(x).padStart(2,"0")}s` : `${m}m`;
+}
+function fmtTime(ts, withDay = true) {
+  const o = {timeZone: D.tz, hour: "2-digit", minute: "2-digit"};
+  if (withDay) Object.assign(o, {weekday: "short", day: "2-digit", month: "2-digit"});
+  return new Intl.DateTimeFormat("de-AT", o).format(new Date(ts * 1000)).replace(",", "");
+}
+function fmtNum(n) {
+  if (n >= 1e9) return (n / 1e9).toFixed(2).replace(".", ",") + " Mrd";
+  if (n >= 1e6) return (n / 1e6).toFixed(1).replace(".", ",").replace(",0", "") + " Mio";
+  if (n >= 1e3) return Math.round(n / 1e3) + "k";
+  return String(n);
+}
+const lvlTxt = s => s.new || s.from === 0 ? "bauen" : `${s.from} → ${s.to}`;
+const costTxt = s => s.cost ? `<span class="cost ${resCls(s.res)}">${fmtNum(s.cost)} ${RES[s.res] || s.res}</span>` : "";
+
+// --- Zustand jetzt berechnen ---
+function slotsNow(q) {
+  const t = now(), cap = D.capacity[q] || 0, out = [];
+  for (let i = 0; i < cap; i++) {
+    const r = D.running.find(x => x.q === q && x.slot === i && x.end > t);
+    const rec = r ? null : D.steps.find(x => x.q === q && x.slot === i);
+    out.push({i, r, rec});
+  }
+  D.running.filter(x => x.q === q && x.goblin && x.end > t).forEach(r => out.push({i: -1, r, goblin: true}));
+  return out;
+}
+
+function slotHtml(q, s) {
+  if (!s.r) {
+    return `<div class="slot free"><div class="row"><div class="sname">${q === "builder" ? "B" + (s.i + 1) + " · " : ""}FREI</div><div class="cd">jetzt starten</div></div>
+      ${s.rec ? `<div class="rec">👉 Empfehlung: <b>${esc(s.rec.name)}</b> ${lvlTxt(s.rec)} · ${fmtDur(s.rec.end - s.rec.start)} ${costTxt(s.rec)}</div>` : ""}</div>`;
+  }
+  const r = s.r, t = now(), tot = Math.max(1, r.end - r.start), pct = Math.min(100, Math.max(0, (t - r.start) / tot * 100));
+  const label = (q === "builder" && !s.goblin ? `B${s.i + 1} · ` : "") + esc(r.name);
+  return `<div class="slot"><div class="row"><div class="sname">${label}${s.goblin ? '<span class="badge g">Goblin</span>' : ""}${r.assumed ? '<span class="badge">angenommen</span>' : ""}</div>
+      <div class="cd" data-end="${r.end}">${fmtDur(r.end - t, true)}</div></div>
+    <div class="bar ${q}"><i data-s="${r.start}" data-e="${r.end}" style="width:${pct}%"></i></div>
+    <div class="sub"><span>${lvlTxt(r)}</span><span>fertig ${fmtTime(r.end)}</span></div></div>`;
+}
+
+function renderNow() {
+  let freeLines = [];
+  const cards = ["builder", "lab", "pets"].filter(q => D.capacity[q]).map(q => {
+    const sl = slotsNow(q), busy = sl.filter(s => s.r && !s.goblin).length, free = sl.filter(s => !s.r);
+    if (free.length) freeLines.push(`${free.length}× ${LABEL[q]}`);
+    return `<div class="card"><h3>${ICON[q]} ${LABEL[q]}<span>${busy}/${D.capacity[q]} beschäftigt</span></h3>${sl.map(s => slotHtml(q, s)).join("")}</div>`;
+  });
+  $("#now").innerHTML = `<div class="grid two">${cards.join("")}</div>`;
+  const b = $("#banner");
+  b.classList.toggle("show", freeLines.length > 0);
+  b.innerHTML = freeLines.length ? `<strong>⚠️ Frei: ${freeLines.join(", ")}</strong><div class="mute" style="margin-top:4px;font-size:13px">Empfehlung starten. Anders gebaut? Export kopieren &amp; Kurzbefehl tippen.</div>` : "";
+}
+
+function renderTimeline() {
+  const t0 = now() - 3600 * 6, t1 = t0 + tlDays * 86400, pxPerDay = tlDays <= 7 ? 150 : 46;
+  const W = tlDays * pxPerDay, x = ts => (ts - t0) / 86400 * pxPerDay;
+  const rows = [];
+  for (let i = 0; i < (D.capacity.builder || 0); i++) rows.push({q: "builder", slot: i, label: "🔨 B" + (i + 1)});
+  if (D.capacity.lab) rows.push({q: "lab", slot: 0, label: "🧪 Labor"});
+  if (D.capacity.pets) rows.push({q: "pets", slot: 0, label: "🐾 Begleiter"});
+
+  // Tage + Nächte
+  let days = "", nights = "";
+  const startDay = new Date(t0 * 1000); startDay.setHours(0, 0, 0, 0);
+  for (let d = startDay.getTime() / 1000; d < t1; d += 86400) {
+    if (d + 86400 > t0) days += `<span style="left:${Math.max(0, x(d))}px">${new Intl.DateTimeFormat("de-AT", {timeZone: D.tz, weekday: "short", day: "2-digit", month: "2-digit"}).format(new Date((d + 43200) * 1000))}</span>`;
+    if (D.sleep) {
+      const [sh, sm] = D.sleep[0].split(":").map(Number), [eh, em] = D.sleep[1].split(":").map(Number);
+      const ns = d + sh * 3600 + sm * 60, ne = d + 86400 + eh * 3600 + em * 60;
+      nights += `<div class="night" style="left:${x(ns)}px;width:${x(ne) - x(ns)}px"></div>`;
+    }
+  }
+  const all = D.running.filter(r => !r.goblin).map(r => ({...r, run: true})).concat(D.steps.map(s => ({...s, run: false})));
+  const rowHtml = rows.map(row => {
+    const bars = all.filter(s => s.q === row.q && s.slot === row.slot && s.end > t0 && s.start < t1).map(s => {
+      const l = Math.max(0, x(s.start)), w = Math.max(4, x(Math.min(s.end, t1)) - l);
+      return `<div class="tb ${resCls(s.res)} ${s.run ? "" : "plan"}" style="left:${l}px;width:${w}px" data-i='${esc(JSON.stringify({n: s.name, l: lvlTxt(s), a: s.start, b: s.end, c: s.cost || 0, r: s.res || "", run: s.run}))}'>${esc(s.name)}</div>`;
+    }).join("");
+    return `<div class="tl-row">${nights}${bars}</div>`;
+  }).join("");
+  $("#tl").innerHTML = `<div class="tl-inner" style="width:${W + 90}px">
+    <div class="tl-labels"><div class="hd"></div>${rows.map(r => `<div>${r.label}</div>`).join("")}</div>
+    <div class="tl-body" style="width:${W}px;margin-left:90px"><div class="tl-days">${days}</div>${rowHtml}
+      <div class="now" style="left:${x(now())}px"></div></div></div>`;
+  $("#tl").querySelectorAll(".tb").forEach(el => el.onclick = () => {
+    const i = JSON.parse(el.dataset.i);
+    $("#detail").innerHTML = `<b>${esc(i.n)}</b> ${i.l} · ${i.run ? "läuft" : "geplant"} · ${fmtTime(i.a)} → ${fmtTime(i.b)} (${fmtDur(i.b - i.a)})` + (i.c ? ` · ${fmtNum(i.c)} ${RES[i.r] || i.r}` : "");
+  });
+  $("#tl").scrollLeft = 0;
+}
+
+function renderList() {
+  const st = D.steps.filter(s => s.q === listQ), shown = st.slice(0, 40);
+  $("#tabs").innerHTML = ["builder", "lab", "pets"].filter(q => D.capacity[q]).map(q =>
+    `<div class="seg"><button class="${q === listQ ? "on" : ""}" data-q="${q}">${ICON[q]} ${LABEL[q]}</button></div>`).join("");
+  $("#tabs").querySelectorAll("button").forEach(b => b.onclick = () => { listQ = b.dataset.q; renderList(); });
+  $("#list").innerHTML = shown.length ? shown.map((s, n) => `<div class="li"><div class="n">${n + 1}</div>
+      <div><div class="sname">${esc(s.name)} <span class="lvl">${lvlTxt(s)}</span></div>
+      <div class="t">${s.q === "builder" ? "B" + (s.slot + 1) + " · " : ""}ab ${fmtTime(s.start)} · ${fmtDur(s.end - s.start)}</div></div>
+      ${costTxt(s)}</div>`).join("") + ((D.stepCount[listQ] || 0) > shown.length ? `<div class="more">… noch ${D.stepCount[listQ] - shown.length} weitere Schritte</div>` : "")
+    : `<div class="more">Alles erledigt auf diesem Rathaus-Level 🎉</div>`;
+}
+
+function renderTotals() {
+  $("#tot").innerHTML = ["builder", "lab", "pets"].filter(q => D.capacity[q]).map(q => {
+    const f = D.finish[q], c = D.costs[q] || {};
+    return `<div class="card"><h3>${ICON[q]} ${LABEL[q]}<span>${D.stepCount[q]} Schritte</span></h3>
+      <div class="mute" style="font-size:12px">alles fertig ungefähr</div>
+      <div class="num">${f ? new Intl.DateTimeFormat("de-AT", {timeZone: D.tz, day: "2-digit", month: "short", year: "numeric"}).format(new Date(f * 1000)) : "–"}</div>
+      <div class="costs">${Object.entries(c).filter(([, v]) => v).map(([r, v]) => `<span class="cost ${resCls(r)}">${fmtNum(v)} ${RES[r] || r}</span>`).join("<br>") || "–"}</div></div>`;
+  }).join("");
+}
+
+function render() {
+  const age = now() - D.export;
+  $("#app").innerHTML = `
+  <header><div><h1>🏰 Clash-Planer</h1><div class="tag">${esc(D.tag)}</div></div>
+    <div class="age ${age > 7 * 86400 ? "stale" : ""}" id="age"></div></header>
+  <div class="chips"><span class="chip">Rathaus<b>${D.th}</b></span><span class="chip">Labor<b>${D.lab}</b></span>
+    <span class="chip">Begleiterhaus<b>${D.pets}</b></span><span class="chip">Heldenhalle<b>${D.heroHall}</b></span>
+    <span class="chip">Bauarbeiter<b>${D.capacity.builder}</b></span></div>
+  <div class="banner" id="banner"></div>
+  <h2>⏳ Läuft gerade</h2><div id="now"></div>
+  <div class="tl-head"><h2>📅 Zeitleiste</h2><div class="seg" id="tlseg"><button data-d="7">7 Tage</button><button data-d="30">30 Tage</button></div></div>
+  <div class="tl" id="tl"></div><div class="detail" id="detail">Tippe auf einen Balken für Details. Volle Balken laufen, gestrichelte sind geplant.</div>
+  <h2>📋 Nächste Schritte</h2><div class="tabs" id="tabs"></div><div class="list" id="list"></div>
+  <h2>📊 Bis alles fertig ist</h2><div class="tot" id="tot"></div>
+  <footer>Zeiten ohne Tränke, Helfer &amp; Juwelen · Rohstoffe werden als vorhanden angenommen<br>
+    <a href="https://github.com/lukasindy/clash-planer">GitHub</a> · <a href="https://github.com/lukasindy/clash-planer/blob/main/PLAN.md">PLAN.md</a></footer>`;
+  $("#tlseg").querySelectorAll("button").forEach(b => {
+    b.classList.toggle("on", +b.dataset.d === tlDays);
+    b.onclick = () => { tlDays = +b.dataset.d; $("#tlseg").querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b)); renderTimeline(); };
+  });
+  renderNow(); renderTimeline(); renderList(); renderTotals(); tick();
+}
+
+function tick() {
+  if (!D) return;
+  const t = now();
+  let changed = false;
+  document.querySelectorAll(".cd[data-end]").forEach(el => {
+    const e = +el.dataset.end;
+    if (e <= t) changed = true; else el.textContent = fmtDur(e - t, true);
+  });
+  document.querySelectorAll(".bar i[data-s]").forEach(el => {
+    const s = +el.dataset.s, e = +el.dataset.e;
+    el.style.width = Math.min(100, Math.max(0, (t - s) / (e - s) * 100)) + "%";
+  });
+  const a = $("#age");
+  if (a) a.innerHTML = `Export vor ${fmtDur(t - D.export)}<br>aktualisiert ${fmtTime(D.generated, false)}`;
+  if (changed) renderNow();   // etwas ist fertig geworden → Slot wird frei
+}
+
+async function load() {
+  try {
+    const r = await fetch("data.json?" + Date.now(), {cache: "no-store"});
+    if (!r.ok) throw new Error(r.status);
+    const fresh = await r.json();
+    const first = !D || fresh.generated !== D.generated;
+    D = fresh;
+    if (first) render();
+  } catch (e) {
+    if (!D) $("#app").innerHTML = `<div class="empty">Noch keine Daten – schick zuerst einen Export (Kurzbefehl).</div>`;
+  }
+}
+load();
+setInterval(tick, 1000);
+setInterval(load, 5 * 60 * 1000);
+document.addEventListener("visibilitychange", () => { if (!document.hidden) load(); });
+</script>
+</body>
+</html>

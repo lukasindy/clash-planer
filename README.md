@@ -7,6 +7,8 @@ Läuft komplett gratis auf GitHub Actions:
 - **Timer:** zeigt, wie lange jedes laufende Upgrade noch braucht.
 - **Benachrichtigung:** Push aufs Handy, sobald ein **Bauarbeiter**, das **Labor** oder das
   **Begleiterhaus** frei wird, zusammen mit einer Empfehlung, was du als Nächstes starten solltest.
+- **Web-App:** <https://lukasindy.github.io/clash-planer/>, mit Live-Countdowns, Fortschrittsbalken,
+  Zeitleiste und nächsten Schritten. Am iPhone in Safari öffnen → Teilen → *Zum Home-Bildschirm*.
 - **Plan-folgen-Modus:** Das Repo geht davon aus, dass du die Empfehlung startest, und rechnet
   selbst weiter. Einen neuen Export brauchst du nur, wenn du vom Plan abweichst.
 

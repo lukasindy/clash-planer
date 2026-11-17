@@ -142,7 +142,7 @@ def parse_export(text_or_obj) -> Village:
         for row in rows:
             if not isinstance(row, dict) or "data" not in row:
                 continue
-            lvl = int(row.get("lvl", 0))
+            lvl = int(row.get("lvl", 0 if "timer" in row else 1))
             goblin = bool(row.get("extra")) or any("goblin" in k for k in row)
             if "timer" in row:
                 cnt = 1

@@ -56,9 +56,10 @@ jobs:
       - name: Speichern
         if: success()
         run: |
+          python -m coc plan > /dev/null
           git config user.name "github-actions[bot]"
           git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
-          git add data/ state/ PLAN.md
+          git add data/ state/ PLAN.md docs/
           if ! git diff --cached --quiet; then
             git commit -m "Neuer Dorf-Export (Issue #${{ github.event.issue.number }})"
             git pull --rebase --autostash
