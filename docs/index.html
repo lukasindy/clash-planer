@@ -104,6 +104,9 @@ header{display:flex;justify-content:space-between;align-items:flex-start;gap:10p
 .msg{margin-top:10px;font-size:13px;min-height:18px}
 details{margin-top:14px;font-size:13px;color:var(--mute)}
 summary{cursor:pointer;font-weight:800}
+.edit{all:unset;cursor:pointer;font-size:14px;padding:4px 8px;border-radius:8px;background:var(--panel2);border:1px solid var(--line);margin-left:8px}
+.bk select{margin-top:6px}
+.warn{color:#ffb199;font-size:12px;margin-top:4px}
 .refresh{all:unset;cursor:pointer;font-size:20px;line-height:1;width:36px;height:36px;display:grid;place-items:center;border-radius:10px;background:var(--panel2);border:1px solid var(--line)}
 .refresh.spin{animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
@@ -116,7 +119,7 @@ footer a{color:var(--mute)}
 <div id="app"><div class="empty">Lade…</div></div>
 
 <script>
-const APP_VERSION = "2026-11-17.3";   // bei jeder Änderung an dieser Datei erhöhen
+const APP_VERSION = "2026-11-18.1";   // bei jeder Änderung an dieser Datei erhöhen
 const ICON = {builder:"🔨", lab:"🧪", pets:"🐾"};
 const LABEL = {builder:"Bauarbeiter", lab:"Labor", pets:"Begleiterhaus"};
 const RES = {"Gold":"Gold","Elixir":"Elixier","Dark Elixir":"Dunkles E."};
@@ -238,61 +241,75 @@ function renderList() {
     : `<div class="more">Alles erledigt auf diesem Rathaus-Level 🎉</div>`;
 }
 
+let bookEdit = null;   // Bearbeitungszustand der Bücher-Tag-Karte
+
 function renderBooks() {
   const bs = D.steps.filter(s => s.book || s.hammer);
-  if (!bs.length) { $("#books").innerHTML = ""; return; }
-  const first = bs[0].start, day = bs.filter(s => s.start === first);
-  $("#books").innerHTML = `<h2>📖 Nächster Bücher-Tag</h2><div class="card"><h3>${fmtTime(first)}<span>Upgrade starten → Buch einsetzen</span></h3>
-    ${day.map(s => `<div class="slot"><div class="row"><div class="sname">${s.hammer ? "🔨 " + HAMMER[s.hammer] : s.q === "builder" ? "📖 Buch des Bauens" : "📖 Labor-Buch"}${s.pick ? '<span class="badge g">Wunsch</span>' : ""}</div>${s.hammer ? '<span class="cost">gratis</span>' : costTxt(s)}</div>
-      <div class="sub"><span>${esc(s.name)} ${s.from} → ${s.to}</span></div></div>`).join("")}
-    <div class="sub" style="margin-top:8px"><span>Bis dahin plant der Planer 1 Bauarbeiter und das Labor so, dass sie rechtzeitig frei sind. Wünsche &amp; Hämmer sind bis dahin reserviert.</span></div></div>`;
-}
-
-const TOKEN_KEY = "clash-planer-token";
-const getToken = () => { try { return localStorage.getItem(TOKEN_KEY) || ""; } catch (e) { return ""; } };
-const setToken = v => { try { v ? localStorage.setItem(TOKEN_KEY, v) : localStorage.removeItem(TOKEN_KEY); } catch (e) {} };
-
-function sel(id, list, value, auto = "— automatisch (längstes) —") {
-  return `<select id="${id}"><option value="">${auto}</option>${list.map(n => `<option ${n === value ? "selected" : ""}>${esc(n)}</option>`).join("")}</select>`;
-}
-
-function renderForm() {
-  const c = D.choices || {}, st = D.settings || {}, h = st.hammers || {};
-  const lab = [...(c.fighting || []), ...(c.spells || [])].sort();
-  const nb = (st.books || {}).builder ?? 1, nl = (st.books || {}).lab ?? 2;
-  const bp = st.builder_picks || [], lp = st.lab_picks || [];
-  let html = "";
-  for (let i = 0; i < nb; i++) html += `<label>📖 Buch des Bauens${nb > 1 ? " " + (i + 1) : ""}</label>${sel("bp" + i, c.building || [], bp[i])}`;
-  for (let i = 0; i < nl; i++) html += `<label>📖 Labor-Buch ${i + 1}</label>${sel("lp" + i, lab, lp[i])}`;
-  const H = [["building", "Hammer des Bauens", c.building], ["heroes", "Hammer der Helden", c.heroes],
-             ["fighting", "Hammer des Kampfes", c.fighting], ["spells", "Hammer der Zauber", c.spells]];
-  html += H.map(([k, label, list]) => `<label>🔨 ${label} – Anzahl &amp; Ziel</label><div class="hrow">
-      <input id="h_${k}" type="number" min="0" max="20" inputmode="numeric" value="${+h[k] || 0}">${sel("hp_" + k, list || [], h[k + "_pick"], "— automatisch —")}</div>`).join("");
-  html += `<a class="btn" id="save">Speichern</a><div class="msg" id="msg"></div>
-    <details ${getToken() ? "" : "open"}><summary>⚙️ Verbindung ${getToken() ? "✅" : "(einmalig einrichten)"}</summary>
-      <p>Damit „Speichern“ direkt funktioniert, hier einmal denselben GitHub-Token einfügen wie im Kurzbefehl
-      (nur <code>github_pat_…</code>, ohne „Bearer“). Er bleibt nur auf diesem Gerät gespeichert.
-      Ohne Token öffnet „Speichern“ GitHub, dort tippst du dann auf „Create“.</p>
-      <input id="tok" type="password" placeholder="github_pat_…" value="${getToken() ? "••••••••" : ""}" autocomplete="off">
-      <a class="btn" id="savetok" style="font-size:15px;padding:9px">Token speichern</a></details>`;
-  $("#form").innerHTML = html;
+  const opt = D.bookOptions || {};
+  if (!bs.length && !opt.time) { $("#books").innerHTML = ""; return; }
+  const first = opt.time || bs[0].start, day = bs.filter(s => s.start === first);
+  const st = D.settings || {};
+  if (!bookEdit) {
+    // Startzustand aus dem Plan: je Buch/Hammer, was geplant ist (Wunsch = fest, sonst automatisch)
+    bookEdit = {
+      rows: day.map(s => ({type: s.hammer ? "hammer" : (s.q === "builder" ? "bb" : "lb"), kind: s.hammer || "",
+                           value: s.pick ? s.name : "", planned: s.name, from: s.from, to: s.to, cost: s.cost, res: s.res})),
+      dirty: false, open: false};
+    // Hämmer, die eingetragen sind, aber nichts gefunden haben, trotzdem anzeigen
+    const h = st.hammers || {};
+    ["building", "heroes", "fighting", "spells"].forEach(k => {
+      const have = +h[k] || 0, shown = bookEdit.rows.filter(r => r.kind === k).length;
+      for (let i = shown; i < have; i++) bookEdit.rows.push({type: "hammer", kind: k, value: h[k + "_pick"] || "", planned: ""});
+    });
+  }
+  const E = bookEdit;
+  const optsFor = r => r.type === "bb" ? opt.builder : r.type === "lb" ? opt.lab : opt[r.kind];
+  const label = r => r.type === "hammer" ? "🔨 " + HAMMER[r.kind] : r.type === "bb" ? "📖 Buch des Bauens" : "📖 Labor-Buch";
+  const rowHtml = (r, i) => {
+    const list = optsFor(r) || [];
+    const planned = r.planned ? `${esc(r.planned)}${r.from !== undefined ? ` ${r.from} → ${r.to}` : ""}` : "<i>nichts Passendes</i>";
+    const body = E.open
+      ? `<select data-i="${i}" class="bksel"><option value="">— automatisch (längstes) —</option>${list.map(n => `<option ${n === r.value ? "selected" : ""}>${esc(n)}</option>`).join("")}</select>`
+      : `<div class="sub"><span>${planned}</span>${r.type === "hammer" ? '<span class="cost">gratis</span>' : (r.cost ? costTxt(r) : "")}</div>`;
+    return `<div class="slot bk"><div class="row"><div class="sname">${label(r)}${r.value ? '<span class="badge g">Wunsch</span>' : ""}</div>
+      ${E.open && r.type === "hammer" ? `<a class="edit" data-del="${i}">✕</a>` : ""}</div>${body}</div>`;
+  };
+  const unmet = (D.bookUnmet || []).map(u => `<div class="warn">⚠️ ${esc(u.pick)}: ${esc(u.why)}</div>`).join("");
+  $("#books").innerHTML = `<h2>📖 Nächster Bücher-Tag</h2><div class="card form">
+    <h3>${fmtTime(first)}<span><a class="edit" id="bkedit">${E.open ? "Abbrechen" : "✏️ Ändern"}</a></span></h3>
+    ${E.rows.map(rowHtml).join("")}
+    ${unmet}
+    ${E.open ? `<div class="hrow" style="margin-top:12px;grid-template-columns:1fr auto">
+        <select id="addkind"><option value="">＋ Hammer hinzufügen …</option>${Object.entries(HAMMER).map(([k, n]) => `<option value="${k}">${n}</option>`).join("")}</select></div>
+        <a class="btn" id="bksave">Speichern</a><div class="msg" id="msg"></div>
+        <details ${getToken() ? "" : "open"}><summary>⚙️ Verbindung ${getToken() ? "✅" : "(einmalig einrichten)"}</summary>
+          <p>Einmal denselben GitHub-Token wie im Kurzbefehl einfügen (nur <code>github_pat_…</code>). Bleibt nur auf diesem Gerät.</p>
+          <input id="tok" type="password" placeholder="github_pat_…" value="${getToken() ? "••••••••" : ""}" autocomplete="off">
+          <a class="btn" id="savetok" style="font-size:15px;padding:9px">Token speichern</a></details>`
+      : `<div class="sub" style="margin-top:8px"><span>Ein Bauarbeiter und das Labor werden so geplant, dass sie rechtzeitig frei sind. Mit ✏️ legst du fest, worauf Bücher und Hämmer kommen – zur Auswahl steht nur, was an dem Tag wirklich geht.</span></div>`}
+  </div>`;
+  $("#bkedit").onclick = () => { E.open = !E.open; if (!E.open) bookEdit = null; renderBooks(); };
+  if (!E.open) return;
+  document.querySelectorAll(".bksel").forEach(el => el.onchange = () => { E.rows[+el.dataset.i].value = el.value; E.dirty = true; });
+  document.querySelectorAll("[data-del]").forEach(el => el.onclick = () => { E.rows.splice(+el.dataset.del, 1); renderBooks(); });
+  $("#addkind").onchange = e => { if (e.target.value) { E.rows.push({type: "hammer", kind: e.target.value, value: "", planned: ""}); renderBooks(); } };
   $("#savetok").onclick = () => {
     const v = $("#tok").value.trim();
-    if (v && !v.startsWith("•")) { setToken(v.replace(/^Bearer\s+/i, "")); $("#msg").textContent = "✅ Token gespeichert."; renderForm(); }
-    else if (!v) { setToken(""); renderForm(); }
+    if (v && !v.startsWith("•")) { setToken(v.replace(/^Bearer\s+/i, "")); renderBooks(); $("#msg").textContent = "✅ Token gespeichert."; }
   };
-  $("#save").onclick = saveSettings;
+  $("#bksave").onclick = saveBooks;
 }
 
-async function saveSettings() {
-  const v = id => ($("#" + id) || {}).value || "";
-  const nb = ((D.settings || {}).books || {}).builder ?? 1, nl = ((D.settings || {}).books || {}).lab ?? 2;
+async function saveBooks() {
+  const E = bookEdit, H = {};
+  ["building", "heroes", "fighting", "spells"].forEach(k => {
+    const rows = E.rows.filter(r => r.type === "hammer" && r.kind === k);
+    H[k] = rows.length; H[k + "_pick"] = (rows.find(r => r.value) || {}).value || "";
+  });
   const payload = {coc_settings: {
-    builder_picks: [...Array(nb).keys()].map(i => v("bp" + i)).filter(Boolean),
-    lab_picks: [...Array(nl).keys()].map(i => v("lp" + i)).filter(Boolean),
-    hammers: Object.fromEntries(["building", "heroes", "fighting", "spells"].flatMap(k =>
-      [[k, Math.max(0, +v("h_" + k) || 0)], [k + "_pick", v("hp_" + k)]]))
-  }};
+    builder_picks: E.rows.filter(r => r.type === "bb" && r.value).map(r => r.value),
+    lab_picks: E.rows.filter(r => r.type === "lb" && r.value).map(r => r.value),
+    hammers: H}};
   const body = "Einstellungen aus der Web-App:\n\n```json\n" + JSON.stringify(payload) + "\n```";
   const title = "Einstellungen: Bücher-Tag & Hämmer", repo = D.repo || "lukasindy/clash-planer";
   const msg = $("#msg"), tok = getToken();
@@ -307,8 +324,17 @@ async function saveSettings() {
       headers: {"Authorization": "Bearer " + tok, "Accept": "application/vnd.github+json", "Content-Type": "application/json"},
       body: JSON.stringify({title, body})});
     if (!r.ok) throw new Error(r.status === 401 ? "Token ungültig" : "Fehler " + r.status);
-    msg.innerHTML = "✅ Gespeichert! In ca. 1 Minute ist der Plan angepasst – dann neu laden.";
+    msg.textContent = "✅ Gespeichert! In ca. 1–2 Minuten aktualisiert sich der Plan von selbst.";
+    setTimeout(() => { bookEdit = null; }, 1500);
   } catch (e) { msg.textContent = "❌ " + e.message; }
+}
+
+const TOKEN_KEY = "clash-planer-token";
+const getToken = () => { try { return localStorage.getItem(TOKEN_KEY) || ""; } catch (e) { return ""; } };
+const setToken = v => { try { v ? localStorage.setItem(TOKEN_KEY, v) : localStorage.removeItem(TOKEN_KEY); } catch (e) {} };
+
+function sel(id, list, value, auto = "— automatisch (längstes) —") {
+  return `<select id="${id}"><option value="">${auto}</option>${list.map(n => `<option ${n === value ? "selected" : ""}>${esc(n)}</option>`).join("")}</select>`;
 }
 
 function renderTotals() {
@@ -345,7 +371,7 @@ function render() {
   <div class="tl-head"><h2>📅 Zeitleiste</h2><div class="seg" id="tlseg"><button data-d="7">7 Tage</button><button data-d="30">30 Tage</button></div></div>
   <div class="tl" id="tl"></div><div class="detail" id="detail">Tippe auf einen Balken für Details. Volle Balken laufen, gestrichelte sind geplant.</div>
   <div id="books"></div>
-  <h2>✏️ Bücher-Tag &amp; Hämmer festlegen</h2><div class="card form" id="form"></div>
+
   <h2>📋 Nächste Schritte</h2><div class="tabs" id="tabs"></div><div class="list" id="list"></div>
   <h2>📊 Bis alles fertig ist</h2><div class="tot" id="tot"></div>
   <footer>Zeiten ohne Tränke, Helfer &amp; Juwelen · Rohstoffe werden als vorhanden angenommen<br>
@@ -354,7 +380,7 @@ function render() {
     b.classList.toggle("on", +b.dataset.d === tlDays);
     b.onclick = () => { tlDays = +b.dataset.d; $("#tlseg").querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b)); renderTimeline(); };
   });
-  renderNow(); renderTimeline(); renderBooks(); renderForm(); renderList(); renderTotals(); tick();
+  renderNow(); renderTimeline(); renderBooks(); renderList(); renderTotals(); tick();
   $("#refresh").onclick = () => load(true);
 }
 
@@ -393,7 +419,7 @@ async function load(manual = false) {
     const changed = !D || fresh.generated !== D.generated;
     D = fresh; lastLoad = now();
     // Formular nicht zerschießen, während man gerade etwas auswählt
-    const editing = document.activeElement && document.activeElement.closest && document.activeElement.closest("#form");
+    const editing = (bookEdit && bookEdit.open) || (document.activeElement && document.activeElement.closest && document.activeElement.closest("#books"));
     if (changed && !editing) {
       const y = window.scrollY; render(); window.scrollTo(0, y);
     } else if (manual || !changed) { renderNow(); tick(); }

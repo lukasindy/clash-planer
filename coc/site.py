@@ -45,6 +45,8 @@ def _choices(gd: GameData, v: Village) -> dict:
         obj, nxt = gd.get(i.data_id), gd.level(i.data_id, i.level + 1)
         if not obj or not nxt or (nxt.get("required_townhall") or 0) > v.th:
             continue
+        if not (nxt.get("build_time") or nxt.get("upgrade_time") or nxt.get("build_cost") or nxt.get("upgrade_cost")):
+            continue   # Platzhalter-Level, gibt es im Spiel noch nicht
         if obj.get("super_troop") or obj.get("is_seasonal"):
             continue
         kind = ("heroes" if i.section == "heroes" else "building") if i.queue == "builder" else \
@@ -74,6 +76,8 @@ def site_data(gd: GameData, v: Village, plan: Plan, cfg: Config, now: float) -> 
         if cfg.sleep_aware else None,
         "boost": cfg.boost_info(now),
         "choices": _choices(gd, v),
+        "bookOptions": plan.book_options,
+        "bookUnmet": plan.book_unmet,
         "settings": {
             "builder_picks": cfg.planner.get("books", {}).get("builder_picks", []),
             "lab_picks": cfg.planner.get("books", {}).get("lab_picks", []),

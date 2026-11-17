@@ -62,6 +62,8 @@ class Plan:
     running: list[Step] = field(default_factory=list)   # Upgrades, die beim Start schon laufen
     idle_at_start: dict[str, int] = field(default_factory=dict)
     book_savings: list = field(default_factory=list)
+    book_options: dict = field(default_factory=dict)   # was am nächsten Bücher-Tag möglich ist
+    book_unmet: list = field(default_factory=list)     # Wünsche, die nicht gingen (+ Grund)
 
     def for_queue(self, q: str) -> list[Step]:
         return [s for s in self.steps if s.queue == q]
@@ -115,6 +117,7 @@ class Planner:
         self._books_done: set[float] = set()
         self.busy: set[int] = set()
         self._in_book = False
+        self._ends: dict[int, float] = {}
         self.reserved: dict[int, str] = self._reserve_picks()
         self._next_uid = min(list(self.inst) + [0]) - 1
         self._known_th = 0
@@ -278,19 +281,65 @@ class Planner:
         inst.level += 1
         self._add_new_buildings()
 
+    def _why_not(self, pick: str) -> str:
+        """Warum ein Wunsch am Bücher-Tag nicht geht."""
+        insts = [i for i in self.inst.values() if self._match(pick, i)]
+        if not insts:
+            return "nicht in deinem Dorf gefunden"
+        lab, th, hh, ph = (self._lvl(LABORATORY), self._lvl(TOWN_HALL), self._lvl(HERO_HALL), self._lvl(PET_HOUSE))
+        reasons = []
+        for i in insts:
+            nxt = self.gd.level(i.data_id, i.level + 1)
+            if not nxt or not (nxt.get("build_time") or nxt.get("upgrade_time") or nxt.get("build_cost") or nxt.get("upgrade_cost")):
+                reasons.append("schon maximal (höheres Level gibt es im Spiel noch nicht)")
+            elif i.uid in self.busy:
+                reasons.append("läuft da gerade noch")
+            elif (nxt.get("required_townhall") or 0) > th:
+                reasons.append(f"braucht Rathaus {nxt['required_townhall']}")
+            elif (nxt.get("required_lab_level") or 0) > lab and i.queue == "lab":
+                lab_end = next((self._ends.get(x.uid) for x in self.inst.values()
+                                if x.data_id == LABORATORY and x.uid in self.busy), None)
+                when = f", Labor-Upgrade fertig {self.cfg.fmt_time(lab_end)}" if lab_end else ""
+                reasons.append(f"braucht Labor {nxt['required_lab_level']} (du hast {lab}{when})")
+            elif (nxt.get("required_hero_tavern_level") or 0) > hh:
+                reasons.append(f"braucht Heldenhalle {nxt['required_hero_tavern_level']}")
+            else:
+                reasons.append("passt nicht zu diesem Buch/Hammer")
+        return reasons[0]
+
+    def _options(self, t) -> dict:
+        b = self._candidates("builder", t, instant=True)
+        lab = self._candidates("lab", t, instant=True)
+        names = lambda cs: sorted({de_name(self.gd.name(c[2].data_id)) for c in cs})
+        return {
+            "builder": names([c for c in b if c[2].section != "heroes"]),
+            "lab": names(lab),
+            "building": names([c for c in b if c[2].section != "heroes"]),
+            "heroes": names([c for c in b if c[2].section == "heroes"]),
+            "fighting": names([c for c in lab if c[2].section != "spells"]),
+            "spells": names([c for c in lab if c[2].section == "spells"]),
+        }
+
     def _use_books(self, plan, idle, t):
         self._books_done.add(t)
         self._in_book = True
+        if self._first_book_day:
+            plan.book_options = {"time": int(t), **self._options(t)}
+            wanted = [("📖", p) for p in self.book_picks["builder"] + self.book_picks["lab"]] + \
+                     [("🔨", p) for k, p in self.hammer_picks.items() if p and self.hammers.get(k)]
+        used: list[str] = []
         for q in ("builder", "lab"):
             slot = self.book_slot if q == "builder" else 0
             if self.books_n.get(q, 0) <= 0 or slot not in idle[q]:
                 continue
             for _ in range(self.books_n[q]):
-                cands = [c for c in self._candidates(q, t) if c[2].section != "heroes"]
+                cands = [c for c in self._candidates(q, t, instant=True) if c[2].section != "heroes"]
                 c, pick = self._pick_target(cands, self.book_picks[q] if self._first_book_day else [])
                 if not c:
                     break
                 self._instant(plan, q, slot, t, c, pick=pick, book=True)
+                if pick:
+                    used.append(pick)
         # Hämmer (nur am ersten Bücher-Tag – danach sind sie verbraucht)
         if self._first_book_day:
             for kind, n in self.hammers.items():
@@ -312,6 +361,12 @@ class Planner:
                         break
                     self.hammer_picks[kind] = ""
                     self._instant(plan, q, -1, t, c, pick=pick, hammer=kind)
+                    if pick:
+                        used.append(pick)
+        if self._first_book_day:
+            for icon, p in wanted:
+                if p not in used:
+                    plan.book_unmet.append({"pick": p, "why": self._why_not(p)})
         self._first_book_day = False
         self._in_book = False
         self.reserved.clear()   # nach dem Bücher-Tag wieder normal planbar
@@ -371,6 +426,7 @@ class Planner:
                                      inst.level, inst.level + 1, 0, "", goblin=inst.goblin,
                                      assumed=inst.assumed, section=inst.section))
             heapq.heappush(events, (inst.end, next(seq), "done", inst.queue, slot, inst.uid))
+            self._ends[inst.uid] = inst.end
             inst.end = None
         for q in QUEUES:
             free = max(cap[q] - used[q], 0)
@@ -432,6 +488,7 @@ class Planner:
                                        de_name(obj["name"]), inst.level, inst.level + 1,
                                        cost, res, new=inst.level == 0, section=inst.section))
                 heapq.heappush(events, (end, next(seq), "done", q, slot, inst.uid))
+                self._ends[inst.uid] = end
 
 
 def make_plan(gd: GameData, village: Village, cfg: Config, now: float) -> Plan:

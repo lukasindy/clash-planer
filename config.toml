@@ -136,7 +136,7 @@ lab = 2         # Labor-Bücher (Kampf/Zauber)
 # Deine Wünsche für den NÄCHSTEN Bücher-Tag (deutsch oder englisch, in Wunschreihenfolge).
 # Leer = automatisch das längste Upgrade. Erfüllte Wünsche werden danach automatisch entfernt.
 builder_picks = []     # z. B. ["Adlerartillerie"]
-lab_picks = ["Dragon Rider", "Drache"]     # z. B. ["Elektrodrache", "Ballon"]
+lab_picks = []     # z. B. ["Elektrodrache", "Ballon"]
 
 # Hämmer, die du gerade hast. Sie werden am nächsten Bücher-Tag eingeplant und danach
 # automatisch abgezogen. Ziel optional (sonst das längste/teuerste Upgrade, Hämmer sind gratis).
@@ -147,5 +147,5 @@ fighting = 1     # Hammer des Kampfes (Truppen/Belagerung)
 spells = 0     # Hammer der Zauber
 building_pick = ""
 heroes_pick = ""
-fighting_pick = "Magier"
+fighting_pick = ""
 spells_pick = ""
