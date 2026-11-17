@@ -2,23 +2,23 @@
 
 - **Spieler:** `#L88VCPGG0`
 - **Rathaus:** 19 · **Bauarbeiter:** 6 · **Labor:** 16 · **Begleiterhaus:** 12 · **Heldenhalle:** 12
-- **Export vom:** Di 17.11. 14:44 (vor 3m)
-- **Plan erstellt:** Di 17.11. 14:47
+- **Export vom:** Di 17.11. 14:44 (vor 5m)
+- **Plan erstellt:** Di 17.11. 14:49
 
 
 ## ⏳ Läuft gerade
 
 | Warteschlange | Was | Level | fertig am | Restzeit |
 |---|---|---|---|---|
-| Bauarbeiter | Bogenschützenkönigin | 104 → 105 | Di 17.11. 17:30 | 2h 43m |
-| Bauarbeiter | Royal Champion | 53 → 54 | Di 17.11. 17:30 | 2h 43m |
-| Bauarbeiter | Sprungfeder | 12 → 13 | Mi 18.11. 02:37 | 11h 49m |
-| Bauarbeiter | Sprungfeder | 12 → 13 | Mi 18.11. 02:37 | 11h 50m |
+| Bauarbeiter | Bogenschützenkönigin | 104 → 105 | Di 17.11. 17:30 | 2h 41m |
+| Bauarbeiter | Royal Champion | 53 → 54 | Di 17.11. 17:30 | 2h 41m |
+| Bauarbeiter | Sprungfeder | 12 → 13 | Mi 18.11. 02:37 | 11h 47m |
+| Bauarbeiter | Sprungfeder | 12 → 13 | Mi 18.11. 02:37 | 11h 48m |
 | Bauarbeiter (Goblin) | Squad Barracks | 1 → 2 | Mi 18.11. 19:07 | 1T 4h |
 | Labor | Magier | 13 → 14 | Di 24.11. 09:23 | 6T 18h |
 | Begleiterhaus *(angenommen)* | Angry Jelly | 10 → 11 | Mi 25.11. 14:45 | 7T 23h |
 | Bauarbeiter | Firecracker Tower | 0 → 1 | Fr 27.11. 21:28 | 10T 6h |
-| Bauarbeiter | Spiky Tower | 0 → 1 | So 29.11. 10:48 | 11T 20h |
+| Bauarbeiter | Spiky Tower | 0 → 1 | So 29.11. 10:48 | 11T 19h |
 
 *angenommen* = so wie empfohlen gestartet (Plan-folgen-Modus). Anders gebaut? Einfach einen neuen Export schicken.
 
