@@ -119,7 +119,7 @@ footer a{color:var(--mute)}
 <div id="app"><div class="empty">Lade…</div></div>
 
 <script>
-const APP_VERSION = "2026-11-18.1";   // bei jeder Änderung an dieser Datei erhöhen
+const APP_VERSION = "2026-11-18.2";   // bei jeder Änderung an dieser Datei erhöhen
 const ICON = {builder:"🔨", lab:"🧪", pets:"🐾"};
 const LABEL = {builder:"Bauarbeiter", lab:"Labor", pets:"Begleiterhaus"};
 const RES = {"Gold":"Gold","Elixir":"Elixier","Dark Elixir":"Dunkles E."};
@@ -264,12 +264,15 @@ function renderBooks() {
   }
   const E = bookEdit;
   const optsFor = r => r.type === "bb" ? opt.builder : r.type === "lb" ? opt.lab : opt[r.kind];
+  const L = opt.locked || {};
+  const lockedFor = r => r.type === "bb" ? (L.building || []) : r.type === "lb" ? [...(L.fighting || []), ...(L.spells || [])] : (L[r.kind] || []);
   const label = r => r.type === "hammer" ? "🔨 " + HAMMER[r.kind] : r.type === "bb" ? "📖 Buch des Bauens" : "📖 Labor-Buch";
   const rowHtml = (r, i) => {
     const list = optsFor(r) || [];
     const planned = r.planned ? `${esc(r.planned)}${r.from !== undefined ? ` ${r.from} → ${r.to}` : ""}` : "<i>nichts Passendes</i>";
     const body = E.open
-      ? `<select data-i="${i}" class="bksel"><option value="">— automatisch (längstes) —</option>${list.map(n => `<option ${n === r.value ? "selected" : ""}>${esc(n)}</option>`).join("")}</select>`
+      ? `<select data-i="${i}" class="bksel"><option value="">— automatisch (längstes) —</option>${list.map(n => `<option ${n === r.value ? "selected" : ""}>${esc(n)}</option>`).join("")}${
+          lockedFor(r).length ? `<optgroup label="Am ${fmtTime(first, true).split(" ")[1] || ""} noch nicht möglich">${lockedFor(r).map(([n, w]) => `<option disabled>${esc(n)} – ${esc(w)}</option>`).join("")}</optgroup>` : ""}</select>`
       : `<div class="sub"><span>${planned}</span>${r.type === "hammer" ? '<span class="cost">gratis</span>' : (r.cost ? costTxt(r) : "")}</div>`;
     return `<div class="slot bk"><div class="row"><div class="sname">${label(r)}${r.value ? '<span class="badge g">Wunsch</span>' : ""}</div>
       ${E.open && r.type === "hammer" ? `<a class="edit" data-del="${i}">✕</a>` : ""}</div>${body}</div>`;

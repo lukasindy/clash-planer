@@ -308,17 +308,41 @@ class Planner:
         return reasons[0]
 
     def _options(self, t) -> dict:
-        b = self._candidates("builder", t, instant=True)
-        lab = self._candidates("lab", t, instant=True)
-        names = lambda cs: sorted({de_name(self.gd.name(c[2].data_id)) for c in cs})
-        return {
-            "builder": names([c for c in b if c[2].section != "heroes"]),
-            "lab": names(lab),
-            "building": names([c for c in b if c[2].section != "heroes"]),
-            "heroes": names([c for c in b if c[2].section == "heroes"]),
-            "fighting": names([c for c in lab if c[2].section != "spells"]),
-            "spells": names([c for c in lab if c[2].section == "spells"]),
-        }
+        """Alles, was am Bücher-Tag grundsätzlich geht – auch wenn der Planer es sonst gerade
+        anderweitig verplant hätte (dein Wunsch wird dafür bis zum Bücher-Tag reserviert)."""
+        th, lab, hh = self._lvl(TOWN_HALL), self._lvl(LABORATORY), self._lvl(HERO_HALL)
+        out = {k: set() for k in ("building", "heroes", "fighting", "spells")}
+        locked = {k: {} for k in out}
+        for i in self.inst.values():
+            if i.queue not in ("builder", "lab") or i.data_id in NEVER_PLAN or i.level < 1:
+                continue
+            if i.data_id == TOWN_HALL and not self.include_th:
+                continue
+            obj = self.gd.get(i.data_id)
+            if not obj or obj.get("village", "home") != "home" or obj.get("super_troop") or obj.get("is_seasonal"):
+                continue
+            nxt = self.gd.level(i.data_id, i.level + 1)
+            if not nxt or not (nxt.get("build_time") or nxt.get("upgrade_time") or nxt.get("build_cost") or nxt.get("upgrade_cost")):
+                continue
+            kind = ("heroes" if i.section == "heroes" else "building") if i.queue == "builder" else \
+                ("spells" if i.section == "spells" else "fighting")
+            name = de_name(obj["name"])
+            if (nxt.get("required_townhall") or 0) > th:
+                continue   # gehört zum nächsten Rathaus – nicht anzeigen
+            why = None
+            if i.queue == "lab" and (nxt.get("required_lab_level") or 0) > lab:
+                why = f"braucht Labor {nxt['required_lab_level']}"
+            elif i.section == "heroes" and (nxt.get("required_hero_tavern_level") or 0) > hh:
+                why = f"braucht Heldenhalle {nxt['required_hero_tavern_level']}"
+            if why:
+                locked[kind].setdefault(name, why)
+            else:
+                out[kind].add(name)
+        o = {k: sorted(v) for k, v in out.items()}
+        o["locked"] = {k: sorted([[n, w] for n, w in v.items() if n not in out[k]]) for k, v in locked.items()}
+        o["builder"] = o["building"]
+        o["lab"] = sorted(out["fighting"] | out["spells"])
+        return o
 
     def _use_books(self, plan, idle, t):
         self._books_done.add(t)

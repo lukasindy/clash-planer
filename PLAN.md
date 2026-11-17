@@ -2,15 +2,15 @@
 
 - **Spieler:** `#L88VCPGG0`
 - **Rathaus:** 19 · **Bauarbeiter:** 6 · **Labor:** 16 · **Begleiterhaus:** 12 · **Heldenhalle:** 12
-- **Export vom:** Di 17.11. 23:37 (vor 27m)
-- **Plan erstellt:** Mi 18.11. 00:05
+- **Export vom:** Di 17.11. 23:37 (vor 33m)
+- **Plan erstellt:** Mi 18.11. 00:10
 
 
 ## ⏳ Läuft gerade
 
 | Warteschlange | Was | Level | fertig am | Restzeit |
 |---|---|---|---|---|
-| Bauarbeiter (Goblin) | Squad Barracks | 1 → 2 | Mi 18.11. 16:15 | 16h 10m |
+| Bauarbeiter (Goblin) | Squad Barracks | 1 → 2 | Mi 18.11. 16:15 | 16h 5m |
 | Begleiterhaus | Angry Jelly | 10 → 11 | Mo 23.11. 15:13 | 5T 15h |
 | Labor | Magier | 13 → 14 | Di 24.11. 07:39 | 6T 7h |
 | Bauarbeiter | Firecracker Tower | 0 → 1 | Fr 27.11. 18:36 | 9T 18h |
