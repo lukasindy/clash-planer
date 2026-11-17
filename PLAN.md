@@ -2,7 +2,7 @@
 
 - **Spieler:** `#L88VCPGG0`
 - **Rathaus:** 19 · **Bauarbeiter:** 6 · **Labor:** 16 · **Begleiterhaus:** 12 · **Heldenhalle:** 12
-- **Export vom:** Di 17.11. 15:14 (vor 42m)
+- **Export vom:** Di 17.11. 15:14 (vor 43m)
 - **Plan erstellt:** Di 17.11. 15:57
 
 
@@ -10,8 +10,8 @@
 
 | Warteschlange | Was | Level | fertig am | Restzeit |
 |---|---|---|---|---|
-| Bauarbeiter | Sprungfeder | 12 → 13 | Di 17.11. 23:45 | 7h 48m |
-| Bauarbeiter | Sprungfeder | 12 → 13 | Di 17.11. 23:45 | 7h 48m |
+| Bauarbeiter | Sprungfeder | 12 → 13 | Di 17.11. 23:45 | 7h 47m |
+| Bauarbeiter | Sprungfeder | 12 → 13 | Di 17.11. 23:45 | 7h 47m |
 | Bauarbeiter (Goblin) | Squad Barracks | 1 → 2 | Mi 18.11. 16:15 | 1T |
 | Begleiterhaus | Angry Jelly | 10 → 11 | Mo 23.11. 15:13 | 5T 23h |
 | Labor | Magier | 13 → 14 | Di 24.11. 08:22 | 6T 16h |
