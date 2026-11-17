@@ -36,6 +36,8 @@ def fmt_cost(s: Step) -> str:
 
 def level_txt(s: Step) -> str:
     txt = "neu bauen" if s.new else f"{s.from_lvl} → {s.to_lvl}"
+    if getattr(s, "hammer", ""):
+        return txt + " 🔨 mit Hammer"
     return txt + (" 📖 mit Buch" if getattr(s, "book", False) else "")
 
 

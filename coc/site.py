@@ -25,6 +25,10 @@ def _step(s, extra=None) -> dict:
         d["assumed"] = True
     if getattr(s, "book", False):
         d["book"] = True
+    if getattr(s, "hammer", ""):
+        d["hammer"] = s.hammer
+    if getattr(s, "pick", ""):
+        d["pick"] = True
     if extra:
         d.update(extra)
     return d

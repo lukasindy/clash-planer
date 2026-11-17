@@ -49,7 +49,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
-          git add state/
+          git add state/ config.toml
           if ! git diff --cached --quiet; then
             # Status hat sich geändert (z. B. angenommene Upgrades) → Plan & Web-App neu
             python -m coc plan > /dev/null

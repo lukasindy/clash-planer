@@ -99,6 +99,26 @@ def _soon_message(evs, plan: Plan, cfg: Config, now: float, names: dict[int, str
     return lines
 
 
+def _consume_items(cfg: Config, steps) -> None:
+    """Nach dem Bücher-Tag: verbrauchte Hämmer abziehen, erfüllte Wünsche aus config.toml streichen."""
+    from .config import update_config
+    raw_b = cfg.raw.get("planner", {}).get("books", {})
+    hm = cfg.raw.get("hammers", {})
+    upd: dict = {}
+    picks = {"builder": list(raw_b.get("builder_picks", []) or []), "lab": list(raw_b.get("lab_picks", []) or [])}
+    for r in steps:
+        if r.hammer:
+            key = f"hammers.{r.hammer}"
+            upd[key] = max(int(upd.get(key, hm.get(r.hammer, 0))) - 1, 0)
+            if r.pick:
+                upd[f"hammers.{r.hammer}_pick"] = ""
+        elif r.pick and r.pick in picks[r.queue]:
+            picks[r.queue].remove(r.pick)
+            upd[f"planner.books.{r.queue}_picks"] = picks[r.queue]
+    if upd:
+        update_config(cfg.path, upd)
+
+
 def run_check(v: Village, plan: Plan, cfg: Config, now: float, names: dict[int, str],
               dry_run: bool = False) -> str:
     state = load_state()
@@ -125,21 +145,30 @@ def run_check(v: Village, plan: Plan, cfg: Config, now: float, names: dict[int, 
             sent[key] = now
 
     # 1b) Bücher-Tag am Monatsanfang
-    book_steps = [r for r in plan.steps if r.book and r.start <= now + 120]
+    book_steps = [r for r in plan.steps if (r.book or r.hammer) and r.start <= now + 120]
     today = cfg._local(now).strftime("%Y-%m-%d")
     if book_steps and state.get("books_used") != today and not quiet:
         blines = []
+        hname = {"building": "Hammer des Bauens", "heroes": "Hammer der Helden",
+                 "fighting": "Hammer des Kampfes", "spells": "Hammer der Zauber"}
         for r in book_steps:
-            book = "Buch des Bauens" if r.queue == "builder" else "Labor-Buch"
-            blines.append(f"{ICON[r.queue]} {book}: {r.name} {r.from_lvl} → {r.to_lvl} ({fmt_cost(r)})")
+            wish = " ⭐" if r.pick else ""
+            if r.hammer:
+                blines.append(f"🔨 {hname[r.hammer]}: {r.name} {r.from_lvl} → {r.to_lvl} (gratis){wish}")
+            else:
+                book = "Buch des Bauens" if r.queue == "builder" else "Labor-Buch"
+                blines.append(f"{ICON[r.queue]} {book}: {r.name} {r.from_lvl} → {r.to_lvl} ({fmt_cost(r)}){wish}")
         saved = sum(plan.book_savings[:len(book_steps)])
-        blines += ["", f"Upgrade starten → sofort Buch einsetzen. Spart zusammen ca. {fmt_dur(saved)}."]
+        blines += ["", "Bücher: Upgrade starten → sofort Buch einsetzen. Hämmer: direkt am Gebäude/Held/Truppe.",
+                   f"Spart zusammen ca. {fmt_dur(saved)}." + (" ⭐ = dein Wunsch" if any(r.pick for r in book_steps) else "")]
         btitle = "📖 Clash: Bücher-Tag!"
         bmsg = "\n".join(blines)
         soon_log = (soon_log + "\n\n" if soon_log else "") + f"**Bücher-Tag:**\n\n```\n{bmsg}\n```"
         if not dry_run:
             notify.send(btitle, bmsg, tags=["books"], priority=4)
         state["books_used"] = today
+        if not dry_run:
+            _consume_items(cfg, book_steps)
         if follow_mode(cfg):
             for r in book_steps:   # sofort fertig → gilt als erledigt
                 state.setdefault("assumed", []).append({
@@ -170,7 +199,7 @@ def run_check(v: Village, plan: Plan, cfg: Config, now: float, names: dict[int, 
         lines.append(f"{ICON[q]} {QUEUE_LABEL[q]}: " + "; ".join(parts))
         # Empfehlungen: die nächsten Plan-Schritte, die noch nicht empfohlen wurden
         recs = [r for r in plan.for_queue(q)
-                if f"{r.uid}:{r.to_lvl}" not in recommended and not r.book][:len(evs)]
+                if f"{r.uid}:{r.to_lvl}" not in recommended and not r.book and not r.hammer][:len(evs)]
         for r in recs:
             lines.append(f"   👉 Empfehlung: {r.name} {level_txt(r)} ({fmt_dur(r.duration)}, {fmt_cost(r)})")
             new_recs.append(r)

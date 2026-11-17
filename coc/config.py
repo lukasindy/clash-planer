@@ -17,6 +17,7 @@ class Config:
     sleep_end: dtime
     boosts: dict = field(default_factory=dict)
     boost_schedule: list = field(default_factory=list)   # [(von_ts, bis_ts, {"builder":20,...})]
+    path: str = "config.toml"
 
     @property
     def notify(self) -> dict:
@@ -146,4 +147,36 @@ def load_config(path: str = "config.toml") -> Config:
         sleep_end=_hm(sch.get("sleep_end", "07:00")),
         boosts=raw.get("boosts", {}),
         boost_schedule=_schedule(raw, ZoneInfo(raw.get("timezone", "Europe/Vienna"))),
+        path=path,
     )
+
+
+def update_config(path: str, updates: dict[str, object]) -> None:
+    """Werte in config.toml ändern, ohne Kommentare zu verlieren. Schlüssel: "abschnitt.key"."""
+    import json
+    import re
+    p = Path(path)
+    lines = p.read_text("utf-8").splitlines()
+    for dotted, value in updates.items():
+        section, key = dotted.rsplit(".", 1)
+        val = json.dumps(value, ensure_ascii=False)
+        in_sec, sec_end, done = False, None, False
+        for i, line in enumerate(lines):
+            m = re.match(r"^\s*\[([^\]]+)\]\s*$", line)
+            if m:
+                if in_sec:
+                    sec_end = i
+                    break
+                in_sec = m.group(1).strip() == section
+                continue
+            if in_sec and re.match(rf"^\s*{re.escape(key)}\s*=", line):
+                comment = line[line.index("#"):] if "#" in line.split("=", 1)[1] else ""
+                lines[i] = f"{key} = {val}" + (f"     {comment}" if comment else "")
+                done = True
+                break
+        if not done:
+            if in_sec:
+                lines.insert(sec_end if sec_end is not None else len(lines), f"{key} = {val}")
+            else:
+                lines += ["", f"[{section}]", f"{key} = {val}"]
+    p.write_text("\n".join(lines) + "\n", "utf-8")

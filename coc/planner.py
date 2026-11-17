@@ -47,6 +47,8 @@ class Step:
     assumed: bool = False
     section: str = ""
     book: bool = False            # mit Buch sofort fertig (Bücher-Tag am Monatsanfang)
+    hammer: str = ""              # mit Hammer sofort fertig: building/heroes/fighting/spells
+    pick: str = ""                # dein Wunsch aus config.toml, der hier erfüllt wurde
 
     @property
     def duration(self) -> float:
@@ -102,10 +104,18 @@ class Planner:
         self.books_on = bool(bk.get("enabled", True))
         self.books_day = int(bk.get("day", 1))
         self.books_n = {"builder": int(bk.get("builder", 1)), "lab": int(bk.get("lab", 2))}
+        self.book_picks = {"builder": list(bk.get("builder_picks", []) or []),
+                           "lab": list(bk.get("lab_picks", []) or [])}
+        hm = cfg.raw.get("hammers", {})
+        self.hammers = {k: int(hm.get(k, 0) or 0) for k in ("building", "heroes", "fighting", "spells")}
+        self.hammer_picks = {k: str(hm.get(f"{k}_pick", "") or "") for k in self.hammers}
+        self._first_book_day = True
         self.book_slot = max(village.capacity("builder") - 1, 0)   # dieser Bauarbeiter ist am 1. frei
         self.book_times = self._make_book_times() if self.books_on else []
         self._books_done: set[float] = set()
         self.busy: set[int] = set()
+        self._in_book = False
+        self.reserved: dict[int, str] = self._reserve_picks()
         self._next_uid = min(list(self.inst) + [0]) - 1
         self._known_th = 0
 
@@ -142,7 +152,7 @@ class Planner:
                 self.inst[self._next_uid] = Instance(self._next_uid, data_id, section, "builder", 0)
                 self._next_uid -= 1
 
-    def _candidates(self, q: str, start: float) -> list[tuple[tuple, int, Instance, int, int, str]]:
+    def _candidates(self, q: str, start: float, instant: bool = False) -> list[tuple[tuple, int, Instance, int, int, str]]:
         th = self._lvl(TOWN_HALL)
         lab = self._lvl(LABORATORY)
         ph = self._lvl(PET_HOUSE)
@@ -151,6 +161,8 @@ class Planner:
         for inst in self.inst.values():
             if inst.queue != q or inst.uid in self.busy or inst.data_id in NEVER_PLAN:
                 continue
+            if inst.uid in self.reserved and not self._in_book:
+                continue   # für den Bücher-Tag reserviert
             obj = self.gd.get(inst.data_id)
             if not obj:
                 continue
@@ -179,7 +191,7 @@ class Planner:
             # Goldpass-Boost, der am STARTZEITPUNKT gilt, senkt Zeit UND Kosten
             f = self.cfg.boost_factor(q, start)
             dur, cost = int(dur * f), int(cost * f)
-            if inst.section == "heroes" and self.cwl_on:
+            if inst.section == "heroes" and self.cwl_on and not instant:
                 clash = self._cwl_overlap(start, start + dur)
                 if clash is not None:
                     # Held wäre während der CWL im Upgrade → später nochmal versuchen
@@ -225,24 +237,84 @@ class Planner:
             return None
         return next((bt for bt in self.book_times if bt >= start and bt not in self._books_done), None)
 
+    def _reserve_picks(self) -> dict[int, str]:
+        """Wünsche/Hammer-Ziele für den Bücher-Tag reservieren: je Wunsch EIN passendes Exemplar
+        (das niedrigste, das gerade nicht im Upgrade ist). Bis zum Bücher-Tag wird es nicht vorgeschlagen."""
+        if not self.books_on:
+            return {}
+        picks = self.book_picks["builder"] + self.book_picks["lab"] + \
+            [p for k, p in self.hammer_picks.items() if p and self.hammers.get(k)]
+        out: dict[int, str] = {}
+        for p in picks:
+            free = sorted((i for i in self.inst.values()
+                           if i.uid not in out and not i.busy and self._match(p, i)), key=lambda i: i.level)
+            if free:
+                out[free[0].uid] = p
+        return out
+
+    def _match(self, pick: str, inst: Instance) -> bool:
+        p = pick.strip().lower()
+        name = self.gd.name(inst.data_id)
+        return bool(p) and p in (name.lower(), de_name(name).lower())
+
+    def _pick_target(self, cands, picks: list[str]):
+        """Erst deine Wünsche (in Reihenfolge), sonst das längste Upgrade."""
+        for p in picks:
+            hit = next((c for c in cands if self.reserved.get(c[2].uid) == p), None) or \
+                next((c for c in cands if self._match(p, c[2])), None)
+            if hit:
+                picks.remove(p)
+                return hit, p
+        return (max(cands, key=lambda c: c[3]), "") if cands else (None, "")
+
+    def _instant(self, plan, q, slot, t, c, pick="", book=False, hammer=""):
+        key, group, inst, dur, cost, res = c
+        obj = self.gd.get(inst.data_id)
+        plan.steps.append(Step(q, slot, t, t, inst.uid, inst.data_id, de_name(obj["name"]),
+                               inst.level, inst.level + 1, 0 if hammer else cost, res,
+                               new=inst.level == 0, section=inst.section, book=book,
+                               hammer=hammer, pick=pick))
+        plan.book_savings.append(dur)
+        inst.level += 1
+        self._add_new_buildings()
+
     def _use_books(self, plan, idle, t):
         self._books_done.add(t)
+        self._in_book = True
         for q in ("builder", "lab"):
             slot = self.book_slot if q == "builder" else 0
             if self.books_n.get(q, 0) <= 0 or slot not in idle[q]:
                 continue
             for _ in range(self.books_n[q]):
                 cands = [c for c in self._candidates(q, t) if c[2].section != "heroes"]
-                if not cands:
+                c, pick = self._pick_target(cands, self.book_picks[q] if self._first_book_day else [])
+                if not c:
                     break
-                key, group, inst, dur, cost, res = max(cands, key=lambda c: c[3])   # längstes = größte Ersparnis
-                obj = self.gd.get(inst.data_id)
-                plan.steps.append(Step(q, slot, t, t, inst.uid, inst.data_id, de_name(obj["name"]),
-                                       inst.level, inst.level + 1, cost, res, new=inst.level == 0,
-                                       section=inst.section, book=True))
-                plan.book_savings.append(dur)
-                inst.level += 1
-                self._add_new_buildings()
+                self._instant(plan, q, slot, t, c, pick=pick, book=True)
+        # Hämmer (nur am ersten Bücher-Tag – danach sind sie verbraucht)
+        if self._first_book_day:
+            for kind, n in self.hammers.items():
+                q = "builder" if kind in ("building", "heroes") else "lab"
+                for _ in range(n):
+                    cands = self._candidates(q, t, instant=True)
+                    if kind == "building":
+                        cands = [c for c in cands if c[2].section != "heroes"]
+                    elif kind == "heroes":
+                        cands = [c for c in cands if c[2].section == "heroes"]
+                    elif kind == "fighting":
+                        cands = [c for c in cands if c[2].section != "spells"]
+                    else:
+                        cands = [c for c in cands if c[2].section == "spells"]
+                    # Hammer ist gratis → lohnt sich am meisten beim teuersten/längsten
+                    picks = [self.hammer_picks[kind]] if self.hammer_picks[kind] else []
+                    c, pick = self._pick_target(cands, picks)
+                    if not c:
+                        break
+                    self.hammer_picks[kind] = ""
+                    self._instant(plan, q, -1, t, c, pick=pick, hammer=kind)
+        self._first_book_day = False
+        self._in_book = False
+        self.reserved.clear()   # nach dem Bücher-Tag wieder normal planbar
 
     def _cwl_windows(self, a: float, b: float):
         """CWL-Zeiträume (Start, Ende) im Bereich a..b, in deiner Zeitzone."""

@@ -132,7 +132,8 @@ function fmtNum(n) {
   if (n >= 1e3) return Math.round(n / 1e3) + "k";
   return String(n);
 }
-const lvlTxt = s => (s.new || s.from === 0 ? "bauen" : `${s.from} → ${s.to}`) + (s.book ? " 📖" : "");
+const lvlTxt = s => (s.new || s.from === 0 ? "bauen" : `${s.from} → ${s.to}`) + (s.book ? " 📖" : "") + (s.hammer ? " 🔨" : "");
+const HAMMER = {building: "Hammer des Bauens", heroes: "Hammer der Helden", fighting: "Hammer des Kampfes", spells: "Hammer der Zauber"};
 const costTxt = s => s.cost ? `<span class="cost ${resCls(s.res)}">${fmtNum(s.cost)} ${RES[s.res] || s.res}</span>` : "";
 
 // --- Zustand jetzt berechnen ---
@@ -219,19 +220,19 @@ function renderList() {
   $("#tabs").querySelectorAll("button").forEach(b => b.onclick = () => { listQ = b.dataset.q; renderList(); });
   $("#list").innerHTML = shown.length ? shown.map((s, n) => `<div class="li"><div class="n">${n + 1}</div>
       <div><div class="sname">${esc(s.name)} <span class="lvl">${lvlTxt(s)}</span></div>
-      <div class="t">${s.q === "builder" ? "B" + (s.slot + 1) + " · " : ""}${s.book ? `<b style="color:var(--gold)">📖 mit Buch am ${fmtTime(s.start)}</b>` : `ab ${fmtTime(s.start)} · ${fmtDur(s.end - s.start)}`}</div></div>
+      <div class="t">${s.q === "builder" && s.slot >= 0 ? "B" + (s.slot + 1) + " · " : ""}${s.hammer ? `<b style="color:var(--gold)">🔨 mit Hammer am ${fmtTime(s.start)}</b>` : s.book ? `<b style="color:var(--gold)">📖 mit Buch am ${fmtTime(s.start)}</b>` : `ab ${fmtTime(s.start)} · ${fmtDur(s.end - s.start)}`}</div></div>
       ${costTxt(s)}</div>`).join("") + ((D.stepCount[listQ] || 0) > shown.length ? `<div class="more">… noch ${D.stepCount[listQ] - shown.length} weitere Schritte</div>` : "")
     : `<div class="more">Alles erledigt auf diesem Rathaus-Level 🎉</div>`;
 }
 
 function renderBooks() {
-  const bs = D.steps.filter(s => s.book);
+  const bs = D.steps.filter(s => s.book || s.hammer);
   if (!bs.length) { $("#books").innerHTML = ""; return; }
   const first = bs[0].start, day = bs.filter(s => s.start === first);
   $("#books").innerHTML = `<h2>📖 Nächster Bücher-Tag</h2><div class="card"><h3>${fmtTime(first)}<span>Upgrade starten → Buch einsetzen</span></h3>
-    ${day.map(s => `<div class="slot"><div class="row"><div class="sname">${s.q === "builder" ? "🔨 Buch des Bauens" : "🧪 Labor-Buch"}</div>${costTxt(s)}</div>
+    ${day.map(s => `<div class="slot"><div class="row"><div class="sname">${s.hammer ? "🔨 " + HAMMER[s.hammer] : s.q === "builder" ? "📖 Buch des Bauens" : "📖 Labor-Buch"}${s.pick ? '<span class="badge g">Wunsch</span>' : ""}</div>${s.hammer ? '<span class="cost">gratis</span>' : costTxt(s)}</div>
       <div class="sub"><span>${esc(s.name)} ${s.from} → ${s.to}</span></div></div>`).join("")}
-    <div class="sub" style="margin-top:8px"><span>Bis dahin plant der Planer 1 Bauarbeiter und das Labor so, dass sie rechtzeitig frei sind.</span></div></div>`;
+    <div class="sub" style="margin-top:8px"><span>Bis dahin plant der Planer 1 Bauarbeiter und das Labor so, dass sie rechtzeitig frei sind. Wünsche &amp; Hämmer sind bis dahin reserviert.</span></div></div>`;
 }
 
 function renderTotals() {
