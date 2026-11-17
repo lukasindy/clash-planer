@@ -2,16 +2,16 @@
 
 - **Spieler:** `#L88VCPGG0`
 - **Rathaus:** 19 · **Bauarbeiter:** 6 · **Labor:** 16 · **Begleiterhaus:** 12 · **Heldenhalle:** 12
-- **Export vom:** Di 17.11. 15:14 (vor 8m)
-- **Plan erstellt:** Di 17.11. 15:22
+- **Export vom:** Di 17.11. 15:14 (vor 13m)
+- **Plan erstellt:** Di 17.11. 15:28
 
 
 ## ⏳ Läuft gerade
 
 | Warteschlange | Was | Level | fertig am | Restzeit |
 |---|---|---|---|---|
-| Bauarbeiter | Sprungfeder | 12 → 13 | Di 17.11. 23:45 | 8h 22m |
-| Bauarbeiter | Sprungfeder | 12 → 13 | Di 17.11. 23:45 | 8h 22m |
+| Bauarbeiter | Sprungfeder | 12 → 13 | Di 17.11. 23:45 | 8h 17m |
+| Bauarbeiter | Sprungfeder | 12 → 13 | Di 17.11. 23:45 | 8h 17m |
 | Bauarbeiter (Goblin) | Squad Barracks | 1 → 2 | Mi 18.11. 16:15 | 1T |
 | Begleiterhaus | Angry Jelly | 10 → 11 | Mo 23.11. 15:13 | 5T 23h |
 | Labor | Magier | 13 → 14 | Di 24.11. 08:22 | 6T 16h |
@@ -49,7 +49,7 @@
 | 23 | Fr 25.12. 19:00 | Minion Prince *(B3)* | 97 → 98 | 8T | 515k Dunkles Elixier | Sa 02.01. 19:00 |
 | 24 | So 27.12. 19:00 | Dragon Duke *(B6)* | 28 → 29 | 8T | 520k Dunkles Elixier | Mo 04.01. 19:00 |
 | 25 | Mo 28.12. 07:00 | Großer Wächter *(B5)* | 80 → 81 | 8T | 27,5 Mio Elixier | Di 05.01. 07:00 |
-| … | | *noch 601 weitere Schritte* | | | | |
+| … | | *noch 176 weitere Schritte* | | | | |
 
 ## 🧪 Labor – nächste Schritte
 
@@ -94,7 +94,7 @@
 
 | Warteschlange | Schritte | fertig ungefähr | Kosten |
 |---|---|---|---|
-| Bauarbeiter | 626 | Mi 03.11. 06:00 | 1063,8 Mio Elixier, 18,6 Mio Dunkles Elixier, 2351,8 Mio Gold |
+| Bauarbeiter | 201 | Mo 30.08. 08:56 | 1063,8 Mio Elixier, 18,6 Mio Dunkles Elixier, 1626,5 Mio Gold |
 | Labor | 31 | Sa 06.11. 18:00 | 7,7 Mio Dunkles Elixier, 173,5 Mio Elixier |
 | Begleiterhaus | 3 | Do 17.12. 15:13 | 1,1 Mio Dunkles Elixier |
 

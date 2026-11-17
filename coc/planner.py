@@ -127,7 +127,10 @@ class Planner:
             if not lv1 or (len(obj["levels"]) == 1 and not lv1.get("build_time")):
                 continue  # Deko-ähnliche Dinge ohne Bauzeit
             have = sum(1 for i in self.inst.values() if i.data_id == data_id)
-            for _ in range(allowed - have):
+            # Nur was DIESES Rathaus-Level neu freischaltet. Ältere Gebäude, die fehlen, wurden
+            # meist zusammengelegt (z. B. Kanonen → Querschläger-Kanone, Scattershot ab RH19).
+            new_at_th = allowed - self.gd.max_count(data_id, th - 1)
+            for _ in range(min(allowed - have, max(new_at_th, 0))):
                 section = "traps" if kind == "trap" else "buildings"
                 self.inst[self._next_uid] = Instance(self._next_uid, data_id, section, "builder", 0)
                 self._next_uid -= 1
