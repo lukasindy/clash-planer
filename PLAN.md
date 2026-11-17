@@ -10,7 +10,7 @@
 
 | Warteschlange | Was | Level | fertig am | Restzeit |
 |---|---|---|---|---|
-| Bauarbeiter | Sprungfeder | 12 → 13 | Di 17.11. 23:45 | 8h 17m |
+| Bauarbeiter | Sprungfeder | 12 → 13 | Di 17.11. 23:45 | 8h 16m |
 | Bauarbeiter | Sprungfeder | 12 → 13 | Di 17.11. 23:45 | 8h 17m |
 | Bauarbeiter (Goblin) | Squad Barracks | 1 → 2 | Mi 18.11. 16:15 | 1T |
 | Begleiterhaus | Angry Jelly | 10 → 11 | Mo 23.11. 15:13 | 5T 23h |
