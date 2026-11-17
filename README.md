@@ -19,7 +19,7 @@ legst ihn als Issue an. Den Rest erledigt das Repo:
 ```
 Spiel → Datenexport kopieren → iPhone-Rückseite doppelt antippen (Kurzbefehl legt das Issue an)
       → Plan wird berechnet
-      → alle 30 Min. prüft GitHub die Timer → Push „Bauarbeiter frei – Empfehlung: …“
+      → alle 10 Min. prüft GitHub die Timer → Push „Bauarbeiter frei – Empfehlung: …“
       → du startest die Empfehlung im Spiel → das Repo rechnet selbst weiter
 ```
 

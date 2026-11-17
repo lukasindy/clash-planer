@@ -20,7 +20,7 @@ In der App **Kurzbefehle** → **+** (neuer Kurzbefehl), dann diese Aktionen hin
 **① Zwischenablage abrufen**
 
 **② Inhalte von URL abrufen**
-- URL: `https://api.github.com/repos/DEIN-GITHUB-NAME/DEIN-REPO/issues`
+- URL: `https://api.github.com/repos/lukasindy/clash-planer/issues`
 - Auf den Pfeil **›** tippen, um die Optionen zu öffnen:
   - **Methode:** `POST`
   - **Header** hinzufügen:

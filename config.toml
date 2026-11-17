@@ -22,7 +22,7 @@ pet_percent = 0
 # Empfehlung startest, und rechnet selbst weiter. Neuer Export nur, wenn du abweichst.
 follow_plan = true
 # Benachrichtigung schon X Minuten bevor etwas frei wird
-# (gleicht aus, dass GitHub-Zeitpläne nur alle ~30 Min. laufen).
+# (gleicht aus, dass GitHub-Zeitpläne sich oft etwas verzögern).
 ahead_minutes = 15
 # Erinnerung, wenn etwas weiter untätig ist (0 = aus).
 reminder_hours = 0
