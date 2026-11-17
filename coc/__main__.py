@@ -38,6 +38,44 @@ def _save_export(text: str, cfg) -> None:
     Path(cfg.village_file).write_text(json.dumps(raw, indent=1, ensure_ascii=False) + "\n", "utf-8")
 
 
+def _settings_issue(cfg) -> int:
+    """Einstellungen aus der Web-App (Issue mit {"coc_settings": {...}}) in config.toml übernehmen."""
+    import re
+    from .config import update_config
+    body = os.environ.get("ISSUE_BODY", "")
+    m = re.search(r"\{.*\}", body, re.S)
+    try:
+        data = json.loads(m.group(0))["coc_settings"] if m else None
+        if not isinstance(data, dict):
+            raise ValueError("kein coc_settings-Block")
+    except (ValueError, KeyError, json.JSONDecodeError) as e:
+        Path("issue_comment.md").write_text(f"❌ Einstellungen nicht lesbar: {e}\n", "utf-8")
+        return 1
+    upd, lines = {}, []
+    clean = lambda xs: [str(x).strip() for x in xs if str(x).strip()][:10]
+    if "builder_picks" in data:
+        upd["planner.books.builder_picks"] = clean(data["builder_picks"])
+        lines.append(f"- 📖 Buch des Bauens: {', '.join(upd['planner.books.builder_picks']) or 'automatisch'}")
+    if "lab_picks" in data:
+        upd["planner.books.lab_picks"] = clean(data["lab_picks"])
+        lines.append(f"- 📖 Labor-Bücher: {', '.join(upd['planner.books.lab_picks']) or 'automatisch'}")
+    names = {"building": "Hammer des Bauens", "heroes": "Hammer der Helden",
+             "fighting": "Hammer des Kampfes", "spells": "Hammer der Zauber"}
+    for k, label in names.items():
+        h = data.get("hammers", {})
+        if k in h:
+            n = max(0, min(int(h.get(k) or 0), 20))
+            pick = str(h.get(f"{k}_pick", "") or "").strip()
+            upd[f"hammers.{k}"] = n
+            upd[f"hammers.{k}_pick"] = pick if n else ""
+            if n:
+                lines.append(f"- 🔨 {label}: {n}× → {pick or 'automatisch'}")
+    update_config(cfg.path, upd)
+    Path("issue_comment.md").write_text("✅ Bücher-Tag-Einstellungen übernommen:\n\n" + "\n".join(lines) + "\n", "utf-8")
+    print("\n".join(lines))
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     ap = argparse.ArgumentParser(prog="coc", description="Clash-of-Clans-Upgrade-Planer")
     ap.add_argument("--config", default="config.toml")
@@ -53,7 +91,11 @@ def main(argv: list[str] | None = None) -> int:
     i.add_argument("file")
     sub.add_parser("import-issue")
     sub.add_parser("test-notify")
+    sub.add_parser("settings-issue")
     args = ap.parse_args(argv)
+
+    if args.cmd == "settings-issue":
+        return _settings_issue(load_config(args.config))
 
     if args.cmd == "test-notify":
         from . import notify

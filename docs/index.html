@@ -95,6 +95,14 @@ header{display:flex;justify-content:space-between;align-items:flex-start;gap:10p
 @media(min-width:760px){.tot{grid-template-columns:repeat(3,1fr)}}
 .tot .card .num{font-size:22px;color:var(--gold)}
 .costs{margin-top:6px;font-size:13px;line-height:1.6}
+.form label{display:block;font-size:12px;color:var(--mute);font-weight:800;margin:12px 0 5px}
+.form select,.form input{width:100%;background:#0f0c0a;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px;font:inherit;font-size:15px;-webkit-appearance:none}
+.form .hrow{display:grid;grid-template-columns:72px 1fr;gap:8px}
+.btn{all:unset;cursor:pointer;display:block;text-align:center;margin-top:16px;background:var(--gold);color:#1a1408;font-family:"Lilita One";font-size:18px;border-radius:12px;padding:12px}
+.btn:active{transform:scale(.98)}
+.msg{margin-top:10px;font-size:13px;min-height:18px}
+details{margin-top:14px;font-size:13px;color:var(--mute)}
+summary{cursor:pointer;font-weight:800}
 footer{margin-top:30px;font-size:12px;color:var(--mute);text-align:center;line-height:1.6}
 footer a{color:var(--mute)}
 .empty{padding:40px 10px;text-align:center;color:var(--mute)}
@@ -235,6 +243,69 @@ function renderBooks() {
     <div class="sub" style="margin-top:8px"><span>Bis dahin plant der Planer 1 Bauarbeiter und das Labor so, dass sie rechtzeitig frei sind. Wünsche &amp; Hämmer sind bis dahin reserviert.</span></div></div>`;
 }
 
+const TOKEN_KEY = "clash-planer-token";
+const getToken = () => { try { return localStorage.getItem(TOKEN_KEY) || ""; } catch (e) { return ""; } };
+const setToken = v => { try { v ? localStorage.setItem(TOKEN_KEY, v) : localStorage.removeItem(TOKEN_KEY); } catch (e) {} };
+
+function sel(id, list, value, auto = "— automatisch (längstes) —") {
+  return `<select id="${id}"><option value="">${auto}</option>${list.map(n => `<option ${n === value ? "selected" : ""}>${esc(n)}</option>`).join("")}</select>`;
+}
+
+function renderForm() {
+  const c = D.choices || {}, st = D.settings || {}, h = st.hammers || {};
+  const lab = [...(c.fighting || []), ...(c.spells || [])].sort();
+  const nb = (st.books || {}).builder ?? 1, nl = (st.books || {}).lab ?? 2;
+  const bp = st.builder_picks || [], lp = st.lab_picks || [];
+  let html = "";
+  for (let i = 0; i < nb; i++) html += `<label>📖 Buch des Bauens${nb > 1 ? " " + (i + 1) : ""}</label>${sel("bp" + i, c.building || [], bp[i])}`;
+  for (let i = 0; i < nl; i++) html += `<label>📖 Labor-Buch ${i + 1}</label>${sel("lp" + i, lab, lp[i])}`;
+  const H = [["building", "Hammer des Bauens", c.building], ["heroes", "Hammer der Helden", c.heroes],
+             ["fighting", "Hammer des Kampfes", c.fighting], ["spells", "Hammer der Zauber", c.spells]];
+  html += H.map(([k, label, list]) => `<label>🔨 ${label} – Anzahl &amp; Ziel</label><div class="hrow">
+      <input id="h_${k}" type="number" min="0" max="20" inputmode="numeric" value="${+h[k] || 0}">${sel("hp_" + k, list || [], h[k + "_pick"], "— automatisch —")}</div>`).join("");
+  html += `<a class="btn" id="save">Speichern</a><div class="msg" id="msg"></div>
+    <details ${getToken() ? "" : "open"}><summary>⚙️ Verbindung ${getToken() ? "✅" : "(einmalig einrichten)"}</summary>
+      <p>Damit „Speichern“ direkt funktioniert, hier einmal denselben GitHub-Token einfügen wie im Kurzbefehl
+      (nur <code>github_pat_…</code>, ohne „Bearer“). Er bleibt nur auf diesem Gerät gespeichert.
+      Ohne Token öffnet „Speichern“ GitHub, dort tippst du dann auf „Create“.</p>
+      <input id="tok" type="password" placeholder="github_pat_…" value="${getToken() ? "••••••••" : ""}" autocomplete="off">
+      <a class="btn" id="savetok" style="font-size:15px;padding:9px">Token speichern</a></details>`;
+  $("#form").innerHTML = html;
+  $("#savetok").onclick = () => {
+    const v = $("#tok").value.trim();
+    if (v && !v.startsWith("•")) { setToken(v.replace(/^Bearer\s+/i, "")); $("#msg").textContent = "✅ Token gespeichert."; renderForm(); }
+    else if (!v) { setToken(""); renderForm(); }
+  };
+  $("#save").onclick = saveSettings;
+}
+
+async function saveSettings() {
+  const v = id => ($("#" + id) || {}).value || "";
+  const nb = ((D.settings || {}).books || {}).builder ?? 1, nl = ((D.settings || {}).books || {}).lab ?? 2;
+  const payload = {coc_settings: {
+    builder_picks: [...Array(nb).keys()].map(i => v("bp" + i)).filter(Boolean),
+    lab_picks: [...Array(nl).keys()].map(i => v("lp" + i)).filter(Boolean),
+    hammers: Object.fromEntries(["building", "heroes", "fighting", "spells"].flatMap(k =>
+      [[k, Math.max(0, +v("h_" + k) || 0)], [k + "_pick", v("hp_" + k)]]))
+  }};
+  const body = "Einstellungen aus der Web-App:\n\n```json\n" + JSON.stringify(payload) + "\n```";
+  const title = "Einstellungen: Bücher-Tag & Hämmer", repo = D.repo || "lukasindy/clash-planer";
+  const msg = $("#msg"), tok = getToken();
+  if (!tok) {
+    window.open(`https://github.com/${repo}/issues/new?title=${encodeURIComponent(title)}&body=${encodeURIComponent(body)}`, "_blank");
+    msg.textContent = "GitHub geöffnet – dort auf „Create“ tippen.";
+    return;
+  }
+  msg.textContent = "Sende …";
+  try {
+    const r = await fetch(`https://api.github.com/repos/${repo}/issues`, {method: "POST",
+      headers: {"Authorization": "Bearer " + tok, "Accept": "application/vnd.github+json", "Content-Type": "application/json"},
+      body: JSON.stringify({title, body})});
+    if (!r.ok) throw new Error(r.status === 401 ? "Token ungültig" : "Fehler " + r.status);
+    msg.innerHTML = "✅ Gespeichert! In ca. 1 Minute ist der Plan angepasst – dann neu laden.";
+  } catch (e) { msg.textContent = "❌ " + e.message; }
+}
+
 function renderTotals() {
   $("#tot").innerHTML = ["builder", "lab", "pets"].filter(q => D.capacity[q]).map(q => {
     const f = D.finish[q], c = D.costs[q] || {};
@@ -268,6 +339,7 @@ function render() {
   <div class="tl-head"><h2>📅 Zeitleiste</h2><div class="seg" id="tlseg"><button data-d="7">7 Tage</button><button data-d="30">30 Tage</button></div></div>
   <div class="tl" id="tl"></div><div class="detail" id="detail">Tippe auf einen Balken für Details. Volle Balken laufen, gestrichelte sind geplant.</div>
   <div id="books"></div>
+  <h2>✏️ Bücher-Tag &amp; Hämmer festlegen</h2><div class="card form" id="form"></div>
   <h2>📋 Nächste Schritte</h2><div class="tabs" id="tabs"></div><div class="list" id="list"></div>
   <h2>📊 Bis alles fertig ist</h2><div class="tot" id="tot"></div>
   <footer>Zeiten ohne Tränke, Helfer &amp; Juwelen · Rohstoffe werden als vorhanden angenommen<br>
@@ -276,7 +348,7 @@ function render() {
     b.classList.toggle("on", +b.dataset.d === tlDays);
     b.onclick = () => { tlDays = +b.dataset.d; $("#tlseg").querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b)); renderTimeline(); };
   });
-  renderNow(); renderTimeline(); renderBooks(); renderList(); renderTotals(); tick();
+  renderNow(); renderTimeline(); renderBooks(); renderForm(); renderList(); renderTotals(); tick();
 }
 
 function tick() {

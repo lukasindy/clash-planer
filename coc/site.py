@@ -5,6 +5,7 @@ import json
 from pathlib import Path
 
 from .config import Config
+from .names_de import de_name
 from .gamedata import GameData
 from .planner import QUEUES, Plan
 from .village import Village
@@ -34,6 +35,24 @@ def _step(s, extra=None) -> dict:
     return d
 
 
+def _choices(gd: GameData, v: Village) -> dict:
+    """Namen, die als Wunsch/Hammer-Ziel in Frage kommen (noch nicht maximal auf diesem Rathaus)."""
+    from .planner import NEVER_PLAN
+    out = {"building": set(), "heroes": set(), "fighting": set(), "spells": set()}
+    for i in v.instances:
+        if i.queue not in ("builder", "lab") or i.data_id in NEVER_PLAN or i.level < 1:
+            continue
+        obj, nxt = gd.get(i.data_id), gd.level(i.data_id, i.level + 1)
+        if not obj or not nxt or (nxt.get("required_townhall") or 0) > v.th:
+            continue
+        if obj.get("super_troop") or obj.get("is_seasonal"):
+            continue
+        kind = ("heroes" if i.section == "heroes" else "building") if i.queue == "builder" else \
+            ("spells" if i.section == "spells" else "fighting")
+        out[kind].add(de_name(obj["name"]))
+    return {k: sorted(x) for k, x in out.items()}
+
+
 def site_data(gd: GameData, v: Village, plan: Plan, cfg: Config, now: float) -> dict:
     running = []
     for s in plan.running:
@@ -54,6 +73,15 @@ def site_data(gd: GameData, v: Village, plan: Plan, cfg: Config, now: float) -> 
         "tz": str(cfg.tz), "sleep": [cfg.sleep_start.strftime("%H:%M"), cfg.sleep_end.strftime("%H:%M")]
         if cfg.sleep_aware else None,
         "boost": cfg.boost_info(now),
+        "choices": _choices(gd, v),
+        "settings": {
+            "builder_picks": cfg.planner.get("books", {}).get("builder_picks", []),
+            "lab_picks": cfg.planner.get("books", {}).get("lab_picks", []),
+            "books": {"builder": cfg.planner.get("books", {}).get("builder", 1),
+                      "lab": cfg.planner.get("books", {}).get("lab", 2)},
+            "hammers": cfg.raw.get("hammers", {}),
+        },
+        "repo": "lukasindy/clash-planer",
         "running": running,
         "steps": [_step(s) for s in sorted(plan.steps, key=lambda s: s.start)[:MAX_STEPS]],
         "stepCount": {q: len(plan.for_queue(q)) for q in QUEUES},
