@@ -12,32 +12,20 @@ sleep_start = "23:00"
 sleep_end = "07:00"
 
 [boosts]
-# Goldpass-Boost in Prozent (0, 10, 15 oder 20). Senkt laut Supercell Bauzeit UND Kosten.
-# Grundwert, der jeden Monat ab dem 1. gilt (Pass wird gekauft → 10 % gibt es sofort).
-builder_percent = 10
-lab_percent = 10
-pet_percent = 10     # Forschungsboost gilt auch fürs Begleiterhaus
+# Goldpass-Boost in Prozent. Senkt laut Supercell Bauzeit UND Kosten (gilt auch fürs Begleiterhaus).
+# Gilt für Upgrades, die ab dann STARTEN – laufende bleiben unverändert.
 
-# Aktuelle Saison: schon 20 % – gilt bis Saisonende (1. des nächsten Monats), danach wieder Grundwert.
-[[boosts.schedule]]
-from = "2026-11-17"
-builder = 20
-lab = 20
-pets = 20
+# Monatsstaffel (jede Saison neu): [Tag im Monat, Prozent]
+[boosts.monthly]
+steps = [[1, 10], [4, 15], [8, 20]]
+queues = ["builder", "lab", "pets"]
 
-# Zeitplan: Ab "from" gilt der Boost für alle Upgrades, die ab dann STARTEN.
-# Laufende Upgrades bleiben unverändert. "until" weglassen = bis Saisonende (Monatswechsel).
-# Mehrere Einträge möglich, z. B. erst 10 %, später 20 %:
-#
+# Ausnahmen / Events (überschreiben die Staffel), z. B. Hammer Jam:
 # [[boosts.schedule]]
-# from = "2026-11-20"          # oder "2026-11-20 18:00"
-# builder = 10
-# lab = 10
-#
-# [[boosts.schedule]]
-# from = "2026-11-25"
-# builder = 20
-# lab = 20
+# from = "2026-12-01"
+# until = "2026-12-16"
+# builder = 50
+# lab = 50
 
 [notify]
 # Plan-folgen-Modus: Nach jeder Benachrichtigung geht das Repo davon aus, dass du die

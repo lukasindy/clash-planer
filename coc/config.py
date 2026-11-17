@@ -58,6 +58,13 @@ class Config:
         """Boost in % für Warteschlange q zum Zeitpunkt ts (Zeitplan schlägt Grundwert)."""
         key = {"builder": "builder_percent", "lab": "lab_percent", "pets": "pet_percent"}.get(q, "")
         pct = float(self.boosts.get(key, 0) or 0)
+        # Monatsstaffel: z. B. ab Tag 1 → 10 %, ab Tag 4 → 15 %, ab Tag 8 → 20 %
+        monthly = self.boosts.get("monthly") or {}
+        if monthly.get("steps") and q in monthly.get("queues", ["builder", "lab", "pets"]):
+            day = self._local(ts).day
+            for start_day, p in sorted(monthly["steps"]):
+                if day >= int(start_day):
+                    pct = float(p)
         for start, end, vals in self.boost_schedule:
             if start <= ts < end and q in vals:
                 pct = float(vals[q])
@@ -72,6 +79,16 @@ class Config:
         until = next((e for s, e, _ in self.boost_schedule if s <= ts < e), None)
         upcoming = [(s, e, v) for s, e, v in self.boost_schedule if s > ts]
         nxt = min(upcoming, key=lambda x: x[0]) if upcoming else None
+        if not nxt:
+            # nächste Änderung der Monatsstaffel suchen (stundenweise, max. 40 Tage)
+            t = ts
+            for _ in range(40 * 24):
+                t += 3600
+                vals = {q: self.boost_pct(q, t) for q in ("builder", "lab", "pets")}
+                if vals != cur:
+                    until = until or t
+                    nxt = (t, t, vals)
+                    break
         return {"now": cur, "until": int(until) if until else None,
                 "next": {"from": int(nxt[0]), "until": int(nxt[1]), **nxt[2]} if nxt else None}
 
