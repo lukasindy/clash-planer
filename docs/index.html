@@ -161,7 +161,7 @@ footer a{color:var(--mute)}
 <div id="app"><div class="empty">Lade…</div></div>
 
 <script>
-const APP_VERSION = "2026-11-19.10";   // bei jeder Änderung an dieser Datei erhöhen
+const APP_VERSION = "2026-11-20.1";   // bei jeder Änderung an dieser Datei erhöhen
 const ICON = {builder:"🔨", lab:"🧪", pets:"🐾"};
 const LABEL = {builder:"Bauarbeiter", lab:"Labor", pets:"Begleiterhaus"};
 const RES = {"Gold":"Gold","Elixir":"Elixier","Dark Elixir":"Dunkles E."};
@@ -448,6 +448,30 @@ function renderAll() {
   $("#allbody").innerHTML = html || `<div class="more" style="padding:40px">Nichts gefunden.</div>`;
 }
 
+function renderWalls() {
+  const w = D.walls, box = $("#walls"); if (!box) return;
+  if (!w || !w.total) { box.innerHTML = `<div class="more">Keine Mauern im Export.</div>`; return; }
+  const pct = w.total ? Math.round(w.atMax / w.total * 100) : 0;
+  const wf = D.icons && D.icons["1000010"];
+  const maxCount = Math.max(...w.byLevel.map(x => x[1]));
+  box.innerHTML = `<div class="card">
+    <div class="row" style="align-items:center"><div class="sname-wrap">${wf ? `<img class="ic" src="icons/${wf}" alt="">` : ""}
+      <div><div class="sname">${w.atMax} von ${w.total} maximal</div><div class="t mute" style="font-size:12px">Maximum auf Rathaus ${D.th}: Level ${w.max}</div></div></div>
+      <div class="cd">${pct}%</div></div>
+    <div class="bar"><i style="width:${pct}%"></i></div>
+    ${w.upgrades ? `<div class="sub" style="margin-top:10px"><span>Noch <b style="color:var(--text)">${w.upgrades}</b> Level-Upgrades (= ${w.upgrades} Mauerringe)</span></div>
+    <div class="sub"><span>Zusammen <b style="color:var(--gold)">${fmtNum(w.cost)}</b> Gold oder Elixier</span></div>` : `<div class="sub" style="margin-top:10px"><span>Alle Mauern sind maximal 🎉</span></div>`}
+    <div style="margin-top:12px">${w.byLevel.map(([l, n]) => `<div class="row" style="align-items:center;gap:10px;margin:5px 0">
+        <span class="lvl" style="width:58px">Level ${l}</span>
+        <div class="bar" style="flex:1;margin:0"><i style="width:${Math.max(2, n / maxCount * 100)}%;${l >= w.max ? "background:linear-gradient(90deg,#3f9a47,var(--ok))" : ""}"></i></div>
+        <span class="lvl" style="width:38px;text-align:right">${n}</span></div>`).join("")}</div>
+    ${w.groups.length ? `<div class="list" style="margin-top:12px">${w.groups.map(g => `<div class="li" style="grid-template-columns:1fr auto!important">
+        <div><div class="sname">${g.count}× Level ${g.level} → ${g.level + 1}</div><div class="t">je ${fmtNum(g.next)} · bis Level ${w.max}: je ${fmtNum(g.toMax)} (${g.steps} ${g.steps === 1 ? "Stufe" : "Stufen"})</div></div>
+        <span class="cost Gold">${fmtNum(g.count * g.toMax)}</span></div>`).join("")}</div>` : ""}
+    <div class="detail">Mauern gehen sofort und brauchen keinen Bauarbeiter. Ein Mauerring ersetzt die Kosten für ein Level. Kosten ohne Goldpass-Rabatt.</div>
+  </div>`;
+}
+
 function renderTotals() {
   $("#tot").innerHTML = ["builder", "lab", "pets"].filter(q => D.capacity[q]).map(q => {
     const f = D.finish[q], c = D.costs[q] || {};
@@ -476,7 +500,7 @@ function render() {
     <a class="refresh" id="refresh" title="Aktualisieren">↻</a></div></header>
   <div class="chips" id="chips"><span class="chip">Rathaus<b>${D.th}</b></span><span class="chip">Labor<b>${D.lab}</b></span>
     <span class="chip">Begleiterhaus<b>${D.pets}</b></span><span class="chip">Heldenhalle<b>${D.heroHall}</b></span>
-    <span class="chip">Bauarbeiter<b>${D.capacity.builder}</b></span>${boostChip()}</div>
+    <span class="chip">Bauarbeiter<b>${D.capacity.builder}</b></span>${D.walls && D.walls.total ? `<span class="chip" id="wallchip" style="cursor:pointer">🧱 Mauern<b>${D.walls.atMax}/${D.walls.total}</b></span>` : ""}${boostChip()}</div>
   <div class="pane" data-pane="jetzt">
     <div class="banner" id="banner"></div>
     <h2>⏳ Läuft gerade</h2><div id="now"></div>
@@ -488,6 +512,7 @@ function render() {
   <div class="pane" data-pane="buch"><div id="books"></div></div>
   <div class="pane" data-pane="schritte">
     <h2>📋 Nächste Schritte</h2><div class="tabs" id="tabs"></div><div class="list" id="list"></div>
+    <h2>🧱 Mauern</h2><div id="walls"></div>
     <h2>📊 Bis alles fertig ist</h2><div class="tot" id="tot"></div>
   </div>
   <div class="pane" data-pane="tipps"><h2>💡 Wofür lohnt sich …?</h2><div id="advice"></div></div>
@@ -496,7 +521,8 @@ function render() {
     b.classList.toggle("on", +b.dataset.d === tlDays);
     b.onclick = () => { tlDays = +b.dataset.d; $("#tlseg").querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b)); renderTimeline(); };
   });
-  renderNow(); renderTimeline(); renderBooks(); renderList(); renderTotals(); renderAdvice(); tick();
+  renderNow(); renderTimeline(); renderBooks(); renderList(); renderWalls(); renderTotals(); renderAdvice(); tick();
+  const wc = $("#wallchip"); if (wc) wc.onclick = () => { showTab("schritte"); setTimeout(() => { const el = $("#walls"); if (el) $("#app").scrollTop = el.offsetTop - 70; }, 50); };
   $("#refresh").onclick = () => load(true);
   // Navigation unten
   let nav = $("#navbar");

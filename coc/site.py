@@ -120,6 +120,35 @@ def _advice(gd: GameData, v: Village, cfg: Config, now: float, top: int = 8) -> 
     return out
 
 
+def _walls(gd: GameData, v: Village) -> dict:
+    """Mauer-Zähler: wie viele sind maximal, was kostet der Rest (sofort, ohne Bauarbeiter)."""
+    from .village import WALL
+    obj = gd.get(WALL)
+    if not obj:
+        return {}
+    levels = {l["level"]: l for l in obj["levels"]}
+    max_lvl = max((l for l, d in levels.items() if (d.get("required_townhall") or 0) <= v.th), default=0)
+    by = {}
+    for i in v.instances:
+        if i.data_id == WALL:
+            by[i.level] = by.get(i.level, 0) + 1
+    total = sum(by.values())
+    upgrades, cost = 0, 0
+    groups = []
+    for lvl, n in sorted(by.items()):
+        if lvl >= max_lvl:
+            continue
+        nxt = int(levels.get(lvl + 1, {}).get("build_cost", 0) or 0)
+        to_max = sum(int(levels.get(x, {}).get("build_cost", 0) or 0) for x in range(lvl + 1, max_lvl + 1))
+        groups.append({"level": lvl, "count": n, "next": nxt, "toMax": to_max, "steps": max_lvl - lvl})
+        upgrades += n * (max_lvl - lvl)
+        cost += n * to_max
+    alt_from = min((l for l, d in levels.items() if d.get("alt_upgrade_resource")), default=None)
+    return {"total": total, "allowed": gd.max_count(WALL, v.th), "max": max_lvl, "atMax": by.get(max_lvl, 0),
+            "byLevel": sorted([[l, n] for l, n in by.items()], reverse=True), "groups": groups,
+            "upgrades": upgrades, "cost": cost, "altFrom": alt_from}
+
+
 def site_data(gd: GameData, v: Village, plan: Plan, cfg: Config, now: float) -> dict:
     running = []
     for s in plan.running:
@@ -155,6 +184,7 @@ def site_data(gd: GameData, v: Village, plan: Plan, cfg: Config, now: float) -> 
         "repo": "lukasindy/clash-planer",
         "icons": _icons(),
         "advice": _advice(gd, v, cfg, now),
+        "walls": _walls(gd, v),
         "running": running,
         "steps": [_step(s) for s in sorted(plan.steps, key=lambda s: s.start)[:MAX_STEPS]],
         "stepCount": {q: len(plan.for_queue(q)) for q in QUEUES},

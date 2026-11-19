@@ -21,6 +21,8 @@ def fmt_dur(sec: float) -> str:
 
 
 def fmt_num(n: int) -> str:
+    if n >= 1_000_000_000:
+        return f"{n / 1_000_000_000:.2f} Mrd".replace(".", ",")
     if n >= 1_000_000:
         return f"{n / 1_000_000:.1f} Mio".replace(".", ",").replace(",0 ", " ")
     if n >= 1000:
@@ -110,6 +112,19 @@ def plan_markdown(v: Village, plan: Plan, cfg: Config, now: float) -> str:
         costs = ", ".join(f"{fmt_num(c)} {RES_SHORT.get(r, r)}" for r, c in plan.costs(q).items() if c)
         L.append(f"| {QUEUE_LABEL[q]} | {len(plan.for_queue(q))} | "
                  f"{cfg.fmt_time(fin) if fin else '–'} | {costs or '–'} |")
+    from .site import _walls
+    try:
+        from .gamedata import GameData
+        w = _walls(GameData.load(), v)
+    except Exception:  # noqa: BLE001
+        w = {}
+    if w and w.get("total"):
+        L += ["", "## 🧱 Mauern", "",
+              f"**{w['atMax']} von {w['total']}** auf Level {w['max']} (Maximum) · noch **{w['upgrades']}** Level-Upgrades "
+              f"(= {w['upgrades']} Mauerringe) · zusammen **{fmt_num(w['cost'])}** Gold oder Elixier", "",
+              "| Level | Anzahl | nächstes Level je Mauer | bis Max je Mauer |", "|---|---|---|---|"]
+        for g in w["groups"]:
+            L.append(f"| {g['level']} | {g['count']} | {fmt_num(g['next'])} | {fmt_num(g['toMax'])} |")
     L += ["", "---",
           "*Zeiten ohne Bauarbeiter-/Forschungstränke, Helfer und Juwelen. Der Plan geht davon aus, "
           "dass genug Rohstoffe da sind. Nach jedem neuen Export wird er neu berechnet.*", ""]

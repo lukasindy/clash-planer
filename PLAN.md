@@ -2,23 +2,23 @@
 
 - **Spieler:** `#L88VCPGG0`
 - **Rathaus:** 19 · **Bauarbeiter:** 6 · **Labor:** 16 · **Begleiterhaus:** 12 · **Heldenhalle:** 12
-- **Export vom:** Mi 18.11. 17:38 (vor 21h 15m)
-- **Plan erstellt:** Do 19.11. 14:53
+- **Export vom:** Mi 18.11. 17:38 (vor 1T 6h)
+- **Plan erstellt:** Fr 20.11. 00:34
 
 
 ## ⏳ Läuft gerade
 
 | Warteschlange | Was | Level | fertig am | Restzeit |
 |---|---|---|---|---|
-| Bauarbeiter (Goblin) | Squad Barracks | 2 → 3 | So 22.11. 17:36 | 3T 2h |
-| Begleiterhaus | Angry Jelly | 10 → 11 | Mo 23.11. 15:10 | 4T |
-| Labor | Magier | 13 → 14 | Di 24.11. 05:35 | 4T 14h |
-| Bauarbeiter | Firecracker Tower | 0 → 1 | Fr 27.11. 18:36 | 8T 3h |
-| Bauarbeiter | Dunkles-Elixier-Lager | 13 → 14 | Sa 28.11. 08:37 | 8T 17h |
-| Bauarbeiter | Spiky Tower | 0 → 1 | Sa 28.11. 23:13 | 9T 8h |
-| Bauarbeiter | Firecracker Tower | 0 → 1 | So 29.11. 04:47 | 9T 13h |
-| Bauarbeiter | Spiky Tower | 0 → 1 | So 29.11. 07:56 | 9T 17h |
-| Bauarbeiter | Labor | 16 → 17 | So 29.11. 23:25 | 10T 8h |
+| Bauarbeiter (Goblin) | Squad Barracks | 2 → 3 | So 22.11. 17:36 | 2T 17h |
+| Begleiterhaus | Angry Jelly | 10 → 11 | Mo 23.11. 15:10 | 3T 14h |
+| Labor | Magier | 13 → 14 | Di 24.11. 05:35 | 4T 5h |
+| Bauarbeiter | Firecracker Tower | 0 → 1 | Fr 27.11. 18:36 | 7T 18h |
+| Bauarbeiter | Dunkles-Elixier-Lager | 13 → 14 | Sa 28.11. 08:37 | 8T 8h |
+| Bauarbeiter | Spiky Tower | 0 → 1 | Sa 28.11. 23:13 | 8T 22h |
+| Bauarbeiter | Firecracker Tower | 0 → 1 | So 29.11. 04:47 | 9T 4h |
+| Bauarbeiter | Spiky Tower | 0 → 1 | So 29.11. 07:56 | 9T 7h |
+| Bauarbeiter | Labor | 16 → 17 | So 29.11. 23:25 | 9T 22h |
 
 ## 🔨 Bauarbeiter – nächste Schritte
 
@@ -95,9 +95,18 @@
 
 | Warteschlange | Schritte | fertig ungefähr | Kosten |
 |---|---|---|---|
-| Bauarbeiter | 204 | Mi 25.08. 02:12 | 862,4 Mio Elixier, 1341,6 Mio Gold, 17,1 Mio Dunkles Elixier |
+| Bauarbeiter | 204 | Mi 25.08. 02:12 | 862,4 Mio Elixier, 1,34 Mrd Gold, 17,1 Mio Dunkles Elixier |
 | Labor | 82 | Sa 01.04. 10:00 | 12,6 Mio Dunkles Elixier, 911,6 Mio Elixier |
 | Begleiterhaus | 4 | Sa 19.12. 21:24 | 1,2 Mio Dunkles Elixier |
+
+## 🧱 Mauern
+
+**1 von 350** auf Level 20 (Maximum) · noch **799** Level-Upgrades (= 799 Mauerringe) · zusammen **4,28 Mrd** Gold oder Elixier
+
+| Level | Anzahl | nächstes Level je Mauer | bis Max je Mauer |
+|---|---|---|---|
+| 1 | 25 | 1k | 41,5 Mio |
+| 19 | 324 | 10 Mio | 10 Mio |
 
 ---
 *Zeiten ohne Bauarbeiter-/Forschungstränke, Helfer und Juwelen. Der Plan geht davon aus, dass genug Rohstoffe da sind. Nach jedem neuen Export wird er neu berechnet.*
