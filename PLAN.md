@@ -16,7 +16,7 @@
 | Bauarbeiter | Firecracker Tower | 0 → 1 | Fr 27.11. 18:36 | 8T 3h |
 | Bauarbeiter | Dunkles-Elixier-Lager | 13 → 14 | Sa 28.11. 08:37 | 8T 17h |
 | Bauarbeiter | Spiky Tower | 0 → 1 | Sa 28.11. 23:13 | 9T 8h |
-| Bauarbeiter | Firecracker Tower | 0 → 1 | So 29.11. 04:47 | 9T 14h |
+| Bauarbeiter | Firecracker Tower | 0 → 1 | So 29.11. 04:47 | 9T 13h |
 | Bauarbeiter | Spiky Tower | 0 → 1 | So 29.11. 07:56 | 9T 17h |
 | Bauarbeiter | Labor | 16 → 17 | So 29.11. 23:25 | 10T 8h |
 
