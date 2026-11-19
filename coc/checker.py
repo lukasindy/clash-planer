@@ -161,7 +161,7 @@ def run_check(v: Village, plan: Plan, cfg: Config, now: float, names: dict[int, 
                 blines.append(f"🔨 {hname[r.hammer]}: {r.name} {r.from_lvl} → {r.to_lvl} (gratis){wish}")
             else:
                 book = ("Buch der Helden" if r.section == "heroes" else "Buch des Bauens") \
-                    if r.queue == "builder" else "Labor-Buch"
+                    if r.queue == "builder" else ("Buch der Zauber" if r.section == "spells" else "Buch des Kampfes")
                 blines.append(f"📖 {book}: {r.name} {r.from_lvl} → {r.to_lvl} ({fmt_cost(r)}){wish}")
         saved = sum(plan.book_savings[:len(book_steps)])
         blines += ["", "Bücher: Upgrade starten → sofort Buch einsetzen. Hämmer: direkt am Gebäude/Held/Truppe.",
@@ -203,11 +203,17 @@ def run_check(v: Village, plan: Plan, cfg: Config, now: float, names: dict[int, 
                 parts.append(f"{nm} → {int(lvl) + 1} " + ("fertig" if when <= now else f"in {fmt_dur(when - now)} fertig"))
         lines.append(f"{ICON[q]} {QUEUE_LABEL[q]}: " + "; ".join(parts))
         # Empfehlungen: die nächsten Plan-Schritte, die noch nicht empfohlen wurden
+        bt = (plan.book_options or {}).get("time")
         recs = [r for r in plan.for_queue(q)
-                if f"{r.uid}:{r.to_lvl}" not in recommended and not r.book and not r.hammer][:len(evs)]
+                if f"{r.uid}:{r.to_lvl}" not in recommended and not r.book and not r.hammer
+                # was erst NACH dem Bücher-Tag dran ist, jetzt noch nicht empfehlen
+                and not (bt and r.start >= bt and r.start > now + 3600)][:len(evs)]
         for r in recs:
-            lines.append(f"   👉 Empfehlung: {r.name} {level_txt(r)} ({fmt_dur(r.duration)}, {fmt_cost(r)})")
+            when = f" – ab {cfg.fmt_time(r.start)}" if r.start > now + 1800 else ""
+            lines.append(f"   👉 Empfehlung: {r.name} {level_txt(r)} ({fmt_dur(r.duration)}, {fmt_cost(r)}){when}")
             new_recs.append(r)
+        if len(recs) < len(evs) and bt and bt > now:
+            lines.append(f"   📖 Bis zum Bücher-Tag ({cfg.fmt_time(bt)}) frei lassen – dann Buch einsetzen.")
 
     title = None
     if lines and not quiet:
