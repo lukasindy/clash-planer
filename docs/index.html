@@ -161,7 +161,7 @@ footer a{color:var(--mute)}
 <div id="app"><div class="empty">Lade…</div></div>
 
 <script>
-const APP_VERSION = "2026-11-19.8";   // bei jeder Änderung an dieser Datei erhöhen
+const APP_VERSION = "2026-11-19.9";   // bei jeder Änderung an dieser Datei erhöhen
 const ICON = {builder:"🔨", lab:"🧪", pets:"🐾"};
 const LABEL = {builder:"Bauarbeiter", lab:"Labor", pets:"Begleiterhaus"};
 const RES = {"Gold":"Gold","Elixir":"Elixier","Dark Elixir":"Dunkles E."};
@@ -558,6 +558,21 @@ function tick() {
   if (a) a.innerHTML = `Export vor ${fmtDur(t - D.export)}<br>Daten von ${fmtTime(D.generated, false)}<br>geladen ${fmtTime(lastLoad, false)}`;
   if (changed) renderNow();   // etwas ist fertig geworden → Slot wird frei
 }
+
+// iOS-Home-Bildschirm-App: Mit durchsichtiger Statusleiste meldet iOS die Höhe um genau die
+// Statusleiste zu klein → unten bleibt eine Lücke. Dann auf die echte Bildschirmhöhe setzen.
+function fixStandaloneHeight() {
+  const standalone = navigator.standalone || (window.matchMedia && matchMedia("(display-mode: standalone)").matches);
+  if (!standalone) return;
+  const portrait = window.innerHeight >= window.innerWidth;
+  const full = portrait ? Math.max(screen.height, screen.width) : Math.min(screen.height, screen.width);
+  const b = document.body.style;
+  if (window.innerHeight < full - 1) { b.bottom = "auto"; b.height = full + "px"; }
+  else { b.bottom = ""; b.height = ""; }
+}
+fixStandaloneHeight();
+window.addEventListener("resize", fixStandaloneHeight);
+window.addEventListener("orientationchange", () => setTimeout(fixStandaloneHeight, 300));
 
 let lastLoad = now(), loading = false;
 async function load(manual = false) {
