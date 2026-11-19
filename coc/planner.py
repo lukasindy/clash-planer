@@ -106,9 +106,11 @@ class Planner:
         bk = pc.get("books", {})
         self.books_on = bool(bk.get("enabled", True))
         self.books_day = int(bk.get("day", 1))
-        self.books_n = {"builder": int(bk.get("builder", 1)), "lab": int(bk.get("lab", 2))}
+        self.books_n = {"builder": int(bk.get("builder", 1)), "lab": int(bk.get("lab", 2)),
+                        "heroes": int(bk.get("heroes", 0))}
         self.book_picks = {"builder": list(bk.get("builder_picks", []) or []),
-                           "lab": list(bk.get("lab_picks", []) or [])}
+                           "lab": list(bk.get("lab_picks", []) or []),
+                           "heroes": list(bk.get("heroes_picks", []) or [])}
         hm = cfg.raw.get("hammers", {})
         self.hammers = {k: int(hm.get(k, 0) or 0) for k in ("building", "heroes", "fighting", "spells")}
         self.hammer_picks = {k: str(hm.get(f"{k}_pick", "") or "") for k in self.hammers}
@@ -246,7 +248,7 @@ class Planner:
         (das niedrigste, das gerade nicht im Upgrade ist). Bis zum Bücher-Tag wird es nicht vorgeschlagen."""
         if not self.books_on:
             return {}
-        picks = self.book_picks["builder"] + self.book_picks["lab"] + \
+        picks = self.book_picks["builder"] + self.book_picks["lab"] + self.book_picks["heroes"] + \
             [p for k, p in self.hammer_picks.items() if p and self.hammers.get(k)]
         out: dict[int, str] = {}
         for p in picks:
@@ -353,7 +355,7 @@ class Planner:
         self._in_book = True
         if self._first_book_day:
             plan.book_options = {"time": int(t), **self._options(t)}
-            wanted = [("📖", p) for p in self.book_picks["builder"] + self.book_picks["lab"]] + \
+            wanted = [("📖", p) for p in self.book_picks["builder"] + self.book_picks["lab"] + self.book_picks["heroes"]] + \
                      [("🔨", p) for k, p in self.hammer_picks.items() if p and self.hammers.get(k)]
         used: list[str] = []
         self._no_slot = set()
@@ -374,6 +376,31 @@ class Planner:
                 self._instant(plan, q, slot, t, c, pick=pick, book=True)
                 if pick:
                     used.append(pick)
+        # Buch der Helden: Held-Upgrade starten (braucht einen freien Bauarbeiter) → sofort fertig
+        if self.books_n.get("heroes", 0) > 0:
+            if idle["builder"]:
+                slot = self.book_slot if self.book_slot in idle["builder"] else min(idle["builder"])
+                for _ in range(self.books_n["heroes"]):
+                    cands = [c for c in self._candidates("builder", t, instant=True) if c[2].section == "heroes"]
+                    picks = self.book_picks["heroes"] if self._first_book_day else []
+                    c, pick = self._pick_target(cands, picks) if picks else (None, "")
+                    if not c and cands:
+                        # automatisch: deine wichtigsten Helden (Stufe aus config), dann das längste Upgrade
+                        best = min(c2[0][0] for c2 in cands)
+                        th = self._lvl(TOWN_HALL)
+
+                        def progress(c2):   # wie weit der Held schon ist (0 = ganz am Anfang)
+                            levels = [l["level"] for l in self.gd.get(c2[2].data_id)["levels"]
+                                      if (l.get("required_townhall") or 0) <= th]
+                            return c2[2].level / max(levels or [1])
+                        c = min((c2 for c2 in cands if c2[0][0] == best), key=lambda c2: (progress(c2), -c2[3]))
+                    if not c:
+                        break
+                    self._instant(plan, "builder", slot, t, c, pick=pick, book=True)
+                    if pick:
+                        used.append(pick)
+            else:
+                self._no_slot.add("builder")
         # Hämmer (nur am ersten Bücher-Tag – danach sind sie verbraucht)
         if self._first_book_day:
             for kind, n in self.hammers.items():

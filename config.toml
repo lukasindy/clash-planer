@@ -133,10 +133,12 @@ enabled = true
 day = 1
 builder = 1     # Buch des Bauens
 lab = 2         # Labor-Bücher (Kampf/Zauber)
+heroes = 1      # Buch der Helden
 # Deine Wünsche für den NÄCHSTEN Bücher-Tag (deutsch oder englisch, in Wunschreihenfolge).
 # Leer = automatisch das längste Upgrade. Erfüllte Wünsche werden danach automatisch entfernt.
 builder_picks = ["Clanburg"]     # z. B. ["Adlerartillerie"]
 lab_picks = ["Drache", "Dragon Rider"]     # z. B. ["Elektrodrache", "Ballon"]
+heroes_picks = []         # z. B. ["Bogenschützenkönigin"]
 
 # Hämmer, die du gerade hast. Sie werden am nächsten Bücher-Tag eingeplant und danach
 # automatisch abgezogen. Ziel optional (sonst das längste/teuerste Upgrade, Hämmer sind gratis).

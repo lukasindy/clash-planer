@@ -137,7 +137,7 @@ footer a{color:var(--mute)}
 <div id="app"><div class="empty">Lade…</div></div>
 
 <script>
-const APP_VERSION = "2026-11-19.3";   // bei jeder Änderung an dieser Datei erhöhen
+const APP_VERSION = "2026-11-19.4";   // bei jeder Änderung an dieser Datei erhöhen
 const ICON = {builder:"🔨", lab:"🧪", pets:"🐾"};
 const LABEL = {builder:"Bauarbeiter", lab:"Labor", pets:"Begleiterhaus"};
 const RES = {"Gold":"Gold","Elixir":"Elixier","Dark Elixir":"Dunkles E."};
@@ -277,7 +277,7 @@ function renderBooks() {
   if (!bookEdit) {
     // Startzustand aus dem Plan: je Buch/Hammer, was geplant ist (Wunsch = fest, sonst automatisch)
     bookEdit = {
-      rows: day.map(s => ({type: s.hammer ? "hammer" : (s.q === "builder" ? "bb" : "lb"), kind: s.hammer || "",
+      rows: day.map(s => ({type: s.hammer ? "hammer" : (s.q === "builder" ? (s.hero ? "hb" : "bb") : "lb"), kind: s.hammer || "",
                            value: s.pick ? s.name : "", planned: s.name, id: s.id, from: s.from, to: s.to, cost: s.cost, res: s.res})),
       dirty: false, open: false};
     // Hämmer, die eingetragen sind, aber nichts gefunden haben, trotzdem anzeigen
@@ -288,10 +288,10 @@ function renderBooks() {
     });
   }
   const E = bookEdit;
-  const optsFor = r => r.type === "bb" ? opt.builder : r.type === "lb" ? opt.lab : opt[r.kind];
+  const optsFor = r => r.type === "bb" ? opt.builder : r.type === "lb" ? opt.lab : r.type === "hb" ? opt.heroes : opt[r.kind];
   const L = opt.locked || {};
-  const lockedFor = r => r.type === "bb" ? (L.building || []) : r.type === "lb" ? [...(L.fighting || []), ...(L.spells || [])] : (L[r.kind] || []);
-  const label = r => r.type === "hammer" ? "🔨 " + HAMMER[r.kind] : r.type === "bb" ? "📖 Buch des Bauens" : "📖 Labor-Buch";
+  const lockedFor = r => r.type === "bb" ? (L.building || []) : r.type === "lb" ? [...(L.fighting || []), ...(L.spells || [])] : r.type === "hb" ? (L.heroes || []) : (L[r.kind] || []);
+  const label = r => r.type === "hammer" ? "🔨 " + HAMMER[r.kind] : r.type === "bb" ? "📖 Buch des Bauens" : r.type === "hb" ? "📖 Buch der Helden" : "📖 Labor-Buch";
   const rowHtml = (r, i) => {
     const list = optsFor(r) || [];
     const planned = r.planned ? `${esc(r.planned)}${r.from !== undefined ? ` ${r.from} → ${r.to}` : ""}` : "<i>nichts Passendes</i>";
@@ -337,6 +337,7 @@ async function saveBooks() {
   const payload = {coc_settings: {
     builder_picks: E.rows.filter(r => r.type === "bb" && r.value).map(r => r.value),
     lab_picks: E.rows.filter(r => r.type === "lb" && r.value).map(r => r.value),
+    heroes_picks: E.rows.filter(r => r.type === "hb" && r.value).map(r => r.value),
     hammers: H}};
   const body = "Einstellungen aus der Web-App:\n\n```json\n" + JSON.stringify(payload) + "\n```";
   const title = "Einstellungen: Bücher-Tag & Hämmer", repo = D.repo || "lukasindy/clash-planer";

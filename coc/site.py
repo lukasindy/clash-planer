@@ -32,6 +32,8 @@ def _step(s, extra=None) -> dict:
         d["pick"] = True
     if getattr(s, "est", False):
         d["est"] = True
+    if s.section == "heroes":
+        d["hero"] = True
     if extra:
         d.update(extra)
     return d
@@ -88,8 +90,10 @@ def site_data(gd: GameData, v: Village, plan: Plan, cfg: Config, now: float) -> 
         "settings": {
             "builder_picks": cfg.planner.get("books", {}).get("builder_picks", []),
             "lab_picks": cfg.planner.get("books", {}).get("lab_picks", []),
+            "heroes_picks": cfg.planner.get("books", {}).get("heroes_picks", []),
             "books": {"builder": cfg.planner.get("books", {}).get("builder", 1),
-                      "lab": cfg.planner.get("books", {}).get("lab", 2)},
+                      "lab": cfg.planner.get("books", {}).get("lab", 2),
+                      "heroes": cfg.planner.get("books", {}).get("heroes", 0)},
             "hammers": cfg.raw.get("hammers", {}),
         },
         "repo": "lukasindy/clash-planer",

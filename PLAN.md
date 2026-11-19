@@ -2,8 +2,8 @@
 
 - **Spieler:** `#L88VCPGG0`
 - **Rathaus:** 19 · **Bauarbeiter:** 6 · **Labor:** 16 · **Begleiterhaus:** 12 · **Heldenhalle:** 12
-- **Export vom:** Mi 18.11. 17:38 (vor 18h 1m)
-- **Plan erstellt:** Do 19.11. 11:40
+- **Export vom:** Mi 18.11. 17:38 (vor 18h 6m)
+- **Plan erstellt:** Do 19.11. 11:44
 
 
 ## ⏳ Läuft gerade
@@ -34,21 +34,21 @@
 | 8 | Mo 30.11. 07:00 | Spiky Tower *(B1)* | 1 → 2 | 12T 9h | 408k Dunkles Elixier | Sa 12.12. 16:36 |
 | 9 | Mo 30.11. 11:48 | Luftabwehr *(B6)* | 5 → 6 | 19h 12m | 800k Gold | Di 01.12. 07:00 |
 | 10 | Di 01.12. 07:00 | Clanburg *(B6)* | 14 → 15 📖 mit Buch | 0m | 28,4 Mio Elixier | Di 01.12. 07:00 |
-| 11 | Di 01.12. 07:00 | Firecracker Tower *(B6)* | 1 → 2 | 13T 12h | 28,8 Mio Gold | Mo 14.12. 19:00 |
-| 12 | Fr 04.12. 07:00 | Squad Barracks *(B5)* | 4 → 5 | 5T 22h | 6,4 Mio Elixier | Do 10.12. 05:48 |
-| 13 | So 06.12. 18:13 | Firecracker Tower *(B2)* | 1 → 2 | 12T 18h | 27,2 Mio Gold | Sa 19.12. 12:13 |
-| 14 | Do 10.12. 07:00 | Multi-Archer Tower *(B3)* | 4 → 5 | 11T 14h | 23,2 Mio Gold | Mo 21.12. 21:24 |
-| 15 | Do 10.12. 07:00 | Squad Barracks *(B5)* | 5 → 6 | 6T | 8 Mio Elixier | Mi 16.12. 07:00 |
-| 16 | Fr 11.12. 17:32 | Multi-Archer Tower *(B4)* | 4 → 5 | 11T 14h | 23,2 Mio Gold | Mi 23.12. 07:56 |
-| 17 | Sa 12.12. 16:36 | Multi-Archer Tower *(B1)* | 4 → 5 | 11T 14h | 23,2 Mio Gold | Do 24.12. 07:00 |
-| 18 | Mo 14.12. 19:00 | Multi-Gear Tower *(B6)* | 3 → 4 | 11T 14h | 24 Mio Gold | Sa 26.12. 09:24 |
-| 19 | Mi 16.12. 07:00 | Squad Barracks *(B5)* | 6 → 7 | 6T 9h | 10 Mio Elixier | Di 22.12. 16:36 |
-| 20 | Sa 19.12. 12:13 | Luftabwehr *(B2)* | 16 → 17 | 11T 4h | 22,8 Mio Gold | Mi 30.12. 17:01 |
-| 21 | Mo 21.12. 21:24 | Bogenschützenkönigin *(B3)* | 105 → 106 | 6T 9h | 360k Dunkles Elixier | Mo 28.12. 07:00 |
-| 22 | Di 22.12. 16:36 | Squad Barracks *(B5)* | 7 → 8 | 7T 14h | 12 Mio Elixier | Mi 30.12. 07:00 |
-| 23 | Mi 23.12. 07:56 | Luftabwehr *(B4)* | 16 → 17 | 11T 4h | 22,8 Mio Gold | So 03.01. 12:44 |
-| 24 | Do 24.12. 07:00 | Luftabwehr *(B1)* | 16 → 17 | 11T 4h | 22,8 Mio Gold | Mo 04.01. 11:48 |
-| 25 | Sa 26.12. 09:24 | Luftabwehr *(B6)* | 6 → 7 | 1T 14h | 1,4 Mio Gold | So 27.12. 23:48 |
+| 11 | Di 01.12. 07:00 | Großer Wächter *(B6)* | 77 → 78 📖 mit Buch | 0m | 22,1 Mio Elixier | Di 01.12. 07:00 |
+| 12 | Di 01.12. 07:00 | Firecracker Tower *(B6)* | 1 → 2 | 13T 12h | 28,8 Mio Gold | Mo 14.12. 19:00 |
+| 13 | Fr 04.12. 07:00 | Squad Barracks *(B5)* | 4 → 5 | 5T 22h | 6,4 Mio Elixier | Do 10.12. 05:48 |
+| 14 | So 06.12. 18:13 | Firecracker Tower *(B2)* | 1 → 2 | 12T 18h | 27,2 Mio Gold | Sa 19.12. 12:13 |
+| 15 | Do 10.12. 07:00 | Multi-Archer Tower *(B3)* | 4 → 5 | 11T 14h | 23,2 Mio Gold | Mo 21.12. 21:24 |
+| 16 | Do 10.12. 07:00 | Squad Barracks *(B5)* | 5 → 6 | 6T | 8 Mio Elixier | Mi 16.12. 07:00 |
+| 17 | Fr 11.12. 17:32 | Multi-Archer Tower *(B4)* | 4 → 5 | 11T 14h | 23,2 Mio Gold | Mi 23.12. 07:56 |
+| 18 | Sa 12.12. 16:36 | Multi-Archer Tower *(B1)* | 4 → 5 | 11T 14h | 23,2 Mio Gold | Do 24.12. 07:00 |
+| 19 | Mo 14.12. 19:00 | Multi-Gear Tower *(B6)* | 3 → 4 | 11T 14h | 24 Mio Gold | Sa 26.12. 09:24 |
+| 20 | Mi 16.12. 07:00 | Squad Barracks *(B5)* | 6 → 7 | 6T 9h | 10 Mio Elixier | Di 22.12. 16:36 |
+| 21 | Sa 19.12. 12:13 | Luftabwehr *(B2)* | 16 → 17 | 11T 4h | 22,8 Mio Gold | Mi 30.12. 17:01 |
+| 22 | Mo 21.12. 21:24 | Bogenschützenkönigin *(B3)* | 105 → 106 | 6T 9h | 360k Dunkles Elixier | Mo 28.12. 07:00 |
+| 23 | Di 22.12. 16:36 | Squad Barracks *(B5)* | 7 → 8 | 7T 14h | 12 Mio Elixier | Mi 30.12. 07:00 |
+| 24 | Mi 23.12. 07:56 | Luftabwehr *(B4)* | 16 → 17 | 11T 4h | 22,8 Mio Gold | So 03.01. 12:44 |
+| 25 | Do 24.12. 07:00 | Luftabwehr *(B1)* | 16 → 17 | 11T 4h | 22,8 Mio Gold | Mo 04.01. 11:48 |
 | … | | *noch 179 weitere Schritte* | | | | |
 
 ## 🧪 Labor – nächste Schritte
@@ -95,7 +95,7 @@
 
 | Warteschlange | Schritte | fertig ungefähr | Kosten |
 |---|---|---|---|
-| Bauarbeiter | 204 | Sa 25.09. 02:12 | 846,5 Mio Elixier, 1346,9 Mio Gold, 16,9 Mio Dunkles Elixier |
+| Bauarbeiter | 204 | Mi 25.08. 02:12 | 860,7 Mio Elixier, 1346,9 Mio Gold, 17,1 Mio Dunkles Elixier |
 | Labor | 82 | Sa 01.04. 07:00 | 12,6 Mio Dunkles Elixier, 910,5 Mio Elixier |
 | Begleiterhaus | 4 | Sa 19.12. 21:24 | 1,2 Mio Dunkles Elixier |
 

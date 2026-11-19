@@ -105,16 +105,19 @@ def _consume_items(cfg: Config, steps) -> None:
     raw_b = cfg.raw.get("planner", {}).get("books", {})
     hm = cfg.raw.get("hammers", {})
     upd: dict = {}
-    picks = {"builder": list(raw_b.get("builder_picks", []) or []), "lab": list(raw_b.get("lab_picks", []) or [])}
+    picks = {"builder": list(raw_b.get("builder_picks", []) or []), "lab": list(raw_b.get("lab_picks", []) or []),
+             "heroes": list(raw_b.get("heroes_picks", []) or [])}
     for r in steps:
         if r.hammer:
             key = f"hammers.{r.hammer}"
             upd[key] = max(int(upd.get(key, hm.get(r.hammer, 0))) - 1, 0)
             if r.pick:
                 upd[f"hammers.{r.hammer}_pick"] = ""
-        elif r.pick and r.pick in picks[r.queue]:
-            picks[r.queue].remove(r.pick)
-            upd[f"planner.books.{r.queue}_picks"] = picks[r.queue]
+        elif r.pick:
+            key = "heroes" if r.section == "heroes" else r.queue
+            if r.pick in picks[key]:
+                picks[key].remove(r.pick)
+                upd[f"planner.books.{key}_picks"] = picks[key]
     if upd:
         update_config(cfg.path, upd)
 
@@ -156,8 +159,9 @@ def run_check(v: Village, plan: Plan, cfg: Config, now: float, names: dict[int, 
             if r.hammer:
                 blines.append(f"🔨 {hname[r.hammer]}: {r.name} {r.from_lvl} → {r.to_lvl} (gratis){wish}")
             else:
-                book = "Buch des Bauens" if r.queue == "builder" else "Labor-Buch"
-                blines.append(f"{ICON[r.queue]} {book}: {r.name} {r.from_lvl} → {r.to_lvl} ({fmt_cost(r)}){wish}")
+                book = ("Buch der Helden" if r.section == "heroes" else "Buch des Bauens") \
+                    if r.queue == "builder" else "Labor-Buch"
+                blines.append(f"📖 {book}: {r.name} {r.from_lvl} → {r.to_lvl} ({fmt_cost(r)}){wish}")
         saved = sum(plan.book_savings[:len(book_steps)])
         blines += ["", "Bücher: Upgrade starten → sofort Buch einsetzen. Hämmer: direkt am Gebäude/Held/Truppe.",
                    f"Spart zusammen ca. {fmt_dur(saved)}." + (" ⭐ = dein Wunsch" if any(r.pick for r in book_steps) else "")]

@@ -56,6 +56,9 @@ def _settings_issue(cfg) -> int:
     if "builder_picks" in data:
         upd["planner.books.builder_picks"] = clean(data["builder_picks"])
         lines.append(f"- 📖 Buch des Bauens: {', '.join(upd['planner.books.builder_picks']) or 'automatisch'}")
+    if "heroes_picks" in data:
+        upd["planner.books.heroes_picks"] = clean(data["heroes_picks"])
+        lines.append(f"- 📖 Buch der Helden: {', '.join(upd['planner.books.heroes_picks']) or 'automatisch'}")
     if "lab_picks" in data:
         upd["planner.books.lab_picks"] = clean(data["lab_picks"])
         lines.append(f"- 📖 Labor-Bücher: {', '.join(upd['planner.books.lab_picks']) or 'automatisch'}")
