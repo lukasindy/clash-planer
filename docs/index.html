@@ -21,7 +21,11 @@
 }
 *{box-sizing:border-box}
 html,body{margin:0;background:var(--bg);color:var(--text);font-family:Nunito,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
-body{padding:calc(env(safe-area-inset-top) + 12px) 14px calc(env(safe-area-inset-bottom) + 40px);max-width:980px;margin:0 auto}
+html,body{height:100%;overflow:hidden}
+body{display:flex;flex-direction:column;height:100vh;height:100dvh}
+#app{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;
+  padding:calc(env(safe-area-inset-top) + 12px) 14px 28px}
+#app > .wrap{max-width:980px;margin:0 auto}
 h1,h2,.num{font-family:"Lilita One",system-ui,sans-serif;font-weight:400;letter-spacing:.3px}
 h1{font-size:26px;margin:0}
 h2{font-size:20px;margin:28px 0 10px;display:flex;align-items:center;gap:8px}
@@ -130,11 +134,10 @@ summary{cursor:pointer;font-weight:800}
 .refresh{all:unset;cursor:pointer;font-size:20px;line-height:1;width:36px;height:36px;display:grid;place-items:center;border-radius:10px;background:var(--panel2);border:1px solid var(--line)}
 .refresh.spin{animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-body{padding-bottom:calc(env(safe-area-inset-bottom) + 90px)!important}
 .pane{display:none}
 .pane.on{display:block;animation:fade .18s ease-out}
 @keyframes fade{from{opacity:.3;transform:translateY(6px)}to{opacity:1;transform:none}}
-.navbar{position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;justify-content:space-around;
+.navbar{flex:none;position:relative;z-index:40;display:flex;justify-content:space-around;
   background:rgba(32,27,23,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
   border-top:1px solid var(--line);padding:6px 4px calc(env(safe-area-inset-bottom) + 6px)}
 .navbar button{all:unset;cursor:pointer;flex:1;text-align:center;font-size:11px;font-weight:800;color:var(--mute);padding:4px 0;border-radius:10px}
@@ -158,7 +161,7 @@ footer a{color:var(--mute)}
 <div id="app"><div class="empty">Lade…</div></div>
 
 <script>
-const APP_VERSION = "2026-11-19.6";   // bei jeder Änderung an dieser Datei erhöhen
+const APP_VERSION = "2026-11-19.7";   // bei jeder Änderung an dieser Datei erhöhen
 const ICON = {builder:"🔨", lab:"🧪", pets:"🐾"};
 const LABEL = {builder:"Bauarbeiter", lab:"Labor", pets:"Begleiterhaus"};
 const RES = {"Gold":"Gold","Elixir":"Elixier","Dark Elixir":"Dunkles E."};
@@ -467,7 +470,7 @@ function boostChip() {
 
 function render() {
   const age = now() - D.export;
-  $("#app").innerHTML = `
+  $("#app").innerHTML = `<div class="wrap">
   <header><div><h1>🏰 Clash-Planer</h1><div class="tag">${esc(D.tag)}</div></div>
     <div style="display:flex;gap:10px;align-items:flex-start"><div class="age ${age > 7 * 86400 ? "stale" : ""}" id="age"></div>
     <a class="refresh" id="refresh" title="Aktualisieren">↻</a></div></header>
@@ -488,7 +491,7 @@ function render() {
     <h2>📊 Bis alles fertig ist</h2><div class="tot" id="tot"></div>
   </div>
   <div class="pane" data-pane="tipps"><h2>💡 Wofür lohnt sich …?</h2><div id="advice"></div></div>
-  <footer>Nicht offiziell und nicht von Supercell bewilligt · <a href="https://supercell.com/en/fan-content-policy/de">Fan-Content-Richtlinien</a></footer>`;
+  <footer>Nicht offiziell und nicht von Supercell bewilligt · <a href="https://supercell.com/en/fan-content-policy/de">Fan-Content-Richtlinien</a></footer></div>`;
   $("#tlseg").querySelectorAll("button").forEach(b => {
     b.classList.toggle("on", +b.dataset.d === tlDays);
     b.onclick = () => { tlDays = +b.dataset.d; $("#tlseg").querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b)); renderTimeline(); };
@@ -513,7 +516,7 @@ function showTab(t, noScroll) {
   document.querySelectorAll("#navbar button").forEach(b => b.classList.toggle("on", b.dataset.tab === t));
   const chips = $("#chips"); if (chips) chips.style.display = t === "jetzt" ? "" : "none";
   if (t === "zeit") renderTimeline();
-  if (!noScroll) window.scrollTo(0, 0);
+  if (!noScroll) $("#app").scrollTop = 0;
 }
 
 let advKey = "book_building", advSort = "time";
@@ -576,7 +579,7 @@ async function load(manual = false) {
     // Formular nicht zerschießen, während man gerade etwas auswählt
     const editing = (bookEdit && bookEdit.open) || (document.activeElement && document.activeElement.closest && document.activeElement.closest("#books"));
     if (changed && !editing) {
-      const y = window.scrollY; render(); window.scrollTo(0, y);
+      const y = $("#app").scrollTop; render(); $("#app").scrollTop = y;
     } else if (manual || !changed) { renderNow(); tick(); }
   } catch (e) {
     if (!D) $("#app").innerHTML = `<div class="empty">Noch keine Daten – schick zuerst einen Export (Kurzbefehl).</div>`;
