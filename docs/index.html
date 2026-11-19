@@ -130,6 +130,25 @@ summary{cursor:pointer;font-weight:800}
 .refresh{all:unset;cursor:pointer;font-size:20px;line-height:1;width:36px;height:36px;display:grid;place-items:center;border-radius:10px;background:var(--panel2);border:1px solid var(--line)}
 .refresh.spin{animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
+body{padding-bottom:calc(env(safe-area-inset-bottom) + 90px)!important}
+.pane{display:none}
+.pane.on{display:block;animation:fade .18s ease-out}
+@keyframes fade{from{opacity:.3;transform:translateY(6px)}to{opacity:1;transform:none}}
+.navbar{position:fixed;left:0;right:0;bottom:0;z-index:40;display:flex;justify-content:space-around;
+  background:rgba(32,27,23,.96);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
+  border-top:1px solid var(--line);padding:6px 4px calc(env(safe-area-inset-bottom) + 6px)}
+.navbar button{all:unset;cursor:pointer;flex:1;text-align:center;font-size:11px;font-weight:800;color:var(--mute);padding:4px 0;border-radius:10px}
+.navbar button .ni{display:block;font-size:22px;line-height:1.2;filter:grayscale(.6);opacity:.75}
+.navbar button.on{color:var(--gold)}
+.navbar button.on .ni{filter:none;opacity:1}
+.navbar .dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--warn);margin-left:3px;vertical-align:2px}
+.pane h2:first-child{margin-top:18px}
+.adv-pick{display:flex;gap:8px;overflow-x:auto;padding:4px 0 10px;-webkit-overflow-scrolling:touch}
+.adv-pick button{all:unset;cursor:pointer;flex:none;width:74px;text-align:center;padding:8px 4px;border-radius:12px;background:var(--panel);border:1px solid var(--line);font-size:10.5px;font-weight:800;color:var(--mute);line-height:1.2}
+.adv-pick button img{width:40px;height:40px;object-fit:contain;display:block;margin:0 auto 4px}
+.adv-pick button.on{border-color:var(--gold);color:var(--text);background:var(--panel2)}
+.save{font-family:"Lilita One";font-size:16px;color:var(--ok);white-space:nowrap;text-align:right}
+.save small{display:block;font-family:Nunito;font-size:11px;font-weight:800}
 footer{margin-top:24px;font-size:10px;color:#6f6357;text-align:center;line-height:1.5}
 footer a{color:var(--mute)}
 .empty{padding:40px 10px;text-align:center;color:var(--mute)}
@@ -139,7 +158,7 @@ footer a{color:var(--mute)}
 <div id="app"><div class="empty">Lade…</div></div>
 
 <script>
-const APP_VERSION = "2026-11-19.5";   // bei jeder Änderung an dieser Datei erhöhen
+const APP_VERSION = "2026-11-19.6";   // bei jeder Änderung an dieser Datei erhöhen
 const ICON = {builder:"🔨", lab:"🧪", pets:"🐾"};
 const LABEL = {builder:"Bauarbeiter", lab:"Labor", pets:"Begleiterhaus"};
 const RES = {"Gold":"Gold","Elixir":"Elixier","Dark Elixir":"Dunkles E."};
@@ -207,6 +226,7 @@ function renderNow() {
   });
   $("#now").innerHTML = `<div class="grid two">${cards.join("")}</div>`;
   const b = $("#banner");
+  const fd = $("#freedot"); if (fd) fd.style.display = freeLines.length ? "" : "none";
   b.classList.toggle("show", freeLines.length > 0);
   b.innerHTML = freeLines.length ? `<strong>⚠️ Frei: ${freeLines.join(", ")}</strong><div class="mute" style="margin-top:4px;font-size:13px">Empfehlung starten. Anders gebaut? Export kopieren &amp; Kurzbefehl tippen.</div>` : "";
 }
@@ -451,24 +471,72 @@ function render() {
   <header><div><h1>🏰 Clash-Planer</h1><div class="tag">${esc(D.tag)}</div></div>
     <div style="display:flex;gap:10px;align-items:flex-start"><div class="age ${age > 7 * 86400 ? "stale" : ""}" id="age"></div>
     <a class="refresh" id="refresh" title="Aktualisieren">↻</a></div></header>
-  <div class="chips"><span class="chip">Rathaus<b>${D.th}</b></span><span class="chip">Labor<b>${D.lab}</b></span>
+  <div class="chips" id="chips"><span class="chip">Rathaus<b>${D.th}</b></span><span class="chip">Labor<b>${D.lab}</b></span>
     <span class="chip">Begleiterhaus<b>${D.pets}</b></span><span class="chip">Heldenhalle<b>${D.heroHall}</b></span>
     <span class="chip">Bauarbeiter<b>${D.capacity.builder}</b></span>${boostChip()}</div>
-  <div class="banner" id="banner"></div>
-  <h2>⏳ Läuft gerade</h2><div id="now"></div>
-  <div class="tl-head"><h2>📅 Zeitleiste</h2><div class="seg" id="tlseg"><button data-d="7">7 Tage</button><button data-d="30">30 Tage</button></div></div>
-  <div class="tl" id="tl"></div><div class="detail" id="detail">Tippe auf einen Balken für Details. Volle Balken laufen, gestrichelte sind geplant.</div>
-  <div id="books"></div>
-
-  <h2>📋 Nächste Schritte</h2><div class="tabs" id="tabs"></div><div class="list" id="list"></div>
-  <h2>📊 Bis alles fertig ist</h2><div class="tot" id="tot"></div>
+  <div class="pane" data-pane="jetzt">
+    <div class="banner" id="banner"></div>
+    <h2>⏳ Läuft gerade</h2><div id="now"></div>
+  </div>
+  <div class="pane" data-pane="zeit">
+    <div class="tl-head"><h2>📅 Zeitleiste</h2><div class="seg" id="tlseg"><button data-d="7">7 Tage</button><button data-d="30">30 Tage</button></div></div>
+    <div class="tl" id="tl"></div><div class="detail" id="detail">Tippe auf einen Balken für Details. Volle Balken laufen, gestrichelte sind geplant.</div>
+  </div>
+  <div class="pane" data-pane="buch"><div id="books"></div></div>
+  <div class="pane" data-pane="schritte">
+    <h2>📋 Nächste Schritte</h2><div class="tabs" id="tabs"></div><div class="list" id="list"></div>
+    <h2>📊 Bis alles fertig ist</h2><div class="tot" id="tot"></div>
+  </div>
+  <div class="pane" data-pane="tipps"><h2>💡 Wofür lohnt sich …?</h2><div id="advice"></div></div>
   <footer>Nicht offiziell und nicht von Supercell bewilligt · <a href="https://supercell.com/en/fan-content-policy/de">Fan-Content-Richtlinien</a></footer>`;
   $("#tlseg").querySelectorAll("button").forEach(b => {
     b.classList.toggle("on", +b.dataset.d === tlDays);
     b.onclick = () => { tlDays = +b.dataset.d; $("#tlseg").querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b)); renderTimeline(); };
   });
-  renderNow(); renderTimeline(); renderBooks(); renderList(); renderTotals(); tick();
+  renderNow(); renderTimeline(); renderBooks(); renderList(); renderTotals(); renderAdvice(); tick();
   $("#refresh").onclick = () => load(true);
+  // Navigation unten
+  let nav = $("#navbar");
+  if (!nav) { nav = document.createElement("nav"); nav.id = "navbar"; nav.className = "navbar"; document.body.appendChild(nav); }
+  const tabs = [["jetzt", "🏠", "Jetzt"], ["zeit", "📅", "Zeitleiste"], ["buch", "📖", "Bücher-Tag"], ["schritte", "📋", "Schritte"], ["tipps", "💡", "Tipps"]];
+  nav.innerHTML = tabs.map(([k, i, l]) => `<button data-tab="${k}"><span class="ni">${i}</span>${l}${k === "jetzt" ? '<span class="dot" id="freedot" style="display:none"></span>' : ""}</button>`).join("");
+  nav.querySelectorAll("button").forEach(b => b.onclick = () => showTab(b.dataset.tab));
+  showTab(currentTab, true);
+  renderNow();
+}
+
+let currentTab = (() => { try { return localStorage.getItem("clash-tab") || "jetzt"; } catch (e) { return "jetzt"; } })();
+function showTab(t, noScroll) {
+  currentTab = t;
+  try { localStorage.setItem("clash-tab", t); } catch (e) {}
+  document.querySelectorAll(".pane").forEach(p => p.classList.toggle("on", p.dataset.pane === t));
+  document.querySelectorAll("#navbar button").forEach(b => b.classList.toggle("on", b.dataset.tab === t));
+  const chips = $("#chips"); if (chips) chips.style.display = t === "jetzt" ? "" : "none";
+  if (t === "zeit") renderTimeline();
+  if (!noScroll) window.scrollTo(0, 0);
+}
+
+let advKey = "book_building", advSort = "time";
+const ADV = [["book_building", "Buch des Bauens"], ["book_heroes", "Buch der Helden"], ["book_fighting", "Buch des Kampfes"],
+             ["book_spells", "Buch der Zauber"], ["book_everything", "Buch von allem"], ["hammer_building", "Hammer des Bauens"],
+             ["hammer_heroes", "Hammer der Helden"], ["hammer_fighting", "Hammer des Kampfes"], ["hammer_spells", "Hammer der Zauber"]];
+const DE_WEIGHT = 50;   // grob: 1 Dunkles Elixier ≈ 50 Gold/Elixier (Verhältnis der Lagergrößen)
+function renderAdvice() {
+  const box = $("#advice"); if (!box) return;
+  const A = D.advice || {}, hammer = advKey.startsWith("hammer");
+  let rows = (A[advKey] || []).slice();
+  if (hammer && advSort === "cost") rows.sort((a, b) => (b.cost * (b.res === "Dark Elixir" ? DE_WEIGHT : 1)) - (a.cost * (a.res === "Dark Elixir" ? DE_WEIGHT : 1)));
+  rows = rows.slice(0, 8);
+  const img = k => D.icons && D.icons[k] ? `<img src="icons/${D.icons[k]}" alt="">` : "";
+  box.innerHTML = `<div class="adv-pick">${ADV.map(([k, l]) => `<button data-k="${k}" class="${k === advKey ? "on" : ""}">${img(k)}${l}</button>`).join("")}</div>
+    ${hammer ? `<div class="seg" id="advsort" style="margin-bottom:10px"><button data-s="time" class="${advSort === "time" ? "on" : ""}">⏱ Meiste Zeit</button><button data-s="cost" class="${advSort === "cost" ? "on" : ""}">💰 Meiste Rohstoffe</button></div>` : ""}
+    <div class="list">${rows.length ? rows.map((r, n) => `<div class="li"><div class="n">${n + 1}</div><div>${ico(r)}</div>
+        <div><div class="sname">${esc(r.name)} <span class="lvl">${r.from} → ${r.to}</span></div>
+        <div class="t">${r.running ? "⏳ läuft gerade – Buch macht den Rest sofort fertig" : hammer ? "gratis &amp; sofort statt " + (r.cost ? costTxt(r) : "–") : "starten (kostet " + (r.cost ? costTxt(r) : "–") + ") → Buch einsetzen"}</div></div>
+        <div class="save">${fmtDur(r.save)}<small>gespart</small></div></div>`).join("") : `<div class="more">Gerade nichts Passendes.</div>`}</div>
+    <div class="detail">${hammer ? "Hämmer sparen Zeit <b>und</b> Rohstoffe." + (advSort === "cost" ? " Dunkles Elixier zählt grob ×" + DE_WEIGHT + "." : "") : "Bücher sparen die Zeit – die Kosten zahlst du trotzdem. Laufende Upgrades zählen mit ihrer Restzeit."} Stand jetzt, mit deinem aktuellen Boost.</div>`;
+  box.querySelectorAll(".adv-pick button").forEach(b => b.onclick = () => { advKey = b.dataset.k; renderAdvice(); });
+  box.querySelectorAll("#advsort button").forEach(b => b.onclick = () => { advSort = b.dataset.s; renderAdvice(); });
 }
 
 function tick() {

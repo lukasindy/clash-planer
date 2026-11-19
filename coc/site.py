@@ -64,6 +64,62 @@ def _icons() -> dict:
     return json.loads(p.read_text("utf-8")) if p.exists() else {}
 
 
+def _advice(gd: GameData, v: Village, cfg: Config, now: float, top: int = 8) -> dict:
+    """Wofür lohnt sich welches Buch / welcher Hammer JETZT am meisten?
+    Bücher: gesparte Zeit (laufende Upgrades zählen mit ihrer Restzeit, Kosten zahlst du trotzdem).
+    Hämmer: gesparte Zeit + gesparte Rohstoffe (nur Dinge, die gerade nicht im Upgrade sind)."""
+    from .planner import NEVER_PLAN
+    from .village import HERO_HALL, LABORATORY, TOWN_HALL
+    th, lab, hh = v.th, v.level_of(LABORATORY), v.level_of(HERO_HALL)
+    rows = []
+    for i in v.instances:
+        if i.queue not in ("builder", "lab") or i.data_id in NEVER_PLAN or i.goblin:
+            continue
+        if i.data_id == TOWN_HALL or i.level < 1:
+            continue
+        obj = gd.get(i.data_id)
+        if not obj or obj.get("village", "home") != "home" or obj.get("super_troop") or obj.get("is_seasonal"):
+            continue
+        kind = ("heroes" if i.section == "heroes" else "building") if i.queue == "builder" else \
+            ("spells" if i.section == "spells" else "fighting")
+        base = {"id": i.data_id, "name": de_name(obj["name"]), "kind": kind}
+        if i.end and i.end > now:     # läuft gerade → Buch macht den Rest sofort fertig
+            rows.append({**base, "from": i.level, "to": i.level + 1, "save": int(i.end - now),
+                         "running": True, "cost": 0, "res": ""})
+            continue
+        nxt = gd.level(i.data_id, i.level + 1)
+        if not nxt:
+            continue
+        if (nxt.get("required_townhall") or 0) > th:
+            continue
+        if i.queue == "lab" and (nxt.get("required_lab_level") or 0) > lab:
+            continue
+        if i.section == "heroes" and (nxt.get("required_hero_tavern_level") or 0) > hh:
+            continue
+        dur, cost, res = GameData.upgrade_info(obj, nxt)
+        q = "builder" if i.queue == "builder" else "lab"
+        f = cfg.boost_factor(q, now)
+        if dur <= 0 and cost <= 0:
+            continue
+        rows.append({**base, "from": i.level, "to": i.level + 1, "save": int(dur * f),
+                     "running": False, "cost": int(cost * f), "res": res, "est": bool(nxt.get("estimated"))})
+    # gleiche Sorte/Level nur einmal (z. B. 4 X-Bögen auf gleichem Level)
+    seen, uniq = set(), []
+    for r in rows:
+        key = (r["id"], r["from"], r["running"])
+        if key not in seen:
+            seen.add(key)
+            uniq.append(r)
+    by_time = lambda xs: sorted(xs, key=lambda r: -r["save"])[:top * 3]
+    out = {}
+    for k in ("building", "heroes", "fighting", "spells"):
+        sub = [r for r in uniq if r["kind"] == k]
+        out["book_" + k] = by_time(sub)[:top]
+        out["hammer_" + k] = by_time([r for r in sub if not r["running"]])
+    out["book_everything"] = by_time(uniq)[:top]
+    return out
+
+
 def site_data(gd: GameData, v: Village, plan: Plan, cfg: Config, now: float) -> dict:
     running = []
     for s in plan.running:
@@ -98,6 +154,7 @@ def site_data(gd: GameData, v: Village, plan: Plan, cfg: Config, now: float) -> 
         },
         "repo": "lukasindy/clash-planer",
         "icons": _icons(),
+        "advice": _advice(gd, v, cfg, now),
         "running": running,
         "steps": [_step(s) for s in sorted(plan.steps, key=lambda s: s.start)[:MAX_STEPS]],
         "stepCount": {q: len(plan.for_queue(q)) for q in QUEUES},
