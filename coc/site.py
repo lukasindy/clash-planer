@@ -10,7 +10,7 @@ from .gamedata import GameData
 from .planner import QUEUES, Plan
 from .village import Village
 
-MAX_STEPS = 400
+MAX_STEPS = 2000
 
 
 def _step(s, extra=None) -> dict:

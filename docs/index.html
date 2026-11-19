@@ -109,6 +109,19 @@ summary{cursor:pointer;font-weight:800}
 .ic-bar{width:20px;height:20px;object-fit:contain;vertical-align:-6px;margin-right:3px}
 .sname-wrap{display:flex;align-items:center;gap:10px;min-width:0}
 .li{grid-template-columns:28px 38px 1fr auto!important}
+.allbtn{all:unset;cursor:pointer;display:block;text-align:center;padding:13px;font-weight:800;font-size:14px;color:var(--gold);border-top:1px solid var(--line)}
+.sheet{position:fixed;inset:0;z-index:50;background:var(--bg);display:none;flex-direction:column}
+.sheet.open{display:flex;animation:up .22s ease-out}
+@keyframes up{from{transform:translateY(30px);opacity:.4}to{transform:none;opacity:1}}
+.sheet-head{padding:calc(env(safe-area-inset-top) + 10px) 14px 10px;border-bottom:1px solid var(--line);background:var(--panel)}
+.sheet-head .row{align-items:center}
+.sheet-head h2{margin:0}
+.sheet-body{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;padding:0 14px calc(env(safe-area-inset-bottom) + 30px)}
+.sheet-body .list{border-radius:12px}
+.month{position:sticky;top:0;z-index:1;background:var(--bg);padding:14px 2px 8px;font-family:"Lilita One";font-size:16px;color:var(--gold);display:flex;justify-content:space-between}
+.month span{font-family:Nunito;font-size:12px;color:var(--mute);font-weight:800}
+.close{all:unset;cursor:pointer;font-size:22px;width:38px;height:38px;display:grid;place-items:center;border-radius:10px;background:var(--panel2);border:1px solid var(--line)}
+.search{width:100%;margin-top:10px;background:#0f0c0a;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px;font:inherit;font-size:15px}
 .edit{all:unset;cursor:pointer;font-size:14px;padding:4px 8px;border-radius:8px;background:var(--panel2);border:1px solid var(--line);margin-left:8px}
 .bk select{margin-top:6px}
 .warn{color:#ffb199;font-size:12px;margin-top:4px}
@@ -124,7 +137,7 @@ footer a{color:var(--mute)}
 <div id="app"><div class="empty">Lade…</div></div>
 
 <script>
-const APP_VERSION = "2026-11-19.1";   // bei jeder Änderung an dieser Datei erhöhen
+const APP_VERSION = "2026-11-19.2";   // bei jeder Änderung an dieser Datei erhöhen
 const ICON = {builder:"🔨", lab:"🧪", pets:"🐾"};
 const LABEL = {builder:"Bauarbeiter", lab:"Labor", pets:"Begleiterhaus"};
 const RES = {"Gold":"Gold","Elixir":"Elixier","Dark Elixir":"Dunkles E."};
@@ -236,15 +249,21 @@ function renderTimeline() {
 }
 
 function renderList() {
-  const st = D.steps.filter(s => s.q === listQ), shown = st.slice(0, 40);
+  const st = D.steps.filter(s => s.q === listQ), shown = st.slice(0, 10);
   $("#tabs").innerHTML = ["builder", "lab", "pets"].filter(q => D.capacity[q]).map(q =>
     `<div class="seg"><button class="${q === listQ ? "on" : ""}" data-q="${q}">${ICON[q]} ${LABEL[q]}</button></div>`).join("");
   $("#tabs").querySelectorAll("button").forEach(b => b.onclick = () => { listQ = b.dataset.q; renderList(); });
-  $("#list").innerHTML = shown.length ? shown.map((s, n) => `<div class="li"><div class="n">${n + 1}</div><div>${ico(s)}</div>
+  $("#list").innerHTML = shown.length ? shown.map((s, n) => liHtml(s, n)).join("") +
+      (st.length > shown.length ? `<a class="allbtn" id="allbtn">Alle ${st.length} Schritte anzeigen →</a>` : "")
+    : `<div class="more">Alles erledigt auf diesem Rathaus-Level 🎉</div>`;
+  const ab = $("#allbtn"); if (ab) ab.onclick = () => openAll(listQ);
+}
+
+function liHtml(s, n) {
+  return `<div class="li"><div class="n">${n + 1}</div><div>${ico(s)}</div>
       <div><div class="sname">${esc(s.name)} <span class="lvl">${lvlTxt(s)}</span></div>
       <div class="t">${s.q === "builder" && s.slot >= 0 ? "B" + (s.slot + 1) + " · " : ""}${s.hammer ? `<b style="color:var(--gold)">🔨 mit Hammer am ${fmtTime(s.start)}</b>` : s.book ? `<b style="color:var(--gold)">📖 mit Buch am ${fmtTime(s.start)}</b>` : `ab ${fmtTime(s.start)} · ${fmtDur(s.end - s.start)}`}</div></div>
-      ${costTxt(s)}</div>`).join("") + ((D.stepCount[listQ] || 0) > shown.length ? `<div class="more">… noch ${D.stepCount[listQ] - shown.length} weitere Schritte</div>` : "")
-    : `<div class="more">Alles erledigt auf diesem Rathaus-Level 🎉</div>`;
+      ${costTxt(s)}</div>`;
 }
 
 let bookEdit = null;   // Bearbeitungszustand der Bücher-Tag-Karte
@@ -344,6 +363,56 @@ const setToken = v => { try { v ? localStorage.setItem(TOKEN_KEY, v) : localStor
 
 function sel(id, list, value, auto = "— automatisch (längstes) —") {
   return `<select id="${id}"><option value="">${auto}</option>${list.map(n => `<option ${n === value ? "selected" : ""}>${esc(n)}</option>`).join("")}</select>`;
+}
+
+let allQ = "builder";
+function openAll(q) {
+  allQ = q || allQ;
+  let sh = $("#sheet");
+  if (!sh) {
+    sh = document.createElement("div"); sh.id = "sheet"; sh.className = "sheet";
+    document.body.appendChild(sh);
+  }
+  sh.innerHTML = `<div class="sheet-head"><div class="row"><h2>📋 Alle Schritte</h2><a class="close" id="closeall">✕</a></div>
+      <div class="tabs" id="alltabs" style="margin:10px 0 0"></div>
+      <input class="search" id="allsearch" type="search" placeholder="Suchen, z. B. Inferno oder Drache …" autocomplete="off"></div>
+    <div class="sheet-body" id="allbody"></div>`;
+  sh.classList.add("open");
+  document.body.style.overflow = "hidden";
+  try { history.pushState({sheet: 1}, ""); } catch (e) {}
+  $("#closeall").onclick = closeAll;
+  $("#allsearch").oninput = renderAll;
+  renderAll();
+}
+function closeAll(fromPop) {
+  const sh = $("#sheet"); if (!sh || !sh.classList.contains("open")) return;
+  sh.classList.remove("open"); document.body.style.overflow = "";
+  if (fromPop !== true) { try { history.back(); } catch (e) {} }
+}
+window.addEventListener("popstate", () => closeAll(true));
+function renderAll() {
+  $("#alltabs").innerHTML = ["builder", "lab", "pets"].filter(q => D.capacity[q]).map(q =>
+    `<div class="seg"><button class="${q === allQ ? "on" : ""}" data-q="${q}">${ICON[q]} ${LABEL[q]} <span class="mute">${D.stepCount[q] || 0}</span></button></div>`).join("");
+  $("#alltabs").querySelectorAll("button").forEach(b => b.onclick = () => { allQ = b.dataset.q; renderAll(); $("#allbody").scrollTop = 0; });
+  const term = ($("#allsearch").value || "").trim().toLowerCase();
+  const st = D.steps.filter(s => s.q === allQ);
+  const monthFmt = new Intl.DateTimeFormat("de-AT", {timeZone: D.tz, month: "long", year: "numeric"});
+  let html = "", cur = null, buf = [], n = 0, sum = {};
+  const flush = () => {
+    if (!buf.length) return;
+    const costs = Object.entries(sum).filter(([, v]) => v).map(([r, v]) => `${fmtNum(v)} ${RES[r] || r}`).join(" · ");
+    html += `<div class="month">${cur}<span>${buf.length} ${buf.length === 1 ? "Schritt" : "Schritte"}${costs ? " · " + costs : ""}</span></div><div class="list">${buf.join("")}</div>`;
+    buf = []; sum = {};
+  };
+  st.forEach((s, i) => {
+    if (term && !s.name.toLowerCase().includes(term)) return;
+    const m = monthFmt.format(new Date(s.start * 1000));
+    if (m !== cur) { flush(); cur = m; }
+    buf.push(liHtml(s, i)); n++;
+    if (s.cost && !s.hammer) sum[s.res] = (sum[s.res] || 0) + s.cost;
+  });
+  flush();
+  $("#allbody").innerHTML = html || `<div class="more" style="padding:40px">Nichts gefunden.</div>`;
 }
 
 function renderTotals() {
