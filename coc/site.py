@@ -14,7 +14,7 @@ MAX_STEPS = 400
 
 
 def _step(s, extra=None) -> dict:
-    d = {"q": s.queue, "slot": s.slot, "name": s.name, "from": s.from_lvl, "to": s.to_lvl,
+    d = {"q": s.queue, "slot": s.slot, "name": s.name, "id": s.data_id, "from": s.from_lvl, "to": s.to_lvl,
          "start": int(s.start), "end": int(s.end)}
     if s.cost:
         d["cost"], d["res"] = s.cost, s.resource
@@ -57,6 +57,11 @@ def _choices(gd: GameData, v: Village) -> dict:
     return {k: sorted(x) for k, x in out.items()}
 
 
+def _icons() -> dict:
+    p = Path("docs/icons/index.json")
+    return json.loads(p.read_text("utf-8")) if p.exists() else {}
+
+
 def site_data(gd: GameData, v: Village, plan: Plan, cfg: Config, now: float) -> dict:
     running = []
     for s in plan.running:
@@ -88,6 +93,7 @@ def site_data(gd: GameData, v: Village, plan: Plan, cfg: Config, now: float) -> 
             "hammers": cfg.raw.get("hammers", {}),
         },
         "repo": "lukasindy/clash-planer",
+        "icons": _icons(),
         "running": running,
         "steps": [_step(s) for s in sorted(plan.steps, key=lambda s: s.start)[:MAX_STEPS]],
         "stepCount": {q: len(plan.for_queue(q)) for q in QUEUES},

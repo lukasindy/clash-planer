@@ -2,8 +2,8 @@
 
 - **Spieler:** `#L88VCPGG0`
 - **Rathaus:** 19 · **Bauarbeiter:** 6 · **Labor:** 16 · **Begleiterhaus:** 12 · **Heldenhalle:** 12
-- **Export vom:** Mi 18.11. 17:38 (vor 17h 43m)
-- **Plan erstellt:** Do 19.11. 11:22
+- **Export vom:** Mi 18.11. 17:38 (vor 17h 55m)
+- **Plan erstellt:** Do 19.11. 11:33
 
 
 ## ⏳ Läuft gerade
@@ -18,7 +18,7 @@
 | Bauarbeiter | Spiky Tower | 0 → 1 | Sa 28.11. 23:13 | 9T 11h |
 | Bauarbeiter | Firecracker Tower | 0 → 1 | So 29.11. 04:47 | 9T 17h |
 | Bauarbeiter | Spiky Tower | 0 → 1 | So 29.11. 07:56 | 9T 20h |
-| Bauarbeiter | Labor | 16 → 17 | So 29.11. 23:25 | 10T 12h |
+| Bauarbeiter | Labor | 16 → 17 | So 29.11. 23:25 | 10T 11h |
 
 ## 🔨 Bauarbeiter – nächste Schritte
 

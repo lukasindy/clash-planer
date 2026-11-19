@@ -92,7 +92,14 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("import-issue")
     sub.add_parser("test-notify")
     sub.add_parser("settings-issue")
+    sub.add_parser("icons")
     args = ap.parse_args(argv)
+
+    if args.cmd == "icons":
+        from .gamedata import load_raw
+        from .icons import download_icons
+        print(download_icons(load_raw()))
+        return 0
 
     if args.cmd == "settings-issue":
         return _settings_issue(load_config(args.config))

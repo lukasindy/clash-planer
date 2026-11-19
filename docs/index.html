@@ -104,6 +104,11 @@ header{display:flex;justify-content:space-between;align-items:flex-start;gap:10p
 .msg{margin-top:10px;font-size:13px;min-height:18px}
 details{margin-top:14px;font-size:13px;color:var(--mute)}
 summary{cursor:pointer;font-weight:800}
+.ic{width:34px;height:34px;object-fit:contain;flex:none;filter:drop-shadow(0 1px 2px rgba(0,0,0,.5))}
+.ic-sm{width:20px;height:20px;object-fit:contain;vertical-align:-5px;margin-right:4px}
+.ic-bar{width:20px;height:20px;object-fit:contain;vertical-align:-6px;margin-right:3px}
+.sname-wrap{display:flex;align-items:center;gap:10px;min-width:0}
+.li{grid-template-columns:28px 38px 1fr auto!important}
 .edit{all:unset;cursor:pointer;font-size:14px;padding:4px 8px;border-radius:8px;background:var(--panel2);border:1px solid var(--line);margin-left:8px}
 .bk select{margin-top:6px}
 .warn{color:#ffb199;font-size:12px;margin-top:4px}
@@ -119,7 +124,7 @@ footer a{color:var(--mute)}
 <div id="app"><div class="empty">Lade…</div></div>
 
 <script>
-const APP_VERSION = "2026-11-18.3";   // bei jeder Änderung an dieser Datei erhöhen
+const APP_VERSION = "2026-11-19.1";   // bei jeder Änderung an dieser Datei erhöhen
 const ICON = {builder:"🔨", lab:"🧪", pets:"🐾"};
 const LABEL = {builder:"Bauarbeiter", lab:"Labor", pets:"Begleiterhaus"};
 const RES = {"Gold":"Gold","Elixir":"Elixier","Dark Elixir":"Dunkles E."};
@@ -149,6 +154,7 @@ function fmtNum(n) {
   return String(n);
 }
 const lvlTxt = s => (s.new || s.from === 0 ? "bauen" : `${s.from} → ${s.to}`) + (s.book ? " 📖" : "") + (s.hammer ? " 🔨" : "");
+const ico = (s, cls = "ic") => { const f = s && D.icons && D.icons[String(s.id)]; return f ? `<img class="${cls}" src="icons/${f}" alt="" loading="lazy">` : ""; };
 const HAMMER = {building: "Hammer des Bauens", heroes: "Hammer der Helden", fighting: "Hammer des Kampfes", spells: "Hammer der Zauber"};
 const costTxt = s => s.cost ? `<span class="cost ${resCls(s.res)}" ${s.est ? 'title="geschätzt – fehlt noch in den Spieldaten"' : ""}>${s.est ? "≈" : ""}${fmtNum(s.cost)} ${RES[s.res] || s.res}</span>` : "";
 
@@ -167,11 +173,11 @@ function slotsNow(q) {
 function slotHtml(q, s) {
   if (!s.r) {
     return `<div class="slot free"><div class="row"><div class="sname">${q === "builder" ? "B" + (s.i + 1) + " · " : ""}FREI</div><div class="cd">jetzt starten</div></div>
-      ${s.rec ? `<div class="rec">👉 Empfehlung: <b>${esc(s.rec.name)}</b> ${lvlTxt(s.rec)} · ${fmtDur(s.rec.end - s.rec.start)} ${costTxt(s.rec)}</div>` : ""}</div>`;
+      ${s.rec ? `<div class="rec">👉 Empfehlung: ${ico(s.rec, "ic-sm")}<b>${esc(s.rec.name)}</b> ${lvlTxt(s.rec)} · ${fmtDur(s.rec.end - s.rec.start)} ${costTxt(s.rec)}</div>` : ""}</div>`;
   }
   const r = s.r, t = now(), tot = Math.max(1, r.end - r.start), pct = Math.min(100, Math.max(0, (t - r.start) / tot * 100));
   const label = (q === "builder" && !s.goblin ? `B${s.i + 1} · ` : "") + esc(r.name);
-  return `<div class="slot"><div class="row"><div class="sname">${label}${s.goblin ? '<span class="badge g">Goblin</span>' : ""}${r.assumed ? '<span class="badge">angenommen</span>' : ""}</div>
+  return `<div class="slot"><div class="row"><div class="sname-wrap">${ico(r)}<div class="sname">${label}${s.goblin ? '<span class="badge g">Goblin</span>' : ""}${r.assumed ? '<span class="badge">angenommen</span>' : ""}</div></div>
       <div class="cd" data-end="${r.end}">${fmtDur(r.end - t, true)}</div></div>
     <div class="bar ${q}"><i data-s="${r.start}" data-e="${r.end}" style="width:${pct}%"></i></div>
     <div class="sub"><span>${lvlTxt(r)}</span><span>fertig ${fmtTime(r.end)}</span></div></div>`;
@@ -214,7 +220,7 @@ function renderTimeline() {
     const bars = all.filter(s => s.q === row.q && s.slot === row.slot && s.end > t0 && s.start < t1).map(s => {
       const l = Math.max(0, x(s.start)), w = Math.max(4, x(Math.min(s.end, t1)) - l);
       if (s.book) return `<div class="tb book" style="left:${l}px" data-i='${esc(JSON.stringify({n: s.name + " (mit Buch)", l: lvlTxt(s), a: s.start, b: s.end, c: s.cost || 0, r: s.res || "", run: false}))}'>📖</div>`;
-      return `<div class="tb ${resCls(s.res)} ${s.run ? "" : "plan"}" style="left:${l}px;width:${w}px" data-i='${esc(JSON.stringify({n: s.name, l: lvlTxt(s), a: s.start, b: s.end, c: s.cost || 0, r: s.res || "", run: s.run}))}'>${esc(s.name)}</div>`;
+      return `<div class="tb ${resCls(s.res)} ${s.run ? "" : "plan"}" style="left:${l}px;width:${w}px" data-i='${esc(JSON.stringify({n: s.name, l: lvlTxt(s), a: s.start, b: s.end, c: s.cost || 0, r: s.res || "", run: s.run}))}'>${w > 40 ? ico(s, "ic-bar") : ""}${esc(s.name)}</div>`;
     }).join("");
     return `<div class="tl-row">${nights}${bars}</div>`;
   }).join("");
@@ -234,7 +240,7 @@ function renderList() {
   $("#tabs").innerHTML = ["builder", "lab", "pets"].filter(q => D.capacity[q]).map(q =>
     `<div class="seg"><button class="${q === listQ ? "on" : ""}" data-q="${q}">${ICON[q]} ${LABEL[q]}</button></div>`).join("");
   $("#tabs").querySelectorAll("button").forEach(b => b.onclick = () => { listQ = b.dataset.q; renderList(); });
-  $("#list").innerHTML = shown.length ? shown.map((s, n) => `<div class="li"><div class="n">${n + 1}</div>
+  $("#list").innerHTML = shown.length ? shown.map((s, n) => `<div class="li"><div class="n">${n + 1}</div><div>${ico(s)}</div>
       <div><div class="sname">${esc(s.name)} <span class="lvl">${lvlTxt(s)}</span></div>
       <div class="t">${s.q === "builder" && s.slot >= 0 ? "B" + (s.slot + 1) + " · " : ""}${s.hammer ? `<b style="color:var(--gold)">🔨 mit Hammer am ${fmtTime(s.start)}</b>` : s.book ? `<b style="color:var(--gold)">📖 mit Buch am ${fmtTime(s.start)}</b>` : `ab ${fmtTime(s.start)} · ${fmtDur(s.end - s.start)}`}</div></div>
       ${costTxt(s)}</div>`).join("") + ((D.stepCount[listQ] || 0) > shown.length ? `<div class="more">… noch ${D.stepCount[listQ] - shown.length} weitere Schritte</div>` : "")
@@ -253,7 +259,7 @@ function renderBooks() {
     // Startzustand aus dem Plan: je Buch/Hammer, was geplant ist (Wunsch = fest, sonst automatisch)
     bookEdit = {
       rows: day.map(s => ({type: s.hammer ? "hammer" : (s.q === "builder" ? "bb" : "lb"), kind: s.hammer || "",
-                           value: s.pick ? s.name : "", planned: s.name, from: s.from, to: s.to, cost: s.cost, res: s.res})),
+                           value: s.pick ? s.name : "", planned: s.name, id: s.id, from: s.from, to: s.to, cost: s.cost, res: s.res})),
       dirty: false, open: false};
     // Hämmer, die eingetragen sind, aber nichts gefunden haben, trotzdem anzeigen
     const h = st.hammers || {};
@@ -273,7 +279,7 @@ function renderBooks() {
     const body = E.open
       ? `<select data-i="${i}" class="bksel"><option value="">— automatisch (längstes) —</option>${list.map(n => `<option ${n === r.value ? "selected" : ""}>${esc(n)}</option>`).join("")}${
           lockedFor(r).length ? `<optgroup label="Am ${fmtTime(first, true).split(" ")[1] || ""} noch nicht möglich">${lockedFor(r).map(([n, w]) => `<option disabled>${esc(n)} – ${esc(w)}</option>`).join("")}</optgroup>` : ""}</select>`
-      : `<div class="sub"><span>${planned}</span>${r.type === "hammer" ? '<span class="cost">gratis</span>' : (r.cost ? costTxt(r) : "")}</div>`;
+      : `<div class="sub"><span class="sname-wrap" style="gap:8px">${r.id ? ico(r, "ic-sm") : ""}${planned}</span>${r.type === "hammer" ? '<span class="cost">gratis</span>' : (r.cost ? costTxt(r) : "")}</div>`;
     return `<div class="slot bk"><div class="row"><div class="sname">${label(r)}${r.value ? '<span class="badge g">Wunsch</span>' : ""}</div>
       ${E.open && r.type === "hammer" ? `<a class="edit" data-del="${i}">✕</a>` : ""}</div>${body}</div>`;
   };
@@ -378,6 +384,8 @@ function render() {
   <h2>📋 Nächste Schritte</h2><div class="tabs" id="tabs"></div><div class="list" id="list"></div>
   <h2>📊 Bis alles fertig ist</h2><div class="tot" id="tot"></div>
   <footer>Zeiten ohne Tränke, Helfer &amp; Juwelen · Rohstoffe werden als vorhanden angenommen<br>
+    Dieses Material ist nicht offiziell und nicht von Supercell bewilligt. Weitere Informationen finden Sie in Supercells Richtlinien für Fan-Content unter
+    <a href="https://supercell.com/en/fan-content-policy/de">supercell.com/en/fan-content-policy/de</a>. Bilder: Clash of Clans © Supercell, über das Clash of Clans Wiki.<br>
     <a href="https://github.com/lukasindy/clash-planer">GitHub</a> · <a href="https://github.com/lukasindy/clash-planer/blob/main/PLAN.md">PLAN.md</a></footer>`;
   $("#tlseg").querySelectorAll("button").forEach(b => {
     b.classList.toggle("on", +b.dataset.d === tlDays);

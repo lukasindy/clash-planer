@@ -130,4 +130,6 @@ Benötigt nur Python ≥ 3.11, keine weiteren Pakete.
 - GitHub-Zeitpläne können sich um einige Minuten verzögern. Nach 60 Tagen ohne Aktivität im Repo
   pausiert GitHub sie. Jeder neue Export zählt als Aktivität.
 
-*Inoffizielles Fanprojekt, nicht von Supercell unterstützt oder gesponsert.*
+*Dieses Material ist nicht offiziell und nicht von Supercell bewilligt. Weitere Informationen finden Sie in Supercells
+Richtlinien für Fan-Content unter https://supercell.com/en/fan-content-policy/de. Icons: Clash of Clans © Supercell,
+unverändert über das Clash of Clans Wiki (`python -m coc icons`, monatlich automatisch).*
