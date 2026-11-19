@@ -287,6 +287,9 @@ class Planner:
         insts = [i for i in self.inst.values() if self._match(pick, i)]
         if not insts:
             return "nicht in deinem Dorf gefunden"
+        q = insts[0].queue
+        if q in getattr(self, "_no_slot", set()):
+            return ("an dem Tag ist kein Bauarbeiter frei" if q == "builder" else "das Labor ist an dem Tag nicht frei")
         lab, th, hh, ph = (self._lvl(LABORATORY), self._lvl(TOWN_HALL), self._lvl(HERO_HALL), self._lvl(PET_HOUSE))
         reasons = []
         for i in insts:
@@ -353,10 +356,16 @@ class Planner:
             wanted = [("📖", p) for p in self.book_picks["builder"] + self.book_picks["lab"]] + \
                      [("🔨", p) for k, p in self.hammer_picks.items() if p and self.hammers.get(k)]
         used: list[str] = []
+        self._no_slot = set()
         for q in ("builder", "lab"):
             slot = self.book_slot if q == "builder" else 0
-            if self.books_n.get(q, 0) <= 0 or slot not in idle[q]:
+            if self.books_n.get(q, 0) <= 0:
                 continue
+            if slot not in idle[q]:
+                if not idle[q]:
+                    self._no_slot.add(q)      # an dem Tag ist dort nichts frei
+                    continue
+                slot = min(idle[q])           # anderer freier Bauarbeiter tut's auch
             for _ in range(self.books_n[q]):
                 cands = [c for c in self._candidates(q, t, instant=True) if c[2].section != "heroes"]
                 c, pick = self._pick_target(cands, self.book_picks[q] if self._first_book_day else [])
@@ -461,7 +470,8 @@ class Planner:
 
         self._add_new_buildings()
         for bt in self.book_times:
-            heapq.heappush(events, (bt, next(seq), "book", None, None, None))
+            # erst alles verarbeiten, was zur selben Minute fertig wird, dann die Bücher
+            heapq.heappush(events, (bt, 10**12 + next(seq), "book", None, None, None))
         t = self.start
         if self.book_times and self.book_times[0] == self.start:
             self._use_books(plan, idle, t)
