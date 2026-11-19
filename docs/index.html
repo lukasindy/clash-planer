@@ -128,7 +128,7 @@ summary{cursor:pointer;font-weight:800}
 .refresh{all:unset;cursor:pointer;font-size:20px;line-height:1;width:36px;height:36px;display:grid;place-items:center;border-radius:10px;background:var(--panel2);border:1px solid var(--line)}
 .refresh.spin{animation:spin .8s linear infinite}
 @keyframes spin{to{transform:rotate(360deg)}}
-footer{margin-top:30px;font-size:12px;color:var(--mute);text-align:center;line-height:1.6}
+footer{margin-top:24px;font-size:10px;color:#6f6357;text-align:center;line-height:1.5}
 footer a{color:var(--mute)}
 .empty{padding:40px 10px;text-align:center;color:var(--mute)}
 </style>
@@ -137,7 +137,7 @@ footer a{color:var(--mute)}
 <div id="app"><div class="empty">Lade…</div></div>
 
 <script>
-const APP_VERSION = "2026-11-19.2";   // bei jeder Änderung an dieser Datei erhöhen
+const APP_VERSION = "2026-11-19.3";   // bei jeder Änderung an dieser Datei erhöhen
 const ICON = {builder:"🔨", lab:"🧪", pets:"🐾"};
 const LABEL = {builder:"Bauarbeiter", lab:"Labor", pets:"Begleiterhaus"};
 const RES = {"Gold":"Gold","Elixir":"Elixier","Dark Elixir":"Dunkles E."};
@@ -452,10 +452,7 @@ function render() {
 
   <h2>📋 Nächste Schritte</h2><div class="tabs" id="tabs"></div><div class="list" id="list"></div>
   <h2>📊 Bis alles fertig ist</h2><div class="tot" id="tot"></div>
-  <footer>Zeiten ohne Tränke, Helfer &amp; Juwelen · Rohstoffe werden als vorhanden angenommen<br>
-    Dieses Material ist nicht offiziell und nicht von Supercell bewilligt. Weitere Informationen finden Sie in Supercells Richtlinien für Fan-Content unter
-    <a href="https://supercell.com/en/fan-content-policy/de">supercell.com/en/fan-content-policy/de</a>. Bilder: Clash of Clans © Supercell, über das Clash of Clans Wiki.<br>
-    <a href="https://github.com/lukasindy/clash-planer">GitHub</a> · <a href="https://github.com/lukasindy/clash-planer/blob/main/PLAN.md">PLAN.md</a></footer>`;
+  <footer>Nicht offiziell und nicht von Supercell bewilligt · <a href="https://supercell.com/en/fan-content-policy/de">Fan-Content-Richtlinien</a></footer>`;
   $("#tlseg").querySelectorAll("button").forEach(b => {
     b.classList.toggle("on", +b.dataset.d === tlDays);
     b.onclick = () => { tlDays = +b.dataset.d; $("#tlseg").querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b)); renderTimeline(); };
