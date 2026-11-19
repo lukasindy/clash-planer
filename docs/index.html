@@ -124,6 +124,8 @@ summary{cursor:pointer;font-weight:800}
 .search{width:100%;margin-top:10px;background:#0f0c0a;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px;font:inherit;font-size:15px}
 .edit{all:unset;cursor:pointer;font-size:14px;padding:4px 8px;border-radius:8px;background:var(--panel2);border:1px solid var(--line);margin-left:8px}
 .bk select{margin-top:6px}
+.bk .sname{display:flex;align-items:center;gap:6px}
+.bk .sname .badge{margin-left:0}
 .warn{color:#ffb199;font-size:12px;margin-top:4px}
 .refresh{all:unset;cursor:pointer;font-size:20px;line-height:1;width:36px;height:36px;display:grid;place-items:center;border-radius:10px;background:var(--panel2);border:1px solid var(--line)}
 .refresh.spin{animation:spin .8s linear infinite}
@@ -137,7 +139,7 @@ footer a{color:var(--mute)}
 <div id="app"><div class="empty">Lade…</div></div>
 
 <script>
-const APP_VERSION = "2026-11-19.4";   // bei jeder Änderung an dieser Datei erhöhen
+const APP_VERSION = "2026-11-19.5";   // bei jeder Änderung an dieser Datei erhöhen
 const ICON = {builder:"🔨", lab:"🧪", pets:"🐾"};
 const LABEL = {builder:"Bauarbeiter", lab:"Labor", pets:"Begleiterhaus"};
 const RES = {"Gold":"Gold","Elixir":"Elixier","Dark Elixir":"Dunkles E."};
@@ -278,7 +280,8 @@ function renderBooks() {
     // Startzustand aus dem Plan: je Buch/Hammer, was geplant ist (Wunsch = fest, sonst automatisch)
     bookEdit = {
       rows: day.map(s => ({type: s.hammer ? "hammer" : (s.q === "builder" ? (s.hero ? "hb" : "bb") : "lb"), kind: s.hammer || "",
-                           value: s.pick ? s.name : "", planned: s.name, id: s.id, from: s.from, to: s.to, cost: s.cost, res: s.res})),
+                           value: s.pick ? s.name : "", planned: s.name, id: s.id, from: s.from, to: s.to, cost: s.cost, res: s.res,
+                           spell: (D.choices && (D.choices.spells || []).includes(s.name)) || false})),
       dirty: false, open: false};
     // Hämmer, die eingetragen sind, aber nichts gefunden haben, trotzdem anzeigen
     const h = st.hammers || {};
@@ -291,7 +294,13 @@ function renderBooks() {
   const optsFor = r => r.type === "bb" ? opt.builder : r.type === "lb" ? opt.lab : r.type === "hb" ? opt.heroes : opt[r.kind];
   const L = opt.locked || {};
   const lockedFor = r => r.type === "bb" ? (L.building || []) : r.type === "lb" ? [...(L.fighting || []), ...(L.spells || [])] : r.type === "hb" ? (L.heroes || []) : (L[r.kind] || []);
-  const label = r => r.type === "hammer" ? "🔨 " + HAMMER[r.kind] : r.type === "bb" ? "📖 Buch des Bauens" : r.type === "hb" ? "📖 Buch der Helden" : "📖 Labor-Buch";
+  const itemIco = r => {
+    const key = r.type === "hammer" ? "hammer_" + r.kind : r.type === "bb" ? "book_building" : r.type === "hb" ? "book_heroes"
+      : (r.spell ? "book_spells" : "book_fighting");
+    const f = D.icons && D.icons[key];
+    return f ? `<img class="ic" src="icons/${f}" alt="">` : (r.type === "hammer" ? "🔨" : "📖");
+  };
+  const label = r => `<span class="sname-wrap">${itemIco(r)}<span>${r.type === "hammer" ? HAMMER[r.kind] : r.type === "bb" ? "Buch des Bauens" : r.type === "hb" ? "Buch der Helden" : (r.spell ? "Buch der Zauber" : "Buch des Kampfes")}</span></span>`;
   const rowHtml = (r, i) => {
     const list = optsFor(r) || [];
     const planned = r.planned ? `${esc(r.planned)}${r.from !== undefined ? ` ${r.from} → ${r.to}` : ""}` : "<i>nichts Passendes</i>";

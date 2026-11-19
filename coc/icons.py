@@ -81,6 +81,30 @@ def _ext(data: bytes) -> str | None:
     return None
 
 
+ITEMS = {"book_building": "Book_of_Building.png", "book_heroes": "Book_of_Heroes.png",
+         "book_fighting": "Book_of_Fighting.png", "book_spells": "Book_of_Spells.png",
+         "book_everything": "Book_of_Everything.png",
+         "hammer_building": "Hammer_of_Building.png", "hammer_heroes": "Hammer_of_Heroes.png",
+         "hammer_fighting": "Hammer_of_Fighting.png", "hammer_spells": "Hammer_of_Spells.png"}
+
+
+def download_items(out_dir: str = "docs/icons", size: int = 96) -> dict:
+    """Icons der Bücher und Hämmer."""
+    out = Path(out_dir)
+    urls = _file_urls(list(ITEMS.values()), size)
+    index = {}
+    for key, f in ITEMS.items():
+        url = urls.get(f.replace("_", " ")) or urls.get(f)
+        if not url:
+            continue
+        data = _get(url)
+        ext = _ext(data)
+        if ext:
+            (out / f"{key}.{ext}").write_bytes(data)
+            index[key] = f"{key}.{ext}"
+    return index
+
+
 def download_icons(raw: dict, out_dir: str = "docs/icons", size: int = 96) -> dict:
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
@@ -105,7 +129,7 @@ def download_icons(raw: dict, out_dir: str = "docs/icons", size: int = 96) -> di
     urls = _file_urls(sorted({f for fs in cands.values() for f in fs}), size)
 
     for old in out.glob("*"):
-        if old.suffix in (".png", ".webp", ".jpg"):
+        if old.suffix in (".png", ".webp", ".jpg") and old.stem[:1].isdigit():
             old.unlink()
     index, misses = {}, []
     for name, (kind, ids) in wanted.items():
@@ -126,5 +150,9 @@ def download_icons(raw: dict, out_dir: str = "docs/icons", size: int = 96) -> di
             break
         else:
             misses.append(name)
+    try:
+        index.update(download_items(out_dir, size))
+    except Exception:  # noqa: BLE001
+        pass
     (out / "index.json").write_text(json.dumps(index, indent=0), "utf-8")
     return {"wanted": len(wanted), "found": len(wanted) - len(misses), "missing": misses}
