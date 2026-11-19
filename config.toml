@@ -127,7 +127,7 @@ start_day = 1
 end_day = 11
 
 # Bücher am Monatsanfang: Ein Bauarbeiter und das Labor werden so geplant, dass sie am Bücher-Tag
-# (zur Aufwachzeit) frei sind. Dann werden die längsten Upgrades mit Buch sofort fertig gemacht.
+# (Saisonstart: 1., 8:00 UTC = 9:00 Winter- / 10:00 Sommerzeit) frei sind. Dann werden die längsten Upgrades mit Buch sofort fertig gemacht.
 [planner.books]
 enabled = true
 day = 1

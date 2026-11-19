@@ -219,20 +219,25 @@ class Planner:
 
     # ---------- Bücher am Monatsanfang ----------
     def _make_book_times(self) -> list[float]:
-        """Jeden Monat am Bücher-Tag zur Aufwachzeit (bzw. jetzt, wenn heute Bücher-Tag ist)."""
-        from datetime import datetime
+        """Jeden Monat zum Saisonstart (1., 8:00 UTC = 9:00/10:00 in Wien) – oder jetzt, wenn
+        heute Bücher-Tag ist und die Bücher noch nicht eingesetzt sind."""
+        from datetime import datetime, timezone
+        from .config import next_season_start, season_start
         tz, out = self.cfg.tz, []
-        h, m = self.cfg.sleep_end.hour, self.cfg.sleep_end.minute
-        d = datetime.fromtimestamp(self.start, tz).replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-        while d.timestamp() <= self.horizon:
-            bt = d.replace(day=self.books_day, hour=h, minute=m).timestamp()
-            today = datetime.fromtimestamp(bt, tz).strftime("%Y-%m-%d")
-            if bt <= self.start < bt + 86400 - 3600 * h:
-                if self.cfg.planner.get("books", {}).get("skip_date") != today:
-                    out.append(self.start)        # heute ist Bücher-Tag (und noch nicht erledigt)
-            elif bt > self.start:
-                out.append(bt)
-            d = d.replace(year=d.year + 1, month=1) if d.month == 12 else d.replace(month=d.month + 1)
+        cur = season_start(self.start)
+        today = datetime.fromtimestamp(cur, tz).strftime("%Y-%m-%d")
+        if self.books_day == 1 and cur <= self.start < cur + 86400 and \
+                self.cfg.planner.get("books", {}).get("skip_date") != today:
+            out.append(self.start)                # heute ist Bücher-Tag (und noch nicht erledigt)
+        bt = next_season_start(self.start)
+        while bt <= self.horizon:
+            d = datetime.fromtimestamp(bt, timezone.utc)
+            if self.books_day != 1:               # anderer Tag gewünscht → gleiche Uhrzeit an dem Tag
+                bt2 = d.replace(day=self.books_day).timestamp()
+            else:
+                bt2 = bt
+            out.append(bt2)
+            bt = next_season_start(bt + 3600)
         return out
 
     def _book_deadline(self, q: str, slot: int, start: float) -> float | None:

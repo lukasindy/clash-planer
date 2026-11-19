@@ -62,7 +62,7 @@ class Config:
         # Monatsstaffel: z. B. ab Tag 1 → 10 %, ab Tag 4 → 15 %, ab Tag 8 → 20 %
         monthly = self.boosts.get("monthly") or {}
         if monthly.get("steps") and q in monthly.get("queues", ["builder", "lab", "pets"]):
-            day = self._local(ts).day
+            day = int((ts - season_start(ts)) // 86400) + 1   # Saisontag (Saison startet 1. um 8:00 UTC)
             for start_day, p in sorted(monthly["steps"]):
                 if day >= int(start_day):
                     pct = float(p)
@@ -116,11 +116,29 @@ def _to_ts(value, tz: ZoneInfo) -> float:
     return d.timestamp()
 
 
-def _season_end(ts: float, tz: ZoneInfo) -> float:
-    """Goldpass-Saison endet zum Monatswechsel."""
-    d = datetime.fromtimestamp(ts, tz)
+SEASON_HOUR_UTC = 8   # neue Saison: 1. des Monats, 8:00 UTC (= 9:00 Winterzeit / 10:00 Sommerzeit in Wien)
+
+
+def season_start(ts: float) -> float:
+    from datetime import timezone
+    d = datetime.fromtimestamp(ts, timezone.utc)
+    start = datetime(d.year, d.month, 1, SEASON_HOUR_UTC, tzinfo=timezone.utc)
+    if ts < start.timestamp():
+        y, m = (d.year - 1, 12) if d.month == 1 else (d.year, d.month - 1)
+        start = datetime(y, m, 1, SEASON_HOUR_UTC, tzinfo=timezone.utc)
+    return start.timestamp()
+
+
+def next_season_start(ts: float) -> float:
+    from datetime import timezone
+    d = datetime.fromtimestamp(season_start(ts), timezone.utc)
     y, m = (d.year + 1, 1) if d.month == 12 else (d.year, d.month + 1)
-    return datetime(y, m, 1, tzinfo=tz).timestamp()
+    return datetime(y, m, 1, SEASON_HOUR_UTC, tzinfo=timezone.utc).timestamp()
+
+
+def _season_end(ts: float, tz: ZoneInfo) -> float:
+    """Goldpass-Saison endet zum Saisonwechsel (1. des Monats, 8:00 UTC)."""
+    return next_season_start(ts)
 
 
 def _schedule(raw: dict, tz: ZoneInfo) -> list:

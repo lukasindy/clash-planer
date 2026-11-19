@@ -149,7 +149,8 @@ def run_check(v: Village, plan: Plan, cfg: Config, now: float, names: dict[int, 
 
     # 1b) Bücher-Tag am Monatsanfang
     book_steps = [r for r in plan.steps if (r.book or r.hammer) and r.start <= now + 120]
-    today = cfg._local(now).strftime("%Y-%m-%d")
+    from .config import season_start
+    today = cfg._local(season_start(now)).strftime("%Y-%m-%d")
     if book_steps and state.get("books_used") != today and not quiet:
         blines = []
         hname = {"building": "Hammer des Bauens", "heroes": "Hammer der Helden",
