@@ -138,7 +138,7 @@ heroes = 1      # Buch der Helden
 # Leer = automatisch das längste Upgrade. Erfüllte Wünsche werden danach automatisch entfernt.
 builder_picks = ["Clanburg"]     # z. B. ["Adlerartillerie"]
 lab_picks = ["Drache", "Dragon Rider"]     # z. B. ["Elektrodrache", "Ballon"]
-heroes_picks = []         # z. B. ["Bogenschützenkönigin"]
+heroes_picks = ["Royal Champion"]     # z. B. ["Bogenschützenkönigin"]
 
 # Hämmer, die du gerade hast. Sie werden am nächsten Bücher-Tag eingeplant und danach
 # automatisch abgezogen. Ziel optional (sonst das längste/teuerste Upgrade, Hämmer sind gratis).

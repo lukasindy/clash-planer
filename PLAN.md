@@ -2,8 +2,8 @@
 
 - **Spieler:** `#L88VCPGG0`
 - **Rathaus:** 19 · **Bauarbeiter:** 6 · **Labor:** 16 · **Begleiterhaus:** 12 · **Heldenhalle:** 12
-- **Export vom:** Mi 18.11. 17:38 (vor 18h 8m)
-- **Plan erstellt:** Do 19.11. 11:47
+- **Export vom:** Mi 18.11. 17:38 (vor 18h 11m)
+- **Plan erstellt:** Do 19.11. 11:49
 
 
 ## ⏳ Läuft gerade
@@ -16,7 +16,7 @@
 | Bauarbeiter | Firecracker Tower | 0 → 1 | Fr 27.11. 18:36 | 8T 6h |
 | Bauarbeiter | Dunkles-Elixier-Lager | 13 → 14 | Sa 28.11. 08:37 | 8T 20h |
 | Bauarbeiter | Spiky Tower | 0 → 1 | Sa 28.11. 23:13 | 9T 11h |
-| Bauarbeiter | Firecracker Tower | 0 → 1 | So 29.11. 04:47 | 9T 17h |
+| Bauarbeiter | Firecracker Tower | 0 → 1 | So 29.11. 04:47 | 9T 16h |
 | Bauarbeiter | Spiky Tower | 0 → 1 | So 29.11. 07:56 | 9T 20h |
 | Bauarbeiter | Labor | 16 → 17 | So 29.11. 23:25 | 10T 11h |
 
@@ -34,7 +34,7 @@
 | 8 | Mo 30.11. 07:00 | Spiky Tower *(B1)* | 1 → 2 | 12T 9h | 408k Dunkles Elixier | Sa 12.12. 16:36 |
 | 9 | Mo 30.11. 11:48 | Luftabwehr *(B6)* | 5 → 6 | 19h 12m | 800k Gold | Di 01.12. 07:00 |
 | 10 | Di 01.12. 07:00 | Clanburg *(B6)* | 14 → 15 📖 mit Buch | 0m | 28,4 Mio Elixier | Di 01.12. 07:00 |
-| 11 | Di 01.12. 07:00 | Großer Wächter *(B6)* | 77 → 78 📖 mit Buch | 0m | 22,1 Mio Elixier | Di 01.12. 07:00 |
+| 11 | Di 01.12. 07:00 | Royal Champion *(B6)* | 54 → 55 📖 mit Buch | 0m | 450k Dunkles Elixier | Di 01.12. 07:00 |
 | 12 | Di 01.12. 07:00 | Firecracker Tower *(B6)* | 1 → 2 | 13T 12h | 28,8 Mio Gold | Mo 14.12. 19:00 |
 | 13 | Fr 04.12. 07:00 | Squad Barracks *(B5)* | 4 → 5 | 5T 22h | 6,4 Mio Elixier | Do 10.12. 05:48 |
 | 14 | So 06.12. 18:13 | Firecracker Tower *(B2)* | 1 → 2 | 12T 18h | 27,2 Mio Gold | Sa 19.12. 12:13 |
@@ -95,7 +95,7 @@
 
 | Warteschlange | Schritte | fertig ungefähr | Kosten |
 |---|---|---|---|
-| Bauarbeiter | 204 | Mi 25.08. 02:12 | 860,7 Mio Elixier, 1346,9 Mio Gold, 17,1 Mio Dunkles Elixier |
+| Bauarbeiter | 204 | Di 31.08. 16:36 | 861,1 Mio Elixier, 1346,9 Mio Gold, 17,1 Mio Dunkles Elixier |
 | Labor | 82 | Sa 01.04. 07:00 | 12,6 Mio Dunkles Elixier, 910,5 Mio Elixier |
 | Begleiterhaus | 4 | Sa 19.12. 21:24 | 1,2 Mio Dunkles Elixier |
 
