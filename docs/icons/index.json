@@ -154,5 +154,15 @@
 "hammer_building": "hammer_building.webp",
 "hammer_heroes": "hammer_heroes.webp",
 "hammer_fighting": "hammer_fighting.webp",
-"hammer_spells": "hammer_spells.webp"
+"hammer_spells": "hammer_spells.webp",
+"res_gold": "res_gold.webp",
+"res_elixir": "res_elixir.webp",
+"res_dark": "res_dark.webp",
+"res_gem": "res_gem.webp",
+"ui_builder": "ui_builder.webp",
+"ui_research": "ui_research.webp",
+"ui_pets": "ui_pets.webp",
+"ui_builder_potion": "ui_builder_potion.webp",
+"ui_clock": "ui_clock.webp",
+"ui_wall_ring": "ui_wall_ring.webp"
 }

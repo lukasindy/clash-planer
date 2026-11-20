@@ -2,23 +2,23 @@
 
 - **Spieler:** `#L88VCPGG0`
 - **Rathaus:** 19 · **Bauarbeiter:** 6 · **Labor:** 16 · **Begleiterhaus:** 12 · **Heldenhalle:** 12
-- **Export vom:** Mi 18.11. 17:38 (vor 1T 6h)
-- **Plan erstellt:** Fr 20.11. 00:34
+- **Export vom:** Mi 18.11. 17:38 (vor 1T 15h)
+- **Plan erstellt:** Fr 20.11. 09:12
 
 
 ## ⏳ Läuft gerade
 
 | Warteschlange | Was | Level | fertig am | Restzeit |
 |---|---|---|---|---|
-| Bauarbeiter (Goblin) | Squad Barracks | 2 → 3 | So 22.11. 17:36 | 2T 17h |
-| Begleiterhaus | Angry Jelly | 10 → 11 | Mo 23.11. 15:10 | 3T 14h |
-| Labor | Magier | 13 → 14 | Di 24.11. 05:35 | 4T 5h |
-| Bauarbeiter | Firecracker Tower | 0 → 1 | Fr 27.11. 18:36 | 7T 18h |
-| Bauarbeiter | Dunkles-Elixier-Lager | 13 → 14 | Sa 28.11. 08:37 | 8T 8h |
-| Bauarbeiter | Spiky Tower | 0 → 1 | Sa 28.11. 23:13 | 8T 22h |
-| Bauarbeiter | Firecracker Tower | 0 → 1 | So 29.11. 04:47 | 9T 4h |
-| Bauarbeiter | Spiky Tower | 0 → 1 | So 29.11. 07:56 | 9T 7h |
-| Bauarbeiter | Labor | 16 → 17 | So 29.11. 23:25 | 9T 22h |
+| Bauarbeiter (Goblin) | Squad Barracks | 2 → 3 | So 22.11. 17:36 | 2T 8h |
+| Begleiterhaus | Angry Jelly | 10 → 11 | Mo 23.11. 15:10 | 3T 5h |
+| Labor | Magier | 13 → 14 | Di 24.11. 05:35 | 3T 20h |
+| Bauarbeiter | Firecracker Tower | 0 → 1 | Fr 27.11. 18:36 | 7T 9h |
+| Bauarbeiter | Dunkles-Elixier-Lager | 13 → 14 | Sa 28.11. 08:37 | 7T 23h |
+| Bauarbeiter | Spiky Tower | 0 → 1 | Sa 28.11. 23:13 | 8T 14h |
+| Bauarbeiter | Firecracker Tower | 0 → 1 | So 29.11. 04:47 | 8T 19h |
+| Bauarbeiter | Spiky Tower | 0 → 1 | So 29.11. 07:56 | 8T 22h |
+| Bauarbeiter | Labor | 16 → 17 | So 29.11. 23:25 | 9T 14h |
 
 ## 🔨 Bauarbeiter – nächste Schritte
 

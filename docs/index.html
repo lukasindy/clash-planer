@@ -126,6 +126,10 @@ summary{cursor:pointer;font-weight:800}
 .month span{font-family:Nunito;font-size:12px;color:var(--mute);font-weight:800}
 .close{all:unset;cursor:pointer;font-size:22px;width:38px;height:38px;display:grid;place-items:center;border-radius:10px;background:var(--panel2);border:1px solid var(--line)}
 .search{width:100%;margin-top:10px;background:#0f0c0a;color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px;font:inherit;font-size:15px}
+.ui{width:24px;height:24px;object-fit:contain;vertical-align:-6px;filter:drop-shadow(0 1px 1px rgba(0,0,0,.5))}
+h2 .ui{width:28px;height:28px;vertical-align:-6px}
+.ui-xs{width:15px;height:15px;object-fit:contain;vertical-align:-3px;margin:0 1px}
+.navbar .ni img{width:30px;height:30px;object-fit:contain;display:block;margin:0 auto 1px}
 .edit{all:unset;cursor:pointer;font-size:14px;padding:4px 8px;border-radius:8px;background:var(--panel2);border:1px solid var(--line);margin-left:8px}
 .bk select{margin-top:6px}
 .bk .sname{display:flex;align-items:center;gap:6px}
@@ -161,8 +165,13 @@ footer a{color:var(--mute)}
 <div id="app"><div class="empty">Lade…</div></div>
 
 <script>
-const APP_VERSION = "2026-11-20.1";   // bei jeder Änderung an dieser Datei erhöhen
+const APP_VERSION = "2026-11-20.2";   // bei jeder Änderung an dieser Datei erhöhen
 const ICON = {builder:"🔨", lab:"🧪", pets:"🐾"};
+// Clash-Icons für die Oberfläche (Fallback: Emoji)
+const UI = (k, cls = "ui") => D && D.icons && D.icons[k] ? `<img class="${cls}" src="icons/${D.icons[k]}" alt="">` : "";
+const QK = {builder: "ui_builder", lab: "ui_research", pets: "ui_pets"};
+const qi = (q, cls) => UI(QK[q], cls) || ICON[q];
+const RK = {"Gold": "res_gold", "Elixir": "res_elixir", "Dark Elixir": "res_dark"};
 const LABEL = {builder:"Bauarbeiter", lab:"Labor", pets:"Begleiterhaus"};
 const RES = {"Gold":"Gold","Elixir":"Elixier","Dark Elixir":"Dunkles E."};
 let D = null, tlDays = 7, listQ = "builder";
@@ -190,10 +199,10 @@ function fmtNum(n) {
   if (n >= 1e3) return Math.round(n / 1e3) + "k";
   return String(n);
 }
-const lvlTxt = s => (s.new || s.from === 0 ? "bauen" : `${s.from} → ${s.to}`) + (s.book ? " 📖" : "") + (s.hammer ? " 🔨" : "");
+const lvlTxt = s => (s.new || s.from === 0 ? "bauen" : `${s.from} → ${s.to}`) + (s.book ? " " + (UI("book_everything", "ui-xs") || "📖") : "") + (s.hammer ? " " + (UI("hammer_" + s.hammer, "ui-xs") || "🔨") : "");
 const ico = (s, cls = "ic") => { const f = s && D.icons && D.icons[String(s.id)]; return f ? `<img class="${cls}" src="icons/${f}" alt="" loading="lazy">` : ""; };
 const HAMMER = {building: "Hammer des Bauens", heroes: "Hammer der Helden", fighting: "Hammer des Kampfes", spells: "Hammer der Zauber"};
-const costTxt = s => s.cost ? `<span class="cost ${resCls(s.res)}" ${s.est ? 'title="geschätzt – fehlt noch in den Spieldaten"' : ""}>${s.est ? "≈" : ""}${fmtNum(s.cost)} ${RES[s.res] || s.res}</span>` : "";
+const costTxt = s => s.cost ? `<span class="cost ${resCls(s.res)}" ${s.est ? 'title="geschätzt – fehlt noch in den Spieldaten"' : ""}>${s.est ? "≈" : ""}${fmtNum(s.cost)} ${UI(RK[s.res], "ui-xs") || (RES[s.res] || s.res)}</span>` : "";
 
 // --- Zustand jetzt berechnen ---
 function slotsNow(q) {
@@ -225,7 +234,7 @@ function renderNow() {
   const cards = ["builder", "lab", "pets"].filter(q => D.capacity[q]).map(q => {
     const sl = slotsNow(q), busy = sl.filter(s => s.r && !s.goblin).length, free = sl.filter(s => !s.r);
     if (free.length) freeLines.push(`${free.length}× ${LABEL[q]}`);
-    return `<div class="card"><h3>${ICON[q]} ${LABEL[q]}<span>${busy}/${D.capacity[q]} beschäftigt</span></h3>${sl.map(s => slotHtml(q, s)).join("")}</div>`;
+    return `<div class="card"><h3>${qi(q)} ${LABEL[q]}<span>${busy}/${D.capacity[q]} beschäftigt</span></h3>${sl.map(s => slotHtml(q, s)).join("")}</div>`;
   });
   $("#now").innerHTML = `<div class="grid two">${cards.join("")}</div>`;
   const b = $("#banner");
@@ -238,9 +247,9 @@ function renderTimeline() {
   const t0 = now() - 3600 * 6, t1 = t0 + tlDays * 86400, pxPerDay = tlDays <= 7 ? 150 : 46;
   const W = tlDays * pxPerDay, x = ts => (ts - t0) / 86400 * pxPerDay;
   const rows = [];
-  for (let i = 0; i < (D.capacity.builder || 0); i++) rows.push({q: "builder", slot: i, label: "🔨 B" + (i + 1)});
-  if (D.capacity.lab) rows.push({q: "lab", slot: 0, label: "🧪 Labor"});
-  if (D.capacity.pets) rows.push({q: "pets", slot: 0, label: "🐾 Begleiter"});
+  for (let i = 0; i < (D.capacity.builder || 0); i++) rows.push({q: "builder", slot: i, label: qi("builder", "ui-xs") + " B" + (i + 1)});
+  if (D.capacity.lab) rows.push({q: "lab", slot: 0, label: qi("lab", "ui-xs") + " Labor"});
+  if (D.capacity.pets) rows.push({q: "pets", slot: 0, label: qi("pets", "ui-xs") + " Begleiter"});
 
   // Tage + Nächte
   let days = "", nights = "";
@@ -276,7 +285,7 @@ function renderTimeline() {
 function renderList() {
   const st = D.steps.filter(s => s.q === listQ), shown = st.slice(0, 10);
   $("#tabs").innerHTML = ["builder", "lab", "pets"].filter(q => D.capacity[q]).map(q =>
-    `<div class="seg"><button class="${q === listQ ? "on" : ""}" data-q="${q}">${ICON[q]} ${LABEL[q]}</button></div>`).join("");
+    `<div class="seg"><button class="${q === listQ ? "on" : ""}" data-q="${q}">${qi(q)} ${LABEL[q]}</button></div>`).join("");
   $("#tabs").querySelectorAll("button").forEach(b => b.onclick = () => { listQ = b.dataset.q; renderList(); });
   $("#list").innerHTML = shown.length ? shown.map((s, n) => liHtml(s, n)).join("") +
       (st.length > shown.length ? `<a class="allbtn" id="allbtn">Alle ${st.length} Schritte anzeigen →</a>` : "")
@@ -287,7 +296,7 @@ function renderList() {
 function liHtml(s, n) {
   return `<div class="li"><div class="n">${n + 1}</div><div>${ico(s)}</div>
       <div><div class="sname">${esc(s.name)} <span class="lvl">${lvlTxt(s)}</span></div>
-      <div class="t">${s.q === "builder" && s.slot >= 0 ? "B" + (s.slot + 1) + " · " : ""}${s.hammer ? `<b style="color:var(--gold)">🔨 mit Hammer am ${fmtTime(s.start)}</b>` : s.book ? `<b style="color:var(--gold)">📖 mit Buch am ${fmtTime(s.start)}</b>` : `ab ${fmtTime(s.start)} · ${fmtDur(s.end - s.start)}`}</div></div>
+      <div class="t">${s.q === "builder" && s.slot >= 0 ? "B" + (s.slot + 1) + " · " : ""}${s.hammer ? `<b style="color:var(--gold)">${UI("hammer_" + s.hammer, "ui-xs")} mit Hammer am ${fmtTime(s.start)}</b>` : s.book ? `<b style="color:var(--gold)">${UI("book_everything", "ui-xs")} mit Buch am ${fmtTime(s.start)}</b>` : `ab ${fmtTime(s.start)} · ${fmtDur(s.end - s.start)}`}</div></div>
       ${costTxt(s)}</div>`;
 }
 
@@ -335,7 +344,7 @@ function renderBooks() {
       ${E.open && r.type === "hammer" ? `<a class="edit" data-del="${i}">✕</a>` : ""}</div>${body}</div>`;
   };
   const unmet = (D.bookUnmet || []).map(u => `<div class="warn">⚠️ ${esc(u.pick)}: ${esc(u.why)}</div>`).join("");
-  $("#books").innerHTML = `<h2>📖 Nächster Bücher-Tag</h2><div class="card form">
+  $("#books").innerHTML = `<h2>${UI("book_everything")} Nächster Bücher-Tag</h2><div class="card form">
     <h3>${fmtTime(first)}<span><a class="edit" id="bkedit">${E.open ? "Abbrechen" : "✏️ Ändern"}</a></span></h3>
     ${E.rows.map(rowHtml).join("")}
     ${unmet}
@@ -406,7 +415,7 @@ function openAll(q) {
     sh = document.createElement("div"); sh.id = "sheet"; sh.className = "sheet";
     document.body.appendChild(sh);
   }
-  sh.innerHTML = `<div class="sheet-head"><div class="row"><h2>📋 Alle Schritte</h2><a class="close" id="closeall">✕</a></div>
+  sh.innerHTML = `<div class="sheet-head"><div class="row"><h2>${UI("1000015")} Alle Schritte</h2><a class="close" id="closeall">✕</a></div>
       <div class="tabs" id="alltabs" style="margin:10px 0 0"></div>
       <input class="search" id="allsearch" type="search" placeholder="Suchen, z. B. Inferno oder Drache …" autocomplete="off"></div>
     <div class="sheet-body" id="allbody"></div>`;
@@ -425,7 +434,7 @@ function closeAll(fromPop) {
 window.addEventListener("popstate", () => closeAll(true));
 function renderAll() {
   $("#alltabs").innerHTML = ["builder", "lab", "pets"].filter(q => D.capacity[q]).map(q =>
-    `<div class="seg"><button class="${q === allQ ? "on" : ""}" data-q="${q}">${ICON[q]} ${LABEL[q]} <span class="mute">${D.stepCount[q] || 0}</span></button></div>`).join("");
+    `<div class="seg"><button class="${q === allQ ? "on" : ""}" data-q="${q}">${qi(q)} ${LABEL[q]} <span class="mute">${D.stepCount[q] || 0}</span></button></div>`).join("");
   $("#alltabs").querySelectorAll("button").forEach(b => b.onclick = () => { allQ = b.dataset.q; renderAll(); $("#allbody").scrollTop = 0; });
   const term = ($("#allsearch").value || "").trim().toLowerCase();
   const st = D.steps.filter(s => s.q === allQ);
@@ -459,8 +468,8 @@ function renderWalls() {
       <div><div class="sname">${w.atMax} von ${w.total} maximal</div><div class="t mute" style="font-size:12px">Maximum auf Rathaus ${D.th}: Level ${w.max}</div></div></div>
       <div class="cd">${pct}%</div></div>
     <div class="bar"><i style="width:${pct}%"></i></div>
-    ${w.upgrades ? `<div class="sub" style="margin-top:10px"><span>Noch <b style="color:var(--text)">${w.upgrades}</b> Level-Upgrades (= ${w.upgrades} Mauerringe)</span></div>
-    <div class="sub"><span>Zusammen <b style="color:var(--gold)">${fmtNum(w.cost)}</b> Gold oder Elixier</span></div>` : `<div class="sub" style="margin-top:10px"><span>Alle Mauern sind maximal 🎉</span></div>`}
+    ${w.upgrades ? `<div class="sub" style="margin-top:10px"><span>Noch <b style="color:var(--text)">${w.upgrades}</b> Level-Upgrades (= ${w.upgrades} ${UI("ui_wall_ring", "ui-xs")} Mauerringe)</span></div>
+    <div class="sub"><span>Zusammen <b style="color:var(--gold)">${fmtNum(w.cost)}</b> ${UI("res_gold", "ui-xs")} oder ${UI("res_elixir", "ui-xs")}</span></div>` : `<div class="sub" style="margin-top:10px"><span>Alle Mauern sind maximal 🎉</span></div>`}
     <div style="margin-top:12px">${w.byLevel.map(([l, n]) => `<div class="row" style="align-items:center;gap:10px;margin:5px 0">
         <span class="lvl" style="width:58px">Level ${l}</span>
         <div class="bar" style="flex:1;margin:0"><i style="width:${Math.max(2, n / maxCount * 100)}%;${l >= w.max ? "background:linear-gradient(90deg,#3f9a47,var(--ok))" : ""}"></i></div>
@@ -475,7 +484,7 @@ function renderWalls() {
 function renderTotals() {
   $("#tot").innerHTML = ["builder", "lab", "pets"].filter(q => D.capacity[q]).map(q => {
     const f = D.finish[q], c = D.costs[q] || {};
-    return `<div class="card"><h3>${ICON[q]} ${LABEL[q]}<span>${D.stepCount[q]} Schritte</span></h3>
+    return `<div class="card"><h3>${qi(q)} ${LABEL[q]}<span>${D.stepCount[q]} Schritte</span></h3>
       <div class="mute" style="font-size:12px">alles fertig ungefähr</div>
       <div class="num">${f ? new Intl.DateTimeFormat("de-AT", {timeZone: D.tz, day: "2-digit", month: "short", year: "numeric"}).format(new Date(f * 1000)) : "–"}</div>
       <div class="costs">${Object.entries(c).filter(([, v]) => v).map(([r, v]) => `<span class="cost ${resCls(r)}">${fmtNum(v)} ${RES[r] || r}</span>`).join("<br>") || "–"}</div></div>`;
@@ -484,7 +493,7 @@ function renderTotals() {
 
 function boostChip() {
   const b = D.boost; if (!b) return "";
-  const pct = o => `🔨${o.builder || 0}% · 🧪${o.lab || 0}%` + ((o.pets || 0) ? ` · 🐾${o.pets}%` : "");
+  const pct = o => `${qi("builder", "ui-xs")}${o.builder || 0}% · ${qi("lab", "ui-xs")}${o.lab || 0}%` + ((o.pets || 0) ? ` · ${qi("pets", "ui-xs")}${o.pets}%` : "");
   const day = ts => new Intl.DateTimeFormat("de-AT", {timeZone: D.tz, day: "2-digit", month: "2-digit"}).format(new Date(ts * 1000));
   const now = b.now || {}, any = (now.builder || 0) + (now.lab || 0) + (now.pets || 0) > 0;
   let t = any ? `Boost<b>${pct(now)}</b>${b.until ? ` <span class="mute">bis ${day(b.until)}</span>` : ""}` : "";
@@ -500,38 +509,71 @@ function render() {
     <a class="refresh" id="refresh" title="Aktualisieren">↻</a></div></header>
   <div class="chips" id="chips"><span class="chip">Rathaus<b>${D.th}</b></span><span class="chip">Labor<b>${D.lab}</b></span>
     <span class="chip">Begleiterhaus<b>${D.pets}</b></span><span class="chip">Heldenhalle<b>${D.heroHall}</b></span>
-    <span class="chip">Bauarbeiter<b>${D.capacity.builder}</b></span>${D.walls && D.walls.total ? `<span class="chip" id="wallchip" style="cursor:pointer">🧱 Mauern<b>${D.walls.atMax}/${D.walls.total}</b></span>` : ""}${boostChip()}</div>
+    <span class="chip">Bauarbeiter<b>${D.capacity.builder}</b></span>${D.walls && D.walls.total ? `<span class="chip" id="wallchip" style="cursor:pointer">${UI("1000010", "ui-xs")} Mauern<b>${D.walls.atMax}/${D.walls.total}</b></span>` : ""}${boostChip()}</div>
   <div class="pane" data-pane="jetzt">
     <div class="banner" id="banner"></div>
-    <h2>⏳ Läuft gerade</h2><div id="now"></div>
+    <h2>${UI("ui_clock")} Läuft gerade</h2><div id="now"></div>
+    <a class="btn" id="widgetbtn" style="background:var(--panel2);color:var(--text);border:1px solid var(--line);font-size:16px">📱 Widget für den Home-Bildschirm</a>
   </div>
   <div class="pane" data-pane="zeit">
-    <div class="tl-head"><h2>📅 Zeitleiste</h2><div class="seg" id="tlseg"><button data-d="7">7 Tage</button><button data-d="30">30 Tage</button></div></div>
+    <div class="tl-head"><h2>${UI("ui_clock")} Zeitleiste</h2><div class="seg" id="tlseg"><button data-d="7">7 Tage</button><button data-d="30">30 Tage</button></div></div>
     <div class="tl" id="tl"></div><div class="detail" id="detail">Tippe auf einen Balken für Details. Volle Balken laufen, gestrichelte sind geplant.</div>
   </div>
   <div class="pane" data-pane="buch"><div id="books"></div></div>
   <div class="pane" data-pane="schritte">
-    <h2>📋 Nächste Schritte</h2><div class="tabs" id="tabs"></div><div class="list" id="list"></div>
-    <h2>🧱 Mauern</h2><div id="walls"></div>
-    <h2>📊 Bis alles fertig ist</h2><div class="tot" id="tot"></div>
+    <h2>${UI("1000015")} Nächste Schritte</h2><div class="tabs" id="tabs"></div><div class="list" id="list"></div>
+    <h2>${UI("1000010")} Mauern</h2><div id="walls"></div>
+    <h2>${UI("ui_builder_potion")} Bis alles fertig ist</h2><div class="tot" id="tot"></div>
   </div>
-  <div class="pane" data-pane="tipps"><h2>💡 Wofür lohnt sich …?</h2><div id="advice"></div></div>
+  <div class="pane" data-pane="tipps"><h2>${UI("res_gem")} Wofür lohnt sich …?</h2><div id="advice"></div></div>
   <footer>Nicht offiziell und nicht von Supercell bewilligt · <a href="https://supercell.com/en/fan-content-policy/de">Fan-Content-Richtlinien</a></footer></div>`;
   $("#tlseg").querySelectorAll("button").forEach(b => {
     b.classList.toggle("on", +b.dataset.d === tlDays);
     b.onclick = () => { tlDays = +b.dataset.d; $("#tlseg").querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b)); renderTimeline(); };
   });
   renderNow(); renderTimeline(); renderBooks(); renderList(); renderWalls(); renderTotals(); renderAdvice(); tick();
+  const wb = $("#widgetbtn"); if (wb) wb.onclick = openWidgetHelp;
   const wc = $("#wallchip"); if (wc) wc.onclick = () => { showTab("schritte"); setTimeout(() => { const el = $("#walls"); if (el) $("#app").scrollTop = el.offsetTop - 70; }, 50); };
   $("#refresh").onclick = () => load(true);
   // Navigation unten
   let nav = $("#navbar");
   if (!nav) { nav = document.createElement("nav"); nav.id = "navbar"; nav.className = "navbar"; document.body.appendChild(nav); }
-  const tabs = [["jetzt", "🏠", "Jetzt"], ["zeit", "📅", "Zeitleiste"], ["buch", "📖", "Bücher-Tag"], ["schritte", "📋", "Schritte"], ["tipps", "💡", "Tipps"]];
+  const tabs = [["jetzt", UI("1000001") || "🏠", "Jetzt"], ["zeit", UI("ui_clock") || "📅", "Zeitleiste"], ["buch", UI("book_everything") || "📖", "Bücher-Tag"],
+                ["schritte", UI("1000015") || "📋", "Schritte"], ["tipps", UI("res_gem") || "💡", "Tipps"]];
   nav.innerHTML = tabs.map(([k, i, l]) => `<button data-tab="${k}"><span class="ni">${i}</span>${l}${k === "jetzt" ? '<span class="dot" id="freedot" style="display:none"></span>' : ""}</button>`).join("");
   nav.querySelectorAll("button").forEach(b => b.onclick = () => showTab(b.dataset.tab));
   showTab(currentTab, true);
   renderNow();
+}
+
+let widgetCode = null;
+function openWidgetHelp() {
+  fetch("widget.js?" + Date.now(), {cache: "no-store"}).then(r => r.text()).then(t => { widgetCode = t; }).catch(() => {});
+  let sh = $("#wsheet");
+  if (!sh) { sh = document.createElement("div"); sh.id = "wsheet"; sh.className = "sheet"; document.body.appendChild(sh); }
+  sh.innerHTML = `<div class="sheet-head"><div class="row"><h2>📱 Widget einrichten</h2><a class="close" id="wclose">✕</a></div></div>
+    <div class="sheet-body"><div class="card" style="margin-top:14px">
+      <p class="mute" style="margin-top:0">Web-Apps dürfen auf dem iPhone keine Widgets anlegen – das geht über die kostenlose App <b style="color:var(--text)">Scriptable</b>. Das Widget zeigt deine Timer mit Live-Countdown und aktualisiert sich von selbst.</p>
+      <div class="slot"><div class="sname">1. Scriptable laden</div><div class="sub"><span>Kostenlos im App Store.</span></div>
+        <a class="btn" href="https://apps.apple.com/app/scriptable/id1405459188" target="_blank" style="font-size:15px;padding:9px">Scriptable öffnen</a></div>
+      <div class="slot"><div class="sname">2. Skript kopieren</div>
+        <a class="btn" id="wcopy" style="font-size:15px;padding:9px">Skript kopieren</a><div class="msg" id="wmsg"></div></div>
+      <div class="slot"><div class="sname">3. In Scriptable einfügen</div><div class="sub"><span>Oben rechts <b>+</b> → ins leere Feld tippen → <b>Einsetzen</b> → oben den Namen auf <b>Clash-Planer</b> ändern → <b>Fertig</b>.</span></div></div>
+      <div class="slot"><div class="sname">4. Widget hinzufügen</div><div class="sub"><span>Home-Bildschirm lange drücken → <b>Bearbeiten</b> → <b>Widget hinzufügen</b> → <b>Scriptable</b> → Größe wählen (groß zeigt alles) → hinzufügen. Dann das Widget lange drücken → <b>Widget bearbeiten</b> → bei <b>Script</b> „Clash-Planer“ wählen.</span></div></div>
+      <div class="detail">Antippen öffnet die Web-App. iOS aktualisiert Widgets etwa alle 15–30 Minuten, die Countdowns laufen dazwischen live weiter.</div>
+    </div></div>`;
+  sh.classList.add("open");
+  $("#wclose").onclick = () => sh.classList.remove("open");
+  $("#wcopy").onclick = async () => {
+    const msg = $("#wmsg");
+    try {
+      if (!widgetCode) widgetCode = await (await fetch("widget.js")).text();
+      await navigator.clipboard.writeText(widgetCode);
+      msg.textContent = "✅ Kopiert! Jetzt in Scriptable einfügen.";
+    } catch (e) {
+      msg.innerHTML = 'Kopieren ging nicht automatisch – <a href="widget.js" target="_blank" style="color:var(--gold)">Skript öffnen</a>, alles markieren und kopieren.';
+    }
+  };
 }
 
 let currentTab = (() => { try { return localStorage.getItem("clash-tab") || "jetzt"; } catch (e) { return "jetzt"; } })();
@@ -561,7 +603,7 @@ function renderAdvice() {
     ${hammer ? `<div class="seg" id="advsort" style="margin-bottom:10px"><button data-s="time" class="${advSort === "time" ? "on" : ""}">⏱ Meiste Zeit</button><button data-s="cost" class="${advSort === "cost" ? "on" : ""}">💰 Meiste Rohstoffe</button></div>` : ""}
     <div class="list">${rows.length ? rows.map((r, n) => `<div class="li"><div class="n">${n + 1}</div><div>${ico(r)}</div>
         <div><div class="sname">${esc(r.name)} <span class="lvl">${r.from} → ${r.to}</span></div>
-        <div class="t">${r.running ? "⏳ läuft gerade – Buch macht den Rest sofort fertig" : hammer ? "gratis &amp; sofort statt " + (r.cost ? costTxt(r) : "–") : "starten (kostet " + (r.cost ? costTxt(r) : "–") + ") → Buch einsetzen"}</div></div>
+        <div class="t">${r.running ? UI("ui_clock", "ui-xs") + " läuft gerade – Buch macht den Rest sofort fertig" : hammer ? "gratis &amp; sofort statt " + (r.cost ? costTxt(r) : "–") : "starten (kostet " + (r.cost ? costTxt(r) : "–") + ") → Buch einsetzen"}</div></div>
         <div class="save">${fmtDur(r.save)}<small>gespart</small></div></div>`).join("") : `<div class="more">Gerade nichts Passendes.</div>`}</div>
     <div class="detail">${hammer ? "Hämmer sparen Zeit <b>und</b> Rohstoffe." + (advSort === "cost" ? " Dunkles Elixier zählt grob ×" + DE_WEIGHT + "." : "") : "Bücher sparen die Zeit – die Kosten zahlst du trotzdem. Laufende Upgrades zählen mit ihrer Restzeit."} Stand jetzt, mit deinem aktuellen Boost.</div>`;
   box.querySelectorAll(".adv-pick button").forEach(b => b.onclick = () => { advKey = b.dataset.k; renderAdvice(); });
