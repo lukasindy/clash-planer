@@ -165,7 +165,7 @@ footer a{color:var(--mute)}
 <div id="app"><div class="empty">Lade…</div></div>
 
 <script>
-const APP_VERSION = "2026-11-20.2";   // bei jeder Änderung an dieser Datei erhöhen
+const APP_VERSION = "2026-11-21.1";   // bei jeder Änderung an dieser Datei erhöhen
 const ICON = {builder:"🔨", lab:"🧪", pets:"🐾"};
 // Clash-Icons für die Oberfläche (Fallback: Emoji)
 const UI = (k, cls = "ui") => D && D.icons && D.icons[k] ? `<img class="${cls}" src="icons/${D.icons[k]}" alt="">` : "";
@@ -513,7 +513,6 @@ function render() {
   <div class="pane" data-pane="jetzt">
     <div class="banner" id="banner"></div>
     <h2>${UI("ui_clock")} Läuft gerade</h2><div id="now"></div>
-    <a class="btn" id="widgetbtn" style="background:var(--panel2);color:var(--text);border:1px solid var(--line);font-size:16px">📱 Widget für den Home-Bildschirm</a>
   </div>
   <div class="pane" data-pane="zeit">
     <div class="tl-head"><h2>${UI("ui_clock")} Zeitleiste</h2><div class="seg" id="tlseg"><button data-d="7">7 Tage</button><button data-d="30">30 Tage</button></div></div>
@@ -532,7 +531,6 @@ function render() {
     b.onclick = () => { tlDays = +b.dataset.d; $("#tlseg").querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b)); renderTimeline(); };
   });
   renderNow(); renderTimeline(); renderBooks(); renderList(); renderWalls(); renderTotals(); renderAdvice(); tick();
-  const wb = $("#widgetbtn"); if (wb) wb.onclick = openWidgetHelp;
   const wc = $("#wallchip"); if (wc) wc.onclick = () => { showTab("schritte"); setTimeout(() => { const el = $("#walls"); if (el) $("#app").scrollTop = el.offsetTop - 70; }, 50); };
   $("#refresh").onclick = () => load(true);
   // Navigation unten
@@ -544,36 +542,6 @@ function render() {
   nav.querySelectorAll("button").forEach(b => b.onclick = () => showTab(b.dataset.tab));
   showTab(currentTab, true);
   renderNow();
-}
-
-let widgetCode = null;
-function openWidgetHelp() {
-  fetch("widget.js?" + Date.now(), {cache: "no-store"}).then(r => r.text()).then(t => { widgetCode = t; }).catch(() => {});
-  let sh = $("#wsheet");
-  if (!sh) { sh = document.createElement("div"); sh.id = "wsheet"; sh.className = "sheet"; document.body.appendChild(sh); }
-  sh.innerHTML = `<div class="sheet-head"><div class="row"><h2>📱 Widget einrichten</h2><a class="close" id="wclose">✕</a></div></div>
-    <div class="sheet-body"><div class="card" style="margin-top:14px">
-      <p class="mute" style="margin-top:0">Web-Apps dürfen auf dem iPhone keine Widgets anlegen – das geht über die kostenlose App <b style="color:var(--text)">Scriptable</b>. Das Widget zeigt deine Timer mit Live-Countdown und aktualisiert sich von selbst.</p>
-      <div class="slot"><div class="sname">1. Scriptable laden</div><div class="sub"><span>Kostenlos im App Store.</span></div>
-        <a class="btn" href="https://apps.apple.com/app/scriptable/id1405459188" target="_blank" style="font-size:15px;padding:9px">Scriptable öffnen</a></div>
-      <div class="slot"><div class="sname">2. Skript kopieren</div>
-        <a class="btn" id="wcopy" style="font-size:15px;padding:9px">Skript kopieren</a><div class="msg" id="wmsg"></div></div>
-      <div class="slot"><div class="sname">3. In Scriptable einfügen</div><div class="sub"><span>Oben rechts <b>+</b> → ins leere Feld tippen → <b>Einsetzen</b> → oben den Namen auf <b>Clash-Planer</b> ändern → <b>Fertig</b>.</span></div></div>
-      <div class="slot"><div class="sname">4. Widget hinzufügen</div><div class="sub"><span>Home-Bildschirm lange drücken → <b>Bearbeiten</b> → <b>Widget hinzufügen</b> → <b>Scriptable</b> → Größe wählen (groß zeigt alles) → hinzufügen. Dann das Widget lange drücken → <b>Widget bearbeiten</b> → bei <b>Script</b> „Clash-Planer“ wählen.</span></div></div>
-      <div class="detail">Antippen öffnet die Web-App. iOS aktualisiert Widgets etwa alle 15–30 Minuten, die Countdowns laufen dazwischen live weiter.</div>
-    </div></div>`;
-  sh.classList.add("open");
-  $("#wclose").onclick = () => sh.classList.remove("open");
-  $("#wcopy").onclick = async () => {
-    const msg = $("#wmsg");
-    try {
-      if (!widgetCode) widgetCode = await (await fetch("widget.js")).text();
-      await navigator.clipboard.writeText(widgetCode);
-      msg.textContent = "✅ Kopiert! Jetzt in Scriptable einfügen.";
-    } catch (e) {
-      msg.innerHTML = 'Kopieren ging nicht automatisch – <a href="widget.js" target="_blank" style="color:var(--gold)">Skript öffnen</a>, alles markieren und kopieren.';
-    }
-  };
 }
 
 let currentTab = (() => { try { return localStorage.getItem("clash-tab") || "jetzt"; } catch (e) { return "jetzt"; } })();
