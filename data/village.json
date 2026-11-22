@@ -1,16 +1,16 @@
 {
  "tag": "#L88VCPGG0",
- "timestamp": 1795254784,
+ "timestamp": 1795357988,
  "helpers": [
   {
    "data": 93000000,
    "lvl": 8,
-   "helper_cooldown": 8022
+   "helper_cooldown": 70579
   },
   {
    "data": 93000001,
    "lvl": 4,
-   "helper_cooldown": 8022
+   "helper_cooldown": 70579
   },
   {
    "data": 93000002,
@@ -39,12 +39,12 @@
   {
    "data": 1000007,
    "lvl": 16,
-   "timer": 606720
+   "timer": 503516
   },
   {
    "data": 1000024,
    "lvl": 13,
-   "timer": 467020
+   "timer": 363816
   },
   {
    "data": 1000013,
@@ -110,28 +110,28 @@
   {
    "data": 1000106,
    "lvl": 3,
-   "timer": 409418,
+   "timer": 306214,
    "extra": true
   },
   {
    "data": 1000108,
    "lvl": 0,
-   "timer": 416586
+   "timer": 313382
   },
   {
    "data": 1000107,
    "lvl": 0,
-   "timer": 550973
+   "timer": 447769
   },
   {
    "data": 1000108,
    "lvl": 0,
-   "timer": 539639
+   "timer": 436435
   },
   {
    "data": 1000107,
    "lvl": 0,
-   "timer": 461989,
+   "timer": 301180,
    "helper_recurrent": true
   },
   {
@@ -606,27 +606,7 @@
  "obstacles": [
   {
    "data": 8000000,
-   "cnt": 2
-  },
-  {
-   "data": 8000008,
    "cnt": 1
-  },
-  {
-   "data": 8000009,
-   "cnt": 47
-  },
-  {
-   "data": 8000010,
-   "cnt": 1
-  },
-  {
-   "data": 8000013,
-   "cnt": 1
-  },
-  {
-   "data": 8000023,
-   "cnt": 2
   },
   {
    "data": 8000079,
@@ -705,10 +685,6 @@
    "cnt": 2
   },
   {
-   "data": 8000130,
-   "cnt": 1
-  },
-  {
    "data": 8000131,
    "cnt": 1
   },
@@ -756,7 +732,8 @@
   },
   {
    "data": 4000004,
-   "lvl": 13
+   "lvl": 13,
+   "timer": 441231
   },
   {
    "data": 4000005,
@@ -764,9 +741,7 @@
   },
   {
    "data": 4000006,
-   "lvl": 13,
-   "timer": 200760,
-   "helper_recurrent": true
+   "lvl": 14
   },
   {
    "data": 4000007,
@@ -1058,8 +1033,8 @@
   },
   {
    "data": 73000011,
-   "lvl": 10,
-   "timer": 94787
+   "lvl": 11,
+   "timer": 524586
   },
   {
    "data": 73000016,
@@ -1569,15 +1544,27 @@
  "obstacles2": [
   {
    "data": 8000041,
-   "cnt": 1
+   "cnt": 3
   },
   {
    "data": 8000056,
    "cnt": 1
   },
   {
-   "data": 8000100,
+   "data": 8000059,
    "cnt": 1
+  },
+  {
+   "data": 8000092,
+   "cnt": 1
+  },
+  {
+   "data": 8000097,
+   "cnt": 1
+  },
+  {
+   "data": 8000100,
+   "cnt": 3
   }
  ],
  "units2": [

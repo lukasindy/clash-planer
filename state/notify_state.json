@@ -1,11 +1,9 @@
 {
   "assumed": [],
   "books_used": null,
-  "export_ts": 1795254784.0,
+  "export_ts": 1795357988.0,
   "last_reminder": 0,
   "recommended": [],
-  "sent": {
-    "soon:pets:1795349571:576": 1795348633.9498093
-  },
+  "sent": {},
   "stale_warned": false
 }
