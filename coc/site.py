@@ -34,6 +34,8 @@ def _step(s, extra=None) -> dict:
         d["est"] = True
     if s.section == "heroes":
         d["hero"] = True
+    if getattr(s, "helper", False):
+        d["helper"] = True
     if extra:
         d.update(extra)
     return d
@@ -57,6 +59,14 @@ def _choices(gd: GameData, v: Village) -> dict:
             ("spells" if i.section == "spells" else "fighting")
         out[kind].add(de_name(obj["name"]))
     return {k: sorted(x) for k, x in out.items()}
+
+
+def _raw_static() -> dict:
+    from .gamedata import load_raw
+    try:
+        return load_raw()
+    except Exception:  # noqa: BLE001
+        return {}
 
 
 def _icons() -> dict:
@@ -149,6 +159,41 @@ def _walls(gd: GameData, v: Village) -> dict:
             "upgrades": upgrades, "cost": cost, "altFrom": alt_from}
 
 
+HELPER_DE = {"Builder's Apprentice": "Bauarbeiter-Lehrling", "Lab Assistant": "Labor-Assistent",
+             "Alchemist": "Alchemist", "Prospector": "Prospector"}
+
+
+def _helpers(raw_static: dict, v: Village, now: float) -> list:
+    """Wo arbeiten die Helfer gerade (automatisch) und wann sind sie wieder bereit?"""
+    defs = {h["_id"]: h for h in raw_static.get("helpers", [])}
+    out = []
+    for h in v.helpers:
+        d = defs.get(h["id"], {})
+        name = d.get("name", f"#{h['id']}")
+        lvl = next((l for l in d.get("levels", []) if l.get("level") == h["level"]), {})
+        # Lehrling/Assistent: pro Einsatz (1 Std.) so viele Stunden Fortschritt wie das Level
+        saves = int(lvl.get("boost_time_seconds", 0) or 0) * int(lvl.get("boost_multiplier", 0) or 0)
+        q = {"Builder's Apprentice": "builder", "Lab Assistant": "lab"}.get(name)
+        target = None
+        if q:
+            t = next((i for i in v.instances if i.helper and i.queue == q), None)
+            if t:
+                target = {"id": t.data_id, "name": de_name(gd_name(raw_static, t.data_id)),
+                          "to": t.level + 1, "end": int(t.end) if t.end else None}
+        out.append({"id": h["id"], "name": HELPER_DE.get(name, name), "level": h["level"], "queue": q,
+                    "ready": int(h["ready"]) if h.get("ready") and h["ready"] > now else None,
+                    "saves": saves if q else 0, "target": target})
+    return out
+
+
+def gd_name(raw_static: dict, data_id: int) -> str:
+    for sec in ("buildings", "traps", "troops", "spells", "heroes", "pets", "guardians"):
+        for o in raw_static.get(sec, []):
+            if o["_id"] == data_id:
+                return o["name"]
+    return f"#{data_id}"
+
+
 def site_data(gd: GameData, v: Village, plan: Plan, cfg: Config, now: float) -> dict:
     running = []
     for s in plan.running:
@@ -185,6 +230,7 @@ def site_data(gd: GameData, v: Village, plan: Plan, cfg: Config, now: float) -> 
         "icons": _icons(),
         "advice": _advice(gd, v, cfg, now),
         "walls": _walls(gd, v),
+        "helpers": _helpers(_raw_static(), v, now),
         "running": running,
         "steps": [_step(s) for s in sorted(plan.steps, key=lambda s: s.start)[:MAX_STEPS]],
         "stepCount": {q: len(plan.for_queue(q)) for q in QUEUES},

@@ -89,7 +89,10 @@ ITEMS = {"book_building": "Book_of_Building.png", "book_heroes": "Book_of_Heroes
          # Themen-Icons für die Oberfläche
          "res_gold": "Gold.png", "res_elixir": "Elixir.png", "res_dark": "Dark_Elixir.png", "res_gem": "Gem.png",
          "ui_builder": "Builder.png", "ui_research": "Research_Potion.png", "ui_pets": "Pet_Potion.png",
-         "ui_builder_potion": "Builder_Potion.png", "ui_clock": "Clock_Tower10.png", "ui_wall_ring": "Wall_Ring.png"}
+         "ui_builder_potion": "Builder_Potion.png", "ui_clock": "Clock_Tower10.png", "ui_wall_ring": "Wall_Ring.png",
+         # Helfer
+         "93000000": "Builder's_Apprentice_info.png", "93000001": "Lab_Assistant_info.png",
+         "93000002": "Alchemist_info.png", "93000003": "Prospector_info1.png"}
 
 
 def download_items(out_dir: str = "docs/icons", size: int = 96) -> dict:

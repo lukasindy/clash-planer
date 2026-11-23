@@ -165,7 +165,7 @@ footer a{color:var(--mute)}
 <div id="app"><div class="empty">Lade…</div></div>
 
 <script>
-const APP_VERSION = "2026-11-21.1";   // bei jeder Änderung an dieser Datei erhöhen
+const APP_VERSION = "2026-11-23.1";   // bei jeder Änderung an dieser Datei erhöhen
 const ICON = {builder:"🔨", lab:"🧪", pets:"🐾"};
 // Clash-Icons für die Oberfläche (Fallback: Emoji)
 const UI = (k, cls = "ui") => D && D.icons && D.icons[k] ? `<img class="${cls}" src="icons/${D.icons[k]}" alt="">` : "";
@@ -185,7 +185,7 @@ function fmtDur(s, secs) {
   s = Math.max(0, Math.round(s));
   const d = Math.floor(s / 86400), h = Math.floor(s % 86400 / 3600), m = Math.floor(s % 3600 / 60), x = s % 60;
   if (d) return `${d}T ${h}h` + (secs ? ` ${m}m` : "");
-  if (h) return `${h}h ${m}m` + (secs ? ` ${String(x).padStart(2,"0")}s` : "");
+  if (h) return secs ? `${h}h ${m}m ${String(x).padStart(2,"0")}s` : (m ? `${h}h ${m}m` : `${h}h`);
   return secs ? `${m}m ${String(x).padStart(2,"0")}s` : `${m}m`;
 }
 function fmtTime(ts, withDay = true) {
@@ -223,7 +223,7 @@ function slotHtml(q, s) {
   }
   const r = s.r, t = now(), tot = Math.max(1, r.end - r.start), pct = Math.min(100, Math.max(0, (t - r.start) / tot * 100));
   const label = (q === "builder" && !s.goblin ? `B${s.i + 1} · ` : "") + esc(r.name);
-  return `<div class="slot"><div class="row"><div class="sname-wrap">${ico(r)}<div class="sname">${label}${s.goblin ? '<span class="badge g">Goblin</span>' : ""}${r.assumed ? '<span class="badge">angenommen</span>' : ""}</div></div>
+  return `<div class="slot"><div class="row"><div class="sname-wrap">${ico(r)}<div class="sname">${label}${s.goblin ? '<span class="badge g">Goblin</span>' : ""}${r.assumed ? '<span class="badge">angenommen</span>' : ""}${r.helper ? `<span class="badge g">${UI(r.q === "lab" ? "93000001" : "93000000", "ui-xs")} Helfer</span>` : ""}</div></div>
       <div class="cd" data-end="${r.end}">${fmtDur(r.end - t, true)}</div></div>
     <div class="bar ${q}"><i data-s="${r.start}" data-e="${r.end}" style="width:${pct}%"></i></div>
     <div class="sub"><span>${lvlTxt(r)}</span><span>fertig ${fmtTime(r.end)}</span></div></div>`;
@@ -481,6 +481,26 @@ function renderWalls() {
   </div>`;
 }
 
+function renderHelpers() {
+  const box = $("#helpers"); if (!box) return;
+  const H = D.helpers || [];
+  if (!H.length) { box.innerHTML = `<div class="more">Keine Helfer im Export.</div>`; return; }
+  const t = now();
+  box.innerHTML = `<div class="card">${H.map(h => {
+    const tgt = h.target;
+    let status;
+    if (h.queue && tgt) status = `arbeitet automatisch an ${ico(tgt, "ic-sm")}<b style="color:var(--text)">${esc(tgt.name)}</b>${tgt.to === 1 ? " (bauen)" : tgt.to ? " → " + tgt.to : ""}`;
+    else if (h.queue) status = `<span style="color:var(--warn)">keinem Upgrade zugewiesen</span>`;
+    else status = "nicht im Einsatz";
+    const ready = h.ready && h.ready > t ? `wieder bereit in <b class="cd" data-end="${h.ready}" style="font-size:14px">${fmtDur(h.ready - t, true)}</b>`
+      : (h.queue ? `<b style="color:var(--ok)">bereit</b>` : "");
+    return `<div class="slot"><div class="row" style="align-items:center"><div class="sname-wrap">${UI(String(h.id), "ic")}
+        <div><div class="sname">${esc(h.name)} <span class="lvl">Level ${h.level}</span></div>
+        <div class="t mute" style="font-size:12px">${status}</div></div></div></div>
+      ${ready || h.saves ? `<div class="sub"><span>${ready}</span>${h.saves ? `<span>spart ${fmtDur(h.saves)} pro Einsatz</span>` : ""}</div>` : ""}</div>`;
+  }).join("")}</div>`;
+}
+
 function renderTotals() {
   $("#tot").innerHTML = ["builder", "lab", "pets"].filter(q => D.capacity[q]).map(q => {
     const f = D.finish[q], c = D.costs[q] || {};
@@ -513,6 +533,7 @@ function render() {
   <div class="pane" data-pane="jetzt">
     <div class="banner" id="banner"></div>
     <h2>${UI("ui_clock")} Läuft gerade</h2><div id="now"></div>
+    <h2>${UI("93000000")} Helfer</h2><div id="helpers"></div>
   </div>
   <div class="pane" data-pane="zeit">
     <div class="tl-head"><h2>${UI("ui_clock")} Zeitleiste</h2><div class="seg" id="tlseg"><button data-d="7">7 Tage</button><button data-d="30">30 Tage</button></div></div>
@@ -530,7 +551,7 @@ function render() {
     b.classList.toggle("on", +b.dataset.d === tlDays);
     b.onclick = () => { tlDays = +b.dataset.d; $("#tlseg").querySelectorAll("button").forEach(x => x.classList.toggle("on", x === b)); renderTimeline(); };
   });
-  renderNow(); renderTimeline(); renderBooks(); renderList(); renderWalls(); renderTotals(); renderAdvice(); tick();
+  renderNow(); renderHelpers(); renderTimeline(); renderBooks(); renderList(); renderWalls(); renderTotals(); renderAdvice(); tick();
   const wc = $("#wallchip"); if (wc) wc.onclick = () => { showTab("schritte"); setTimeout(() => { const el = $("#walls"); if (el) $("#app").scrollTop = el.offsetTop - 70; }, 50); };
   $("#refresh").onclick = () => load(true);
   // Navigation unten

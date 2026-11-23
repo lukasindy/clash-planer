@@ -50,6 +50,7 @@ class Step:
     hammer: str = ""              # mit Hammer sofort fertig: building/heroes/fighting/spells
     pick: str = ""                # dein Wunsch aus config.toml, der hier erfüllt wurde
     est: bool = False             # Zeit/Kosten geschätzt (fehlen in den Spieldaten)
+    helper: bool = False          # Helfer arbeitet daran
 
     @property
     def duration(self) -> float:
@@ -96,7 +97,7 @@ class Planner:
         self.pet_prio = {n: i for i, n in enumerate(pc.get("pet_priority", []))}
         # Arbeitskopie der Instanzen
         self.inst: dict[int, Instance] = {
-            i.uid: Instance(i.uid, i.data_id, i.section, i.queue, i.level, i.end, i.goblin, i.assumed)
+            i.uid: Instance(i.uid, i.data_id, i.section, i.queue, i.level, i.end, i.goblin, i.assumed, i.helper)
             for i in village.instances if i.queue in QUEUES
         }
         cwl = pc.get("cwl", {})
@@ -490,7 +491,7 @@ class Planner:
             plan.running.append(Step(inst.queue, slot if slot is not None else -1, self.v.timestamp,
                                      inst.end, inst.uid, inst.data_id, de_name(obj["name"]),
                                      inst.level, inst.level + 1, 0, "", goblin=inst.goblin,
-                                     assumed=inst.assumed, section=inst.section))
+                                     assumed=inst.assumed, section=inst.section, helper=inst.helper))
             heapq.heappush(events, (inst.end, next(seq), "done", inst.queue, slot, inst.uid))
             self._ends[inst.uid] = inst.end
             inst.end = None

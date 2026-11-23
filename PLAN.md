@@ -2,8 +2,8 @@
 
 - **Spieler:** `#L88VCPGG0`
 - **Rathaus:** 19 · **Bauarbeiter:** 6 · **Labor:** 16 · **Begleiterhaus:** 12 · **Heldenhalle:** 12
-- **Export vom:** Mo 23.11. 23:03 (vor 0m)
-- **Plan erstellt:** Mo 23.11. 23:04
+- **Export vom:** Mo 23.11. 23:03 (vor 7m)
+- **Plan erstellt:** Mo 23.11. 23:11
 
 
 ## ⏳ Läuft gerade
@@ -14,7 +14,7 @@
 | Bauarbeiter (Goblin) | Squad Barracks | 3 → 4 | Do 26.11. 03:36 | 2T 4h |
 | Bauarbeiter | Firecracker Tower | 0 → 1 | Do 26.11. 05:36 | 2T 6h |
 | Bauarbeiter | Dunkles-Elixier-Lager | 13 → 14 | Do 26.11. 19:36 | 2T 20h |
-| Labor | Mauerbrecher | 13 → 14 | Fr 27.11. 14:06 | 3T 15h |
+| Labor | Mauerbrecher | 13 → 14 | Fr 27.11. 14:06 | 3T 14h |
 | Bauarbeiter | Firecracker Tower | 0 → 1 | Fr 27.11. 15:47 | 3T 16h |
 | Bauarbeiter | Spiky Tower | 0 → 1 | Fr 27.11. 18:55 | 3T 19h |
 | Bauarbeiter | Labor | 16 → 17 | Sa 28.11. 10:25 | 4T 11h |

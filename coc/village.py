@@ -51,6 +51,7 @@ class Instance:
     end: float | None = None      # Unix-Zeit, wann das laufende Upgrade fertig ist
     goblin: bool = False          # Goblin-Bauarbeiter/-Forscher (zusätzlicher Slot)
     assumed: bool = False         # vom Plan-folgen-Modus angenommen (nicht aus dem Export)
+    helper: bool = False          # ein Helfer (Lehrling/Assistent) arbeitet automatisch daran
 
     @property
     def busy(self) -> bool:
@@ -63,6 +64,7 @@ class Village:
     timestamp: float
     instances: list[Instance] = field(default_factory=list)
     raw: dict = field(default_factory=dict)
+    helpers: list[dict] = field(default_factory=list)   # [{"id", "level", "ready": ts|None}]
 
     # ---------- Hilfen ----------
     def levels_of(self, data_id: int) -> list[int]:
@@ -132,6 +134,11 @@ def parse_export(text_or_obj) -> Village:
     if ts > 1e12:  # Millisekunden
         ts /= 1000
     v = Village(tag=raw.get("tag", "?"), timestamp=ts, raw=raw)
+    for h in raw.get("helpers", []) or []:
+        if isinstance(h, dict) and "data" in h:
+            cd = h.get("helper_cooldown")
+            v.helpers.append({"id": int(h["data"]), "level": int(h.get("lvl", 1)),
+                              "ready": ts + float(cd) if cd else None})
     uid = 0
     for section, rows in raw.items():
         if not isinstance(rows, list):
@@ -151,7 +158,8 @@ def parse_export(text_or_obj) -> Village:
                 cnt = int(row.get("cnt", 1))
                 end = None
             for _ in range(cnt):
-                v.instances.append(Instance(uid, int(row["data"]), section, queue, lvl, end, goblin))
+                v.instances.append(Instance(uid, int(row["data"]), section, queue, lvl, end, goblin,
+                                            helper=bool(row.get("helper_recurrent"))))
                 uid += 1
     return v
 
