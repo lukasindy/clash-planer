@@ -52,6 +52,7 @@ class Instance:
     goblin: bool = False          # Goblin-Bauarbeiter/-Forscher (zusätzlicher Slot)
     assumed: bool = False         # vom Plan-folgen-Modus angenommen (nicht aus dem Export)
     helper: bool = False          # ein Helfer (Lehrling/Assistent) arbeitet automatisch daran
+    base_end: float | None = None # Ende laut Export OHNE künftige Helfer-Einsätze
 
     @property
     def busy(self) -> bool:
@@ -161,6 +162,7 @@ def parse_export(text_or_obj) -> Village:
                 v.instances.append(Instance(uid, int(row["data"]), section, queue, lvl, end, goblin,
                                             helper=bool(row.get("helper_recurrent"))))
                 uid += 1
+    apply_helpers(v)
     return v
 
 
@@ -180,6 +182,35 @@ def apply_assumptions(v: Village, assumed: list[dict]) -> None:
         inst.level = a["from_lvl"]
         inst.end = a["end"]
         inst.assumed = True
+
+
+HELPER_QUEUE = {93000000: "builder", 93000001: "lab"}   # Bauarbeiter-Lehrling, Labor-Assistent
+HELPER_PERIOD = 24 * 3600                                 # 1 Std. Arbeit + ca. 23 Std. Pause
+
+
+def apply_helpers(v: Village, levels: dict[int, int] | None = None) -> None:
+    """Künftige Helfer-Einsätze einrechnen: Ab "bereit" arbeitet der Helfer 1 Stunde und schafft
+    dabei (1 + Level) Stunden Fortschritt (= Level Stunden gespart), danach alle 24 Std. wieder –
+    so lange das Upgrade läuft."""
+    for h in v.helpers:
+        q = HELPER_QUEUE.get(h["id"])
+        if not q:
+            continue
+        target = next((i for i in v.instances if i.helper and i.queue == q and i.end), None)
+        if not target:
+            continue
+        mult = int(h.get("level", 1))
+        t = h.get("ready") or v.timestamp           # nächster Einsatz
+        end = target.end
+        target.base_end = end
+        while t < end:
+            remaining = end - t
+            if remaining <= (mult + 1) * 3600:       # wird während dieser Stunde fertig
+                end = t + remaining / (mult + 1)
+                break
+            end -= mult * 3600
+            t += HELPER_PERIOD
+        target.end = end
 
 
 def load_village(path: str) -> Village:

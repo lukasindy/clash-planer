@@ -49,6 +49,8 @@ def running_table(plan: Plan, cfg: Config, now: float) -> list[str]:
         label = QUEUE_LABEL.get(s.queue, s.queue) + (" (Goblin)" if s.goblin else "")
         if s.assumed:
             label += " *(angenommen)*"
+        if getattr(s, "helper", False):
+            label += " 🧑‍🔧 *(mit Helfer)*"
         rest = "✅ fertig" if s.end <= now else fmt_dur(s.end - now)
         out.append(f"| {label} | {s.name} | {s.from_lvl} → {s.to_lvl} | {cfg.fmt_time(s.end)} | {rest} |")
     if len(out) == 2:
