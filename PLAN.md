@@ -3,7 +3,7 @@
 - **Spieler:** `#L88VCPGG0`
 - **Rathaus:** 19 · **Bauarbeiter:** 6 · **Labor:** 16 · **Begleiterhaus:** 12 · **Heldenhalle:** 12
 - **Export vom:** Mo 23.11. 23:03 (vor 11m)
-- **Plan erstellt:** Mo 23.11. 23:14
+- **Plan erstellt:** Mo 23.11. 23:15
 
 
 ## ⏳ Läuft gerade
