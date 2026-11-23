@@ -1,16 +1,16 @@
 {
  "tag": "#L88VCPGG0",
- "timestamp": 1795357988,
+ "timestamp": 1795471419,
  "helpers": [
   {
    "data": 93000000,
    "lvl": 8,
-   "helper_cooldown": 70579
+   "helper_cooldown": 41888
   },
   {
    "data": 93000001,
    "lvl": 4,
-   "helper_cooldown": 70579
+   "helper_cooldown": 41888
   },
   {
    "data": 93000002,
@@ -39,12 +39,12 @@
   {
    "data": 1000007,
    "lvl": 16,
-   "timer": 503516
+   "timer": 386486
   },
   {
    "data": 1000024,
    "lvl": 13,
-   "timer": 363816
+   "timer": 246786
   },
   {
    "data": 1000013,
@@ -110,28 +110,28 @@
   {
    "data": 1000106,
    "lvl": 3,
-   "timer": 306214,
+   "timer": 189184,
    "extra": true
   },
   {
    "data": 1000108,
    "lvl": 0,
-   "timer": 313382
+   "timer": 196352
   },
   {
    "data": 1000107,
    "lvl": 0,
-   "timer": 447769
+   "timer": 330739
   },
   {
    "data": 1000108,
    "lvl": 0,
-   "timer": 436435
+   "timer": 319405
   },
   {
    "data": 1000107,
    "lvl": 0,
-   "timer": 301180,
+   "timer": 155349,
    "helper_recurrent": true
   },
   {
@@ -605,8 +605,16 @@
  ],
  "obstacles": [
   {
-   "data": 8000000,
+   "data": 8000008,
    "cnt": 1
+  },
+  {
+   "data": 8000009,
+   "cnt": 13
+  },
+  {
+   "data": 8000023,
+   "cnt": 2
   },
   {
    "data": 8000079,
@@ -733,7 +741,8 @@
   {
    "data": 4000004,
    "lvl": 13,
-   "timer": 441231
+   "timer": 313400,
+   "helper_recurrent": true
   },
   {
    "data": 4000005,
@@ -1034,7 +1043,7 @@
   {
    "data": 73000011,
    "lvl": 11,
-   "timer": 524586
+   "timer": 411155
   },
   {
    "data": 73000016,
@@ -1555,6 +1564,10 @@
    "cnt": 1
   },
   {
+   "data": 8000091,
+   "cnt": 1
+  },
+  {
    "data": 8000092,
    "cnt": 1
   },
@@ -1565,6 +1578,10 @@
   {
    "data": 8000100,
    "cnt": 3
+  },
+  {
+   "data": 8000101,
+   "cnt": 1
   }
  ],
  "units2": [
