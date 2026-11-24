@@ -52,6 +52,8 @@ class Step:
     est: bool = False             # Zeit/Kosten geschätzt (fehlen in den Spieldaten)
     helper: bool = False          # Helfer arbeitet daran
     base_end: float | None = None # Ende ohne Helfer
+    helper_uses: int = 0
+    helper_each: int = 0
 
     @property
     def duration(self) -> float:
@@ -98,7 +100,8 @@ class Planner:
         self.pet_prio = {n: i for i, n in enumerate(pc.get("pet_priority", []))}
         # Arbeitskopie der Instanzen
         self.inst: dict[int, Instance] = {
-            i.uid: Instance(i.uid, i.data_id, i.section, i.queue, i.level, i.end, i.goblin, i.assumed, i.helper, i.base_end)
+            i.uid: Instance(i.uid, i.data_id, i.section, i.queue, i.level, i.end, i.goblin, i.assumed, i.helper, i.base_end,
+                            i.helper_uses, i.helper_each)
             for i in village.instances if i.queue in QUEUES
         }
         cwl = pc.get("cwl", {})
@@ -493,7 +496,8 @@ class Planner:
                                      inst.end, inst.uid, inst.data_id, de_name(obj["name"]),
                                      inst.level, inst.level + 1, 0, "", goblin=inst.goblin,
                                      assumed=inst.assumed, section=inst.section, helper=inst.helper,
-                                     base_end=inst.base_end))
+                                     base_end=inst.base_end, helper_uses=inst.helper_uses,
+                                     helper_each=inst.helper_each))
             heapq.heappush(events, (inst.end, next(seq), "done", inst.queue, slot, inst.uid))
             self._ends[inst.uid] = inst.end
             inst.end = None

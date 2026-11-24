@@ -165,7 +165,7 @@ footer a{color:var(--mute)}
 <div id="app"><div class="empty">Lade…</div></div>
 
 <script>
-const APP_VERSION = "2026-11-23.2";   // bei jeder Änderung an dieser Datei erhöhen
+const APP_VERSION = "2026-11-24.1";   // bei jeder Änderung an dieser Datei erhöhen
 const ICON = {builder:"🔨", lab:"🧪", pets:"🐾"};
 // Clash-Icons für die Oberfläche (Fallback: Emoji)
 const UI = (k, cls = "ui") => D && D.icons && D.icons[k] ? `<img class="${cls}" src="icons/${D.icons[k]}" alt="">` : "";
@@ -227,7 +227,7 @@ function slotHtml(q, s) {
       <div class="cd" data-end="${r.end}">${fmtDur(r.end - t, true)}</div></div>
     <div class="bar ${q}"><i data-s="${r.start}" data-e="${r.end}" style="width:${pct}%"></i></div>
     <div class="sub"><span>${lvlTxt(r)}</span><span>fertig ${fmtTime(r.end)}</span></div>
-    ${r.helper && r.baseEnd && r.baseEnd - r.end > 600 ? `<div class="sub"><span>mit Helfer ${fmtDur(r.baseEnd - r.end)} früher</span><span>ohne: ${fmtTime(r.baseEnd)}</span></div>` : ""}</div>`;
+    ${r.helper && r.baseEnd && r.baseEnd - r.end > 600 ? `<div class="sub"><span>mit Helfer ${fmtDur(r.baseEnd - r.end)} früher${r.helperUses > 1 ? ` (${r.helperUses} Einsätze à ${fmtDur(r.helperEach)})` : ""}</span><span>ohne: ${fmtTime(r.baseEnd)}</span></div>` : ""}</div>`;
 }
 
 function renderNow() {
@@ -491,7 +491,7 @@ function renderHelpers() {
     const tgt = h.target;
     let status;
     if (h.queue && tgt) status = `arbeitet automatisch an ${ico(tgt, "ic-sm")}<b style="color:var(--text)">${esc(tgt.name)}</b>${tgt.to === 1 ? " (bauen)" : tgt.to ? " → " + tgt.to : ""}` +
-      (tgt.end ? `<br>fertig mit Helfer: <b style="color:var(--ok)">${fmtTime(tgt.end)}</b>${tgt.baseEnd && tgt.baseEnd - tgt.end > 600 ? ` · ${fmtDur(tgt.baseEnd - tgt.end)} früher` : ""}` : "");
+      (tgt.end ? `<br>fertig mit Helfer: <b style="color:var(--ok)">${fmtTime(tgt.end)}</b>${tgt.baseEnd && tgt.baseEnd - tgt.end > 600 ? ` · ${fmtDur(tgt.baseEnd - tgt.end)} früher` + (tgt.uses > 1 ? ` (${tgt.uses}× ${fmtDur(tgt.each)})` : "") : ""}` : "");
     else if (h.queue) status = `<span style="color:var(--warn)">keinem Upgrade zugewiesen</span>`;
     else status = "nicht im Einsatz";
     const ready = h.ready && h.ready > t ? `wieder bereit in <b class="cd" data-end="${h.ready}" style="font-size:14px">${fmtDur(h.ready - t, true)}</b>`

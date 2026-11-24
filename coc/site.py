@@ -38,6 +38,7 @@ def _step(s, extra=None) -> dict:
         d["helper"] = True
         if getattr(s, "base_end", None):
             d["baseEnd"] = int(s.base_end)
+            d["helperUses"], d["helperEach"] = s.helper_uses, s.helper_each
     if extra:
         d.update(extra)
     return d
@@ -182,7 +183,8 @@ def _helpers(raw_static: dict, v: Village, now: float) -> list:
             if t:
                 target = {"id": t.data_id, "name": de_name(gd_name(raw_static, t.data_id)),
                           "to": t.level + 1, "end": int(t.end) if t.end else None,
-                          "baseEnd": int(t.base_end) if t.base_end else None}
+                          "baseEnd": int(t.base_end) if t.base_end else None,
+                          "uses": t.helper_uses, "each": t.helper_each}
         out.append({"id": h["id"], "name": HELPER_DE.get(name, name), "level": h["level"], "queue": q,
                     "ready": int(h["ready"]) if h.get("ready") and h["ready"] > now else None,
                     "saves": saves if q else 0, "target": target})

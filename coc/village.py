@@ -53,6 +53,8 @@ class Instance:
     assumed: bool = False         # vom Plan-folgen-Modus angenommen (nicht aus dem Export)
     helper: bool = False          # ein Helfer (Lehrling/Assistent) arbeitet automatisch daran
     base_end: float | None = None # Ende laut Export OHNE künftige Helfer-Einsätze
+    helper_uses: int = 0          # so oft setzt der Helfer bis zum Ende noch ein
+    helper_each: int = 0          # Sekunden, die ein Einsatz spart
 
     @property
     def busy(self) -> bool:
@@ -203,14 +205,17 @@ def apply_helpers(v: Village, levels: dict[int, int] | None = None) -> None:
         t = h.get("ready") or v.timestamp           # nächster Einsatz
         end = target.end
         target.base_end = end
+        uses = 0
         while t < end:
             remaining = end - t
+            uses += 1
             if remaining <= (mult + 1) * 3600:       # wird während dieser Stunde fertig
                 end = t + remaining / (mult + 1)
                 break
             end -= mult * 3600
             t += HELPER_PERIOD
         target.end = end
+        target.helper_uses, target.helper_each = uses, mult * 3600
 
 
 def load_village(path: str) -> Village:
