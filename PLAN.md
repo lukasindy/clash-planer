@@ -2,7 +2,7 @@
 
 - **Spieler:** `#L88VCPGG0`
 - **Rathaus:** 19 · **Bauarbeiter:** 6 · **Labor:** 16 · **Begleiterhaus:** 12 · **Heldenhalle:** 12
-- **Export vom:** Mi 25.11. 11:01 (vor 24m)
+- **Export vom:** Mi 25.11. 11:01 (vor 25m)
 - **Plan erstellt:** Mi 25.11. 11:26
 
 
@@ -10,8 +10,8 @@
 
 | Warteschlange | Was | Level | fertig am | Restzeit |
 |---|---|---|---|---|
-| Bauarbeiter | Luftabwehr | 2 → 3 | Mi 25.11. 15:41 | 4h 15m |
-| Bauarbeiter (Goblin) | Squad Barracks | 3 → 4 | Do 26.11. 03:36 | 16h 10m |
+| Bauarbeiter | Luftabwehr | 2 → 3 | Mi 25.11. 15:41 | 4h 14m |
+| Bauarbeiter (Goblin) | Squad Barracks | 3 → 4 | Do 26.11. 03:36 | 16h 9m |
 | Bauarbeiter | Firecracker Tower | 0 → 1 | Do 26.11. 05:36 | 18h 9m |
 | Bauarbeiter | Dunkles-Elixier-Lager | 13 → 14 | Do 26.11. 19:36 | 1T 8h |
 | Labor 🧑‍🔧 *(mit Helfer)* | Mauerbrecher | 13 → 14 | Fr 27.11. 02:06 | 1T 14h |
