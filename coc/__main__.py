@@ -21,7 +21,7 @@ from .gamedata import GameData
 from .names_de import de_name
 from .planner import make_plan
 from .report import plan_markdown, status_markdown
-from .village import parse_export
+from .village import load_village, parse_export
 
 
 def _summary(text: str) -> None:
@@ -96,7 +96,20 @@ def main(argv: list[str] | None = None) -> int:
     sub.add_parser("test-notify")
     sub.add_parser("settings-issue")
     sub.add_parser("icons")
+    ai = sub.add_parser("appicon")
+    ai.add_argument("--check", action="store_true", help="Exit 0, wenn ein neues Symbol nötig ist")
     args = ap.parse_args(argv)
+
+    if args.cmd == "appicon":
+        cfg = load_config(args.config)
+        th = load_village(cfg.village_file).th if Path(cfg.village_file).exists() else 0
+        cur = Path("docs/icon-th.txt").read_text().strip() if Path("docs/icon-th.txt").exists() else ""
+        if args.check:
+            return 0 if th and str(th) != cur else 1
+        from .icons import make_app_icon
+        ok = make_app_icon(th)
+        print("App-Symbol für Rathaus", th, "erstellt" if ok else "– kein Bild gefunden")
+        return 0
 
     if args.cmd == "icons":
         from .gamedata import load_raw

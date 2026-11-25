@@ -112,6 +112,49 @@ def download_items(out_dir: str = "docs/icons", size: int = 96) -> dict:
     return index
 
 
+def download_townhalls(out_dir: str = "docs/icons", size: int = 512, max_th: int = 25) -> dict:
+    """Rathaus-Bild je Level (th_<N>), groß genug fürs App-Symbol."""
+    out = Path(out_dir)
+    files = {f"th_{n}": f"Town_Hall{n}.png" for n in range(1, max_th + 1)}
+    urls = _file_urls(list(files.values()), size)
+    index = {}
+    for key, f in files.items():
+        url = urls.get(f.replace("_", " ")) or urls.get(f)
+        if not url:
+            continue
+        data = _get(url)
+        ext = _ext(data)
+        if ext:
+            (out / f"{key}.{ext}").write_bytes(data)
+            index[key] = f"{key}.{ext}"
+    return index
+
+
+def make_app_icon(th: int, out_dir: str = "docs") -> bool:
+    """Home-Bildschirm-Symbol: Rathaus-Bild (unverändert, nur skaliert) auf dunklem Hintergrund."""
+    from PIL import Image, ImageDraw, ImageFilter
+    idx = json.loads((Path(out_dir) / "icons" / "index.json").read_text("utf-8"))
+    f = idx.get(f"th_{th}")
+    if not f:
+        return False
+    th_img = Image.open(Path(out_dir) / "icons" / f).convert("RGBA")
+    for size, name in ((512, "icon.png"), (180, "apple-touch-icon.png"), (192, "icon-192.png")):
+        bg = Image.new("RGBA", (size, size), (20, 17, 15, 255))
+        # weicher Lichtschein hinter dem Rathaus
+        glow = Image.new("RGBA", (size, size), (0, 0, 0, 0))
+        d = ImageDraw.Draw(glow)
+        r = int(size * 0.42)
+        d.ellipse([size // 2 - r, int(size * 0.52) - r, size // 2 + r, int(size * 0.52) + r], fill=(242, 194, 48, 70))
+        glow = glow.filter(ImageFilter.GaussianBlur(size * 0.12))
+        bg = Image.alpha_composite(bg, glow)
+        im = th_img.copy()
+        im.thumbnail((int(size * 0.84), int(size * 0.84)), Image.LANCZOS)
+        bg.alpha_composite(im, ((size - im.width) // 2, (size - im.height) // 2 + int(size * 0.02)))
+        bg.convert("RGB").save(Path(out_dir) / name, optimize=True)
+    (Path(out_dir) / "icon-th.txt").write_text(str(th), "utf-8")
+    return True
+
+
 def download_icons(raw: dict, out_dir: str = "docs/icons", size: int = 96) -> dict:
     out = Path(out_dir)
     out.mkdir(parents=True, exist_ok=True)
@@ -159,6 +202,7 @@ def download_icons(raw: dict, out_dir: str = "docs/icons", size: int = 96) -> di
             misses.append(name)
     try:
         index.update(download_items(out_dir, size))
+        index.update(download_townhalls(out_dir))
     except Exception:  # noqa: BLE001
         pass
     (out / "index.json").write_text(json.dumps(index, indent=0), "utf-8")

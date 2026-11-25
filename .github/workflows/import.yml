@@ -42,6 +42,14 @@ jobs:
         env:
           ISSUE_BODY: ${{ github.event.issue.body }}
 
+      - name: App-Symbol erneuern (nur bei neuem Rathaus-Level)
+        if: success()
+        run: |
+          if python -m coc appicon --check; then
+            pip install -q pillow && python -m coc appicon
+            sed -i -E "s/(apple-touch-icon\.png|icon-192\.png)\?th=[0-9]+/\1?th=$(cat docs/icon-th.txt)/g" docs/index.html
+          fi
+
       - name: Sofort prüfen (freie Bauarbeiter usw. melden)
         if: success()
         run: python -m coc check
