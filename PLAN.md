@@ -2,54 +2,53 @@
 
 - **Spieler:** `#L88VCPGG0`
 - **Rathaus:** 19 · **Bauarbeiter:** 6 · **Labor:** 16 · **Begleiterhaus:** 12 · **Heldenhalle:** 12
-- **Export vom:** Mi 25.11. 23:02 (vor 0m)
-- **Plan erstellt:** Mi 25.11. 23:03
+- **Export vom:** Do 26.11. 07:42 (vor 0m)
+- **Plan erstellt:** Do 26.11. 07:43
 
 
 ## ⏳ Läuft gerade
 
 | Warteschlange | Was | Level | fertig am | Restzeit |
 |---|---|---|---|---|
-| Bauarbeiter (Goblin) | Squad Barracks | 3 → 4 | Do 26.11. 02:36 | 3h 33m |
-| Bauarbeiter | Firecracker Tower | 0 → 1 | Do 26.11. 04:36 | 5h 32m |
-| Bauarbeiter | Luftabwehr | 4 → 5 | Do 26.11. 13:22 | 14h 19m |
-| Bauarbeiter | Dunkles-Elixier-Lager | 13 → 14 | Do 26.11. 18:36 | 19h 33m |
-| Labor 🧑‍🔧 *(mit Helfer)* | Mauerbrecher | 13 → 14 | Fr 27.11. 02:06 | 1T 3h |
-| Bauarbeiter | Firecracker Tower | 0 → 1 | Fr 27.11. 14:47 | 1T 15h |
-| Bauarbeiter | Spiky Tower | 0 → 1 | Fr 27.11. 17:55 | 1T 18h |
-| Bauarbeiter | Labor | 16 → 17 | Sa 28.11. 09:25 | 2T 10h |
-| Begleiterhaus | Angry Jelly | 11 → 12 | Sa 28.11. 17:16 | 2T 18h |
+| Bauarbeiter | Luftabwehr | 4 → 5 | Do 26.11. 13:22 | 5h 39m |
+| Bauarbeiter | Dunkles-Elixier-Lager | 13 → 14 | Do 26.11. 18:36 | 10h 53m |
+| Labor 🧑‍🔧 *(mit Helfer)* | Mauerbrecher | 13 → 14 | Fr 27.11. 02:06 | 18h 23m |
+| Bauarbeiter | Firecracker Tower | 0 → 1 | Fr 27.11. 14:47 | 1T 7h |
+| Bauarbeiter | Spiky Tower | 0 → 1 | Fr 27.11. 17:55 | 1T 10h |
+| Bauarbeiter | Labor | 16 → 17 | Sa 28.11. 09:25 | 2T 1h |
+| Begleiterhaus | Angry Jelly | 11 → 12 | Sa 28.11. 17:16 | 2T 9h |
+| Bauarbeiter | Squad Barracks | 4 → 5 | Di 01.12. 21:42 | 5T 13h |
 
 ## 🔨 Bauarbeiter – nächste Schritte
 
 | # | Start | Was | Level | Dauer | Kosten | fertig |
 |---|---|---|---|---|---|---|
-| 1 | Do 26.11. 07:00 | Heldenhalle *(B4)* | 12 → 13 | 12T 9h | 24,4 Mio Elixier | Di 08.12. 16:36 |
-| 2 | Do 26.11. 13:22 | Zauberfabrik *(B3)* | 9 → 10 | 8T 9h | 14,8 Mio Elixier | Fr 04.12. 22:58 |
-| 3 | Do 26.11. 18:36 | Squad Barracks *(B2)* | 4 → 5 | 5T 14h | 6 Mio Elixier | Mi 02.12. 09:00 |
-| 4 | Fr 27.11. 14:47 | Luftabwehr *(B6)* | 5 → 6 | 19h 12m | 800k Gold | Sa 28.11. 09:59 |
-| 5 | Fr 27.11. 17:55 | Firecracker Tower *(B5)* | 1 → 2 | 12T | 25,6 Mio Gold | Mi 09.12. 17:55 |
-| 6 | Sa 28.11. 09:25 | Spiky Tower *(B1)* | 1 → 2 | 12T 9h | 408k Dunkles Elixier | Do 10.12. 19:01 |
-| 7 | Sa 28.11. 09:59 | Luftabwehr *(B6)* | 6 → 7 | 1T 14h | 1,4 Mio Gold | Mo 30.11. 00:23 |
-| 8 | Mo 30.11. 07:00 | Sprungfeder *(B6)* | 1 → 2 | 48m | 104k Gold | Mo 30.11. 07:48 |
-| 9 | Mo 30.11. 07:48 | Sprungfeder *(B6)* | 2 → 3 | 1h 36m | 192k Gold | Mo 30.11. 09:24 |
-| 10 | Mo 30.11. 09:24 | Sprungfeder *(B6)* | 3 → 4 | 2h 24m | 280k Gold | Mo 30.11. 11:48 |
-| 11 | Mo 30.11. 11:48 | Sprungfeder *(B6)* | 4 → 5 | 3h 12m | 640k Gold | Mo 30.11. 15:00 |
-| 12 | Mo 30.11. 15:00 | Sprungfeder *(B6)* | 5 → 6 | 4h 48m | 800k Gold | Mo 30.11. 19:48 |
-| 13 | Mo 30.11. 19:48 | Sprungfeder *(B6)* | 6 → 7 | 6h 24m | 1,4 Mio Gold | Di 01.12. 02:12 |
-| 14 | Di 01.12. 09:00 | Clanburg *(B6)* | 14 → 15 📖 mit Buch | 0m | 28,4 Mio Elixier | Di 01.12. 09:00 |
-| 15 | Di 01.12. 09:00 | Royal Champion *(B6)* | 54 → 55 📖 mit Buch | 0m | 450k Dunkles Elixier | Di 01.12. 09:00 |
-| 16 | Di 01.12. 09:00 | Spiky Tower *(B6)* | 1 → 2 | 13T 22h | 459k Dunkles Elixier | Di 15.12. 07:48 |
-| 17 | Mi 02.12. 09:00 | Squad Barracks *(B2)* | 5 → 6 | 6T 18h | 9 Mio Elixier | Mi 09.12. 03:00 |
-| 18 | Fr 04.12. 22:58 | Firecracker Tower *(B3)* | 1 → 2 | 12T 18h | 27,2 Mio Gold | Do 17.12. 16:58 |
-| 19 | Di 08.12. 16:36 | Multi-Archer Tower *(B4)* | 4 → 5 | 11T 14h | 23,2 Mio Gold | So 20.12. 07:00 |
-| 20 | Mi 09.12. 07:00 | Squad Barracks *(B2)* | 6 → 7 | 6T 9h | 10 Mio Elixier | Di 15.12. 16:36 |
-| 21 | Mi 09.12. 17:55 | Multi-Archer Tower *(B5)* | 4 → 5 | 11T 14h | 23,2 Mio Gold | Mo 21.12. 08:19 |
-| 22 | Do 10.12. 19:01 | Multi-Archer Tower *(B1)* | 4 → 5 | 11T 14h | 23,2 Mio Gold | Di 22.12. 09:25 |
+| 1 | Do 26.11. 13:22 | Heldenhalle *(B4)* | 12 → 13 | 12T 9h | 24,4 Mio Elixier | Di 08.12. 22:58 |
+| 2 | Do 26.11. 18:36 | Zauberfabrik *(B2)* | 9 → 10 | 8T 9h | 14,8 Mio Elixier | Sa 05.12. 04:12 |
+| 3 | Fr 27.11. 14:47 | Luftabwehr *(B6)* | 5 → 6 | 19h 12m | 800k Gold | Sa 28.11. 09:59 |
+| 4 | Fr 27.11. 17:55 | Firecracker Tower *(B5)* | 1 → 2 | 12T | 25,6 Mio Gold | Mi 09.12. 17:55 |
+| 5 | Sa 28.11. 09:25 | Spiky Tower *(B1)* | 1 → 2 | 12T 9h | 408k Dunkles Elixier | Do 10.12. 19:01 |
+| 6 | Sa 28.11. 09:59 | Luftabwehr *(B6)* | 6 → 7 | 1T 14h | 1,4 Mio Gold | Mo 30.11. 00:23 |
+| 7 | Mo 30.11. 07:00 | Sprungfeder *(B6)* | 1 → 2 | 48m | 104k Gold | Mo 30.11. 07:48 |
+| 8 | Mo 30.11. 07:48 | Sprungfeder *(B6)* | 2 → 3 | 1h 36m | 192k Gold | Mo 30.11. 09:24 |
+| 9 | Mo 30.11. 09:24 | Sprungfeder *(B6)* | 3 → 4 | 2h 24m | 280k Gold | Mo 30.11. 11:48 |
+| 10 | Mo 30.11. 11:48 | Sprungfeder *(B6)* | 4 → 5 | 3h 12m | 640k Gold | Mo 30.11. 15:00 |
+| 11 | Mo 30.11. 15:00 | Sprungfeder *(B6)* | 5 → 6 | 4h 48m | 800k Gold | Mo 30.11. 19:48 |
+| 12 | Mo 30.11. 19:48 | Sprungfeder *(B6)* | 6 → 7 | 6h 24m | 1,4 Mio Gold | Di 01.12. 02:12 |
+| 13 | Di 01.12. 09:00 | Clanburg *(B6)* | 14 → 15 📖 mit Buch | 0m | 28,4 Mio Elixier | Di 01.12. 09:00 |
+| 14 | Di 01.12. 09:00 | Royal Champion *(B6)* | 54 → 55 📖 mit Buch | 0m | 450k Dunkles Elixier | Di 01.12. 09:00 |
+| 15 | Di 01.12. 09:00 | Spiky Tower *(B6)* | 1 → 2 | 13T 22h | 459k Dunkles Elixier | Di 15.12. 07:48 |
+| 16 | Di 01.12. 21:42 | Squad Barracks *(B3)* | 5 → 6 | 6T 18h | 9 Mio Elixier | Di 08.12. 15:42 |
+| 17 | Sa 05.12. 07:00 | Multi-Archer Tower *(B2)* | 4 → 5 | 12T 7h | 24,6 Mio Gold | Do 17.12. 14:48 |
+| 18 | Di 08.12. 15:42 | Squad Barracks *(B3)* | 6 → 7 | 6T 9h | 10 Mio Elixier | Di 15.12. 01:18 |
+| 19 | Di 08.12. 22:58 | Firecracker Tower *(B4)* | 1 → 2 | 12T | 25,6 Mio Gold | So 20.12. 22:58 |
+| 20 | Mi 09.12. 17:55 | Multi-Archer Tower *(B5)* | 4 → 5 | 11T 14h | 23,2 Mio Gold | Mo 21.12. 08:19 |
+| 21 | Do 10.12. 19:01 | Multi-Archer Tower *(B1)* | 4 → 5 | 11T 14h | 23,2 Mio Gold | Di 22.12. 09:25 |
+| 22 | Di 15.12. 07:00 | Squad Barracks *(B3)* | 7 → 8 | 7T 14h | 12 Mio Elixier | Di 22.12. 21:24 |
 | 23 | Di 15.12. 07:48 | Multi-Gear Tower *(B6)* | 3 → 4 | 11T 14h | 24 Mio Gold | Sa 26.12. 22:12 |
-| 24 | Di 15.12. 16:36 | Squad Barracks *(B2)* | 7 → 8 | 7T 14h | 12 Mio Elixier | Mi 23.12. 07:00 |
-| 25 | Do 17.12. 16:58 | Luftabwehr *(B3)* | 16 → 17 | 11T 4h | 22,8 Mio Gold | Mo 28.12. 21:46 |
-| … | | *noch 175 weitere Schritte* | | | | |
+| 24 | Do 17.12. 14:48 | Luftabwehr *(B2)* | 16 → 17 | 11T 4h | 22,8 Mio Gold | Mo 28.12. 19:36 |
+| 25 | So 20.12. 22:58 | Bogenschützenkönigin *(B4)* | 105 → 106 | 6T 9h | 360k Dunkles Elixier | So 27.12. 08:34 |
+| … | | *noch 174 weitere Schritte* | | | | |
 
 ## 🧪 Labor – nächste Schritte
 
@@ -80,7 +79,7 @@
 | 23 | Mi 17.03. 15:00 | Ice Golem | 8 → 9 | 6T 19h | ≈180k Dunkles Elixier | Mi 24.03. 10:12 |
 | 24 | Do 01.04. 10:00 | Blitzzauber | 13 → 14 📖 mit Buch | 0m | 27,9 Mio Elixier | Do 01.04. 10:00 |
 | 25 | Do 01.04. 10:00 | Totem Spell | 4 → 5 📖 mit Buch | 0m | 27,9 Mio Elixier | Do 01.04. 10:00 |
-| … | | *noch 58 weitere Schritte* | | | | |
+| … | | *noch 60 weitere Schritte* | | | | |
 
 ## 🐾 Begleiterhaus – nächste Schritte
 
@@ -94,8 +93,8 @@
 
 | Warteschlange | Schritte | fertig ungefähr | Kosten |
 |---|---|---|---|
-| Bauarbeiter | 200 | Mi 25.08. 02:12 | 855,6 Mio Elixier, 1,34 Mrd Gold, 17,2 Mio Dunkles Elixier |
-| Labor | 83 | So 23.04. 16:36 | 940,4 Mio Elixier, 12,6 Mio Dunkles Elixier |
+| Bauarbeiter | 199 | Mi 25.08. 02:12 | 849,9 Mio Elixier, 1,34 Mrd Gold, 17,2 Mio Dunkles Elixier |
+| Labor | 85 | Mo 01.05. 10:00 | 935 Mio Elixier, 13,5 Mio Dunkles Elixier |
 | Begleiterhaus | 3 | Fr 18.12. 16:36 | 907k Dunkles Elixier |
 
 ## 🧱 Mauern

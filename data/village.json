@@ -1,16 +1,16 @@
 {
  "tag": "#L88VCPGG0",
- "timestamp": 1795644177,
+ "timestamp": 1795675364,
  "helpers": [
   {
    "data": 93000000,
    "lvl": 8,
-   "helper_cooldown": 35491
+   "helper_cooldown": 4311
   },
   {
    "data": 93000001,
    "lvl": 4,
-   "helper_cooldown": 35491
+   "helper_cooldown": 4311
   },
   {
    "data": 93000002,
@@ -39,12 +39,12 @@
   {
    "data": 1000007,
    "lvl": 16,
-   "timer": 210129
+   "timer": 178942
   },
   {
    "data": 1000024,
    "lvl": 13,
-   "timer": 70429
+   "timer": 39242
   },
   {
    "data": 1000013,
@@ -109,29 +109,23 @@
   },
   {
    "data": 1000106,
-   "lvl": 3,
-   "timer": 12827,
-   "extra": true
+   "lvl": 4,
+   "timer": 482372
   },
   {
    "data": 1000012,
    "lvl": 4,
-   "timer": 51597
-  },
-  {
-   "data": 1000108,
-   "lvl": 0,
-   "timer": 19995
+   "timer": 20414
   },
   {
    "data": 1000107,
    "lvl": 0,
-   "timer": 154382
+   "timer": 123195
   },
   {
    "data": 1000108,
    "lvl": 0,
-   "timer": 143048
+   "timer": 111861
   },
   {
    "data": 1000000,
@@ -330,6 +324,11 @@
   },
   {
    "data": 1000107,
+   "lvl": 1,
+   "cnt": 1
+  },
+  {
+   "data": 1000108,
    "lvl": 1,
    "cnt": 1
   }
@@ -609,7 +608,7 @@
   },
   {
    "data": 8000008,
-   "cnt": 1
+   "cnt": 2
   },
   {
    "data": 8000079,
@@ -736,7 +735,7 @@
   {
    "data": 4000004,
    "lvl": 13,
-   "timer": 111840,
+   "timer": 80653,
    "helper_recurrent": true
   },
   {
@@ -857,6 +856,10 @@
   },
   {
    "data": 4000197,
+   "lvl": 1
+  },
+  {
+   "data": 4000198,
    "lvl": 1
   }
  ],
@@ -1038,7 +1041,7 @@
   {
    "data": 73000011,
    "lvl": 11,
-   "timer": 238397
+   "timer": 207210
   },
   {
    "data": 73000016,
