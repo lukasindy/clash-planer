@@ -1,11 +1,9 @@
 {
   "assumed": [],
   "books_used": null,
-  "export_ts": 1795787631.0,
+  "export_ts": 1795794403.0,
   "last_reminder": 0,
   "recommended": [],
-  "sent": {
-    "lab:free:0": 1795787657.4006963
-  },
+  "sent": {},
   "stale_warned": false
 }
