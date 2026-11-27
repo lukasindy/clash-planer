@@ -4,6 +4,8 @@
   "export_ts": 1795714671.0,
   "last_reminder": 0,
   "recommended": [],
-  "sent": {},
+  "sent": {
+    "lab:end:1795730813:503": 1795746411.9420788
+  },
   "stale_warned": false
 }
