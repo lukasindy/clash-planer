@@ -1,10 +1,24 @@
 {
-  "assumed": [],
+  "assumed": [
+    {
+      "data_id": 1000012,
+      "end": 1795916271.2755148,
+      "from_lvl": 6,
+      "name": "Luftabwehr",
+      "queue": "builder",
+      "section": "buildings",
+      "start": 1795778031.2755148,
+      "uid": 8
+    }
+  ],
   "books_used": null,
   "export_ts": 1795714671.0,
   "last_reminder": 0,
-  "recommended": [],
+  "recommended": [
+    "8:7"
+  ],
   "sent": {
+    "builder:end:1795764802:8": 1795778031.2755148,
     "lab:end:1795730813:503": 1795746411.9420788
   },
   "stale_warned": false
