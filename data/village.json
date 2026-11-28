@@ -1,16 +1,16 @@
 {
  "tag": "#L88VCPGG0",
- "timestamp": 1795802998,
+ "timestamp": 1795878464,
  "helpers": [
   {
    "data": 93000000,
    "lvl": 8,
-   "helper_cooldown": 43606
+   "helper_cooldown": 55776
   },
   {
    "data": 93000001,
    "lvl": 4,
-   "helper_cooldown": 43606
+   "helper_cooldown": 55776
   },
   {
    "data": 93000002,
@@ -39,7 +39,7 @@
   {
    "data": 1000002,
    "lvl": 17,
-   "timer": 116871
+   "timer": 41405
   },
   {
    "data": 1000013,
@@ -49,7 +49,8 @@
   {
    "data": 1000071,
    "lvl": 12,
-   "timer": 1060602
+   "timer": 956320,
+   "helper_recurrent": true
   },
   {
    "data": 1000097,
@@ -110,22 +111,22 @@
   {
    "data": 1000106,
    "lvl": 4,
-   "timer": 354741
+   "timer": 279275
   },
   {
    "data": 1000012,
    "lvl": 6,
-   "timer": 100383
+   "timer": 24917
   },
   {
    "data": 1000108,
    "lvl": 1,
-   "timer": 1021416
+   "timer": 945950
   },
   {
    "data": 1000108,
    "lvl": 1,
-   "timer": 1032620
+   "timer": 957154
   },
   {
    "data": 1000000,
@@ -175,12 +176,12 @@
   {
    "data": 1000010,
    "lvl": 19,
-   "cnt": 319
+   "cnt": 318
   },
   {
    "data": 1000010,
    "lvl": 20,
-   "cnt": 6
+   "cnt": 7
   },
   {
    "data": 1000011,
@@ -603,10 +604,6 @@
  ],
  "obstacles": [
   {
-   "data": 8000000,
-   "cnt": 1
-  },
-  {
    "data": 8000079,
    "cnt": 1
   },
@@ -726,7 +723,8 @@
   },
   {
    "data": 4000003,
-   "lvl": 13
+   "lvl": 13,
+   "timer": 368592
   },
   {
    "data": 4000004,
@@ -774,8 +772,8 @@
   },
   {
    "data": 4000017,
-   "lvl": 8,
-   "timer": 518384
+   "lvl": 9,
+   "helper_recurrent": true
   },
   {
    "data": 4000022,
@@ -1036,7 +1034,7 @@
   {
    "data": 73000011,
    "lvl": 12,
-   "timer": 539792
+   "timer": 464326
   },
   {
    "data": 73000016,
@@ -1544,7 +1542,12 @@
   }
  ],
  "decos2": [],
- "obstacles2": [],
+ "obstacles2": [
+  {
+   "data": 8000099,
+   "cnt": 1
+  }
+ ],
  "units2": [
   {
    "data": 4000031,
@@ -1615,7 +1618,5 @@
   126000003,
   126000004
  ],
- "boosts": {
-  "lab_boost": 19362
- }
+ "boosts": {}
 }
